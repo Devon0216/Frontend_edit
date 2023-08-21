@@ -56,7 +56,7 @@ const createUsers = async () => {
 const updateUsers = async () => {
     const options = {
         'method': 'PATCH',
-        'url': `http://localhost:3500/users`,
+        'url': `https://whiteboarddj-server.onrender.com/users`,
         'headers': {
             
         },
