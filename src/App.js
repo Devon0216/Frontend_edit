@@ -37,9 +37,9 @@ function App() {
             <Route index element={<MiroAuthorize />} />
           </Route>
 
-          <Route path="authorized">
+          {/* <Route path="authorized">
             <Route index element={<MiroAuthorize />} />
-          </Route>
+          </Route> */}
 
           <Route path="pastWorkshop">
             <Route index element={<PastWorkshop />} />

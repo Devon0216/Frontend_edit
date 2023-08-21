@@ -1107,7 +1107,8 @@ const MiroAuthorize = () => {
     const connectToServer = () => {
       userId = global.username;
       socket = io.connect('http://localhost:3500', {
-        query:  {userId} 
+        query:  {userId},
+        transports: ['websocket'] 
       }); // Adjust the URL to your server's URL
       console.log("socket")
       console.log(socket)
