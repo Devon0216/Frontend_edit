@@ -1106,7 +1106,7 @@ const MiroAuthorize = () => {
 
     const connectToServer = () => {
       userId = global.username;
-      socket = io.connect('http://localhost:3400', {
+      socket = io.connect('http://localhost:3500', {
         query:  {userId} 
       }); // Adjust the URL to your server's URL
       console.log("socket")
@@ -1325,7 +1325,7 @@ const MiroAuthorize = () => {
             <div id="messageSection" hidden>
               <h1 className="sectionHeading">Message: </h1>
               <h5>To send messages and synchronize time with coaches, please click the button:</h5>
-              <button onClick={connectToServer}>Connect to coaches</button>
+              <button onClick={connectToServer}>Connect facilitator and coaches</button>
               <br></br>
               <h5>Enter recepients names, seperated by "," E.g. Devon,Joshua,Gary:</h5>
               <input type="text" id="recepient" onChange={(e) => createRecepients(e.target.value)}></input>
