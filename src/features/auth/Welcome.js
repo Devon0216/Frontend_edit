@@ -39,9 +39,9 @@ const Welcome = () => {
             <br></br>
 
 
-            {/* <p><Link to="/dash/notes">View techNotes</Link></p>
+            <p><Link to="/dash/notes">View techNotes</Link></p>
 
-            <p><Link to="/dash/users">View User Settings</Link></p> */}
+            {/* <p><Link to="/dash/users">View User Settings</Link></p> */}
 
             <p><Link to="/dash/authorize">View participants' notes and timer</Link></p>
 
