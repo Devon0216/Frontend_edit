@@ -3,7 +3,7 @@ import axios from "axios";
 const getUsers = async () => {
     const options = {
         'method': 'GET',
-        'url': `http://localhost:3500/users`,
+        'url': `https://whiteboarddj-server.onrender.com/users`,
         'headers': {
             
         },
@@ -29,7 +29,7 @@ const getUsers = async () => {
 const createUsers = async () => {
     const options = {
         'method': 'POST',
-        'url': `http://localhost:3500/users`,
+        'url': `https://whiteboarddj-server.onrender.com/users`,
         'headers': {
         },
         data: { 

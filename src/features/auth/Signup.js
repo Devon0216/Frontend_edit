@@ -12,7 +12,7 @@ const Signup = () => {
         const password = document.getElementById("signupPassword").value
         const options = {
             'method': 'POST',
-            'url': `http://localhost:3500/users`,
+            'url': `https://whiteboarddj-server.onrender.com/users`,
             'headers': {
             },
             data: { 

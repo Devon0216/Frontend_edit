@@ -3,13 +3,13 @@
 import { useNavigate, Link } from 'react-router-dom'
 
 const openURL = async () =>  {
-    window.open(`http://localhost:3500/miro`, "_self")
+    window.open(`https://whiteboarddj-server.onrender.com/miro`, "_self")
 }
 
 const Welcome = () => {
     const navigate = useNavigate();
     async function logout() {
-        const response = await fetch("http://localhost:3500/logout", {
+        const response = await fetch("https://whiteboarddj-server.onrender.com/logout", {
         method: "GET",
         credentials: "include",
         });
