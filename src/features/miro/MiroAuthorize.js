@@ -1293,6 +1293,8 @@ const MiroAuthorize = () => {
         <section>
 
             <div id="loginSection">
+              <label>Please authorize again if any unexpected behaviour occurs</label>
+              <br></br>
               <h1 className="sectionHeading">Log in:</h1>
               <label>User name:</label>
               <br></br>
@@ -1335,6 +1337,8 @@ const MiroAuthorize = () => {
             <div id="notesSection" hidden>
               <h1 className="sectionHeading">Participants' Sticky Notes: </h1>
               <label>Please enter your board ID. It should be in your website URL when you open a Miro board.</label>
+              <br></br>
+              <label>E.g. https://miro.com/app/board/uXjVMy3XuMY=/, the board ID is uXjVMy3XuMY=</label>
               <br></br>
               <input id="boardID"></input>
               <br></br>
