@@ -10,7 +10,7 @@
 
 :root {
   /* COLORS */
-  --BGCOLOR: #0F172A;
+  --BGCOLOR: #1f2227;
   --BORDER-COLOR: #FFF;
   --COLOR: #FFF;
   --ERROR: firebrick;
@@ -64,7 +64,7 @@ body {
   min-height: 100vh;
   background-color: var(--BGCOLOR);
   color: var(--COLOR);
-  background-image: url('./img/background.jpg');
+  background-image: url('../public/img/whiteboard_background.jpg');
   background-size: cover;
   background-position: top right;
   background-blend-mode: multiply;
@@ -99,7 +99,12 @@ a:focus-visible {
 }
 
 .sectionHeading {
-  color:orangered
+  color:coral;
+}
+
+.dash-header__title {
+  color: coral;
+  font-size: 3rem;
 }
 /* || PAGES */
 
@@ -337,6 +342,78 @@ tr {
   flex-flow: column nowrap;
   gap: 0.5em;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.button-orange {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 19px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #000000;
+  background-color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 15px;
+  opacity: 1;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+}
+
+.button-orange:hover {
+  background-color: coral;
+  opacity: 0.8;
+}
+
+.button-orange:active {
+  background-color: coral;
+  transform: translateY(4px);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
 
 @media screen and (max-width: 400px) {
   h1 {

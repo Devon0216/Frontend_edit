@@ -15,7 +15,7 @@
 
 //   const connectToServer = () => {
 //     userId = global.username;
-//     socket = io.connect('https://whiteboarddj-server.onrender.com', {
+//     socket = io.connect('http://localhost:3500', {
 //       query:  {userId} 
 //     }); // Adjust the URL to your server's URL
 //     console.log("socket")

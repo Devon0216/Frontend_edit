@@ -12,12 +12,13 @@ const Public = () => {
     }
 
     const content = (
+        
         <section className="public">
-            <header>
+             <header>
 
                 <h1>
                     <Link to="/dash">
-                    This is <span className="nowrap">Whiteboard by DJ!</span>
+                    <h1>Whiteboard DJ</h1>
                     </Link >
                 </h1>
             </header>
@@ -31,13 +32,16 @@ const Public = () => {
                 <br />
 
                 {/* <button onClick={gotoLogin} >Log in</button> */}
-                <button onClick={gotoHome} >Go to Home</button>
+                <button class="button-orange" onClick={gotoHome} >Go to Home</button>
                 <br/>
                 <br/>
-                <button onClick={gotoSignup }>Sign up</button>
+                <button class="button-orange" onClick={gotoSignup }>Sign up</button>
 
 
-            </main>
+
+            </main> 
+
+            
 
         </section>
 

@@ -12,7 +12,7 @@ const Signup = () => {
         const password = document.getElementById("signupPassword").value
         const options = {
             'method': 'POST',
-            'url': `https://whiteboarddj-server.onrender.com/users`,
+            'url': `http://localhost:3500/users`,
             'headers': {
             },
             data: { 
@@ -33,6 +33,7 @@ const Signup = () => {
             return result;
           } catch (e) {
                console.log(e);
+               document.getElementById("signupError").innerHTML = JSON.parse(e.request.responseText).message
           }
     }
 
@@ -41,7 +42,7 @@ const Signup = () => {
             <header>
                 <h1>
                     <Link to="/">
-                        This is <span className="nowrap">Whiteboard by DJ!</span>
+                        <span className="nowrap">Whiteboard DJ</span>
                     </Link >
                 </h1>
             </header>
@@ -62,6 +63,7 @@ const Signup = () => {
                 <div>
                     <button type="submit" onClick={createUser}>Sign Up</button>
                 </div>
+                <p id="signupError"></p>
             </main>
         </section>
 

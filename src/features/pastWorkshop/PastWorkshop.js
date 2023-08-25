@@ -31,7 +31,7 @@ const PastWorkshop = () => {
     const getUserWorkshops = async () => {
       const options = {
           'method': 'POST',
-          'url': `https://whiteboarddj-server.onrender.com/workshops/userworkshop`,
+          'url': `http://localhost:3500/workshops/userworkshop`,
           'headers': {
               
           },
@@ -49,7 +49,7 @@ const PastWorkshop = () => {
 
     useEffect(() => {
       if (global.userid === undefined){
-        document.getElementById("Title").innerHTML = "Please authorize and log in to view your past workshops"
+        document.getElementById("Title").innerHTML = "Please log in to view your past workshops"
       }
       else{
         getUserWorkshops();
