@@ -1270,6 +1270,7 @@ const MiroAuthorize = () => {
         recipients: selectedRecipients
       };
       socket.emit('sendMessage', data);
+      document.getElementById("messageSent").textContent = "Message sent successfully"
     };
   
     const createRecepients = (recepients) => {
@@ -1305,7 +1306,7 @@ const MiroAuthorize = () => {
               <input type="password" id="password" required minLength="2" maxLength="15" size="20" />
               <br></br>
               <button class="button-orange" onClick={login}>Log in</button>
-              <p id="loginError"></p>
+              <p class="errorMessage" id="loginError"></p>
               <br></br>
               <br></br>
             </div>
@@ -1322,7 +1323,7 @@ const MiroAuthorize = () => {
               <br></br>
               <button class="button-orange" onClick={joinWorkshopAsFacilitator}>Join a workshop as facilitator</button>
               <button class="button-orange" onClick={joinWorkshopAsCoach}>Join a workshop as coach</button>
-              <p id="workshopError"></p>
+              <p class="errorMessage" id="workshopError"></p>
               <br></br>
               <br></br>
               <br></br>
@@ -1336,15 +1337,19 @@ const MiroAuthorize = () => {
 
             <div id="notesSection" hidden>
               <h1 className="sectionHeading">Participants' Sticky Notes: </h1>
+              <label className="sectionHeading">First step</label>
+              <br></br>
               <label>Please enter your board ID. It should be in your website URL when you open a Miro board.</label>
               <br></br>
-              <label>E.g. https://miro.com/app/board/uXjVMy3XuMY=/, the board ID is uXjVMy3XuMY=</label>
+              <label>E.g. https://miro.com/app/board/uXjVMy3XuMY=/, the board ID is "uXjVMy3XuMY="</label>
               <br></br>
               <input id="boardID"></input>
               <br></br>
               <button class="button-orange" onClick={connectMiroBoard} >Connect to the Miro board</button>
-              <p id="notesError"></p>
+              <p class="errorMessage" id="notesError"></p>
               <br></br>
+              <br></br>
+              <label className="sectionHeading">Second step</label>
               <br></br>
               <button class="button-orange" onClick={getNotes} >Get Participants Notes</button>
               <button class="button-orange" onClick={addNotesToWorkshop} id="saveNotesButton">Save sticky notes to workshop</button>
@@ -1369,6 +1374,8 @@ const MiroAuthorize = () => {
               </table>
               <br></br>
               
+              <label className="sectionHeading">Third step</label>
+              <br></br>
               <label>Please select sensitivity for the summarisation</label>
               <br></br>
               <select id="sensitivity">
@@ -1390,9 +1397,13 @@ const MiroAuthorize = () => {
             <div id="agendaSection" hidden>
               <h1 className="sectionHeading">Agenda: </h1>
               <div id="agendaCoach">
-                  <button class="button-orange" onClick={setTimer}>Create a Timer on Miro board</button>
-                  <p id="agendaError"></p>
+                  <label className="sectionHeading">First step</label>
                   <br></br>
+                  <button class="button-orange" onClick={setTimer}>Create a Timer on Miro board</button>
+                  <p class="errorMessage" id="agendaError"></p>
+                  <br></br>
+                  <br></br>
+                  <label className="sectionHeading">Second step</label>
                   <br></br>
                   <label >Session name: </label>
                   <br></br>
@@ -1412,6 +1423,8 @@ const MiroAuthorize = () => {
                   <p key={index}>{line}</p>
                   ))}
                   <br></br>
+                  <label className="sectionHeading">Third step</label>
+                  <br></br>
                   <label >For the current workshop: </label>
                   <br></br>
                   <button class="button-orange" onClick={addAgenda}>Add agenda</button>
@@ -1428,6 +1441,8 @@ const MiroAuthorize = () => {
 
               <br></br>
               <div>
+                  <label className="sectionHeading">Fourth step</label>
+                  <br></br>
                   <button class="button-orange" onClick={startCountdown}>Start Countdown</button>
                   {countdowns.map((countdown, index) => (
                       <p key={countdown.id}>
@@ -1474,18 +1489,24 @@ const MiroAuthorize = () => {
 
             <div id="messageSection" hidden>
               <h1 className="sectionHeading">Message: </h1>
+              <label className="sectionHeading">First step</label>
+              <br></br>
               <label>To send messages and synchronize time with coaches, please click the button:</label>
               <br></br>
               <button class="button-orange" onClick={connectToServer}>Connect facilitator and coaches</button>
               <br></br>
-              <label id="messageError"></label>
+              <label class="errorMessage" id="messageError"></label>
               <br></br>
+              <br></br>
+              <label className="sectionHeading">Second step</label>
               <br></br>
               <label>Enter recepients names, seperated by "," E.g. Devon,Joshua,Gary:</label>
               <br></br>
               <input type="text" id="recepient" onChange={(e) => createRecepients(e.target.value)}></input>
               <br></br>
-
+              
+              <label className="sectionHeading">Third step</label>
+              <br></br>
               <label>Send a Message:</label>
               <br></br>
               <input
@@ -1496,6 +1517,7 @@ const MiroAuthorize = () => {
 
               
               <button class="button-orange" onClick={sendMessage}>Send</button>
+              <label id="messageSent"></label>
               {/* <button onClick={receiveMessage}>Receive</button> */}
               <br></br>
               <label>Received Messages:</label>
