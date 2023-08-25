@@ -94,7 +94,7 @@ const connectMiroBoard = async () => {
 const getAccessToken = async (code) => {
     const options = {
         'method': 'POST',
-        'url': `http://localhost:3500/auth`,
+        'url': `https://whiteboarddj-server.onrender.com/auth`,
         'headers': {
           'Content-Type': 'application/json'
         },
@@ -172,7 +172,7 @@ const NoteItem = ({ noteContent }) => {
 const saveStickyNotes = async (workshop, content) => {
     const options = {
         'method': 'POST',
-        'url': `http://localhost:3500/notes`,
+        'url': `https://whiteboarddj-server.onrender.com/notes`,
         'headers': {
           'Content-Type': 'application/json'
         },
@@ -198,7 +198,7 @@ const saveStickyNotes = async (workshop, content) => {
 const deleteNotesByWorkshopAPI = async (workshop) => {
     const options = {
         'method': 'DELETE',
-        'url': `http://localhost:3500/notes/workshopNotes`,
+        'url': `https://whiteboarddj-server.onrender.com/notes/workshopNotes`,
         'headers': {
           'Content-Type': 'application/json'
         },
@@ -506,7 +506,7 @@ const startAgendaTime = async () => {
 const createWorkshopAPI = async (userID, workshopname) => {
     const options = {
         'method': 'POST',
-        'url': `http://localhost:3500/workshops`,
+        'url': `https://whiteboarddj-server.onrender.com/workshops`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -530,7 +530,7 @@ const createWorkshopAPI = async (userID, workshopname) => {
 const getWorkshopByNameAPI = async ( workshopname) => {
     const options = {
         'method': 'POST',
-        'url': `http://localhost:3500/workshops/workshopByName`,
+        'url': `https://whiteboarddj-server.onrender.com/workshops/workshopByName`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -555,7 +555,7 @@ const getWorkshopByNameAPI = async ( workshopname) => {
 const updateWorkshopAPI = async (workshopID, userID, notes) => {
     const options = {
         'method': 'PATCH',
-        'url': `http://localhost:3500/workshops`,
+        'url': `https://whiteboarddj-server.onrender.com/workshops`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -579,7 +579,7 @@ const updateWorkshopAPI = async (workshopID, userID, notes) => {
 const addAgendaAPI = async (workshopID, workshopAgenda) => {
     const options = {
         'method': 'PATCH',
-        'url': `http://localhost:3500/workshops/userworkshop`,
+        'url': `https://whiteboarddj-server.onrender.com/workshops/userworkshop`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -602,7 +602,7 @@ const addAgendaAPI = async (workshopID, workshopAgenda) => {
 const deleteAgendaAPI = async (workshopID) => {
     const options = {
         'method': 'DELETE',
-        'url': `http://localhost:3500/workshops/userworkshop`,
+        'url': `https://whiteboarddj-server.onrender.com/workshops/userworkshop`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -628,7 +628,7 @@ const getUserByName = async (username, password) => {
         // console.log(password);
         const options = {
             'method': 'POST',
-            'url': `http://localhost:3500/users/username`,
+            'url': `https://whiteboarddj-server.onrender.com/users/username`,
             'headers': {
                 
             },
@@ -787,7 +787,7 @@ const addAgenda = async () => {
 const summariseAPI = async (notes, sensitivity) => {
     const options = {
         'method': 'POST',
-        'url': `http://localhost:3500/summarise`,
+        'url': `https://whiteboarddj-server.onrender.com/summarise`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -809,7 +809,7 @@ const summariseAPI = async (notes, sensitivity) => {
 const addSummaryAPI = async (workshopID, workshopSummary) => {
   const options = {
       'method': 'PATCH',
-      'url': `http://localhost:3500/workshops/workshopByName`,
+      'url': `https://whiteboarddj-server.onrender.com/workshops/workshopByName`,
       'headers': {
           'content-type': 'application/json'
       },
@@ -899,7 +899,7 @@ const MiroAuthorize = () => {
     // const navigate = useNavigate();
     // useEffect(() => {
     //     async function autoLogin() {
-    //       const response = await fetch("http://localhost:3500/autoLogin", {
+    //       const response = await fetch("https://whiteboarddj-server.onrender.com/autoLogin", {
     //         method: "GET",
     //         credentials: "include",
     //       });
@@ -1214,7 +1214,7 @@ const MiroAuthorize = () => {
 
     const connectToServer = () => {
       userId = global.username;
-      socket = io.connect('http://localhost:3500', {
+      socket = io.connect('https://whiteboarddj-server.onrender.com', {
         query:  {userId},
         transports: ['websocket'] 
       }); // Adjust the URL to your server's URL
