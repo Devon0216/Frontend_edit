@@ -879,7 +879,7 @@ const summarise = async () => {
     // document.getElementById("agendaTest").value = ""
     const result2 = await getWorkshopByNameAPI(global.workshopname );
     // global.userid = result1.data[0]._id
-    const result3 = await addSummaryAPI(result2.data[0]._id, result1.data );
+    const result3 = await addSummaryAPI(result2.data[0]._id, result1.data.summary );
     console.log(result3)
 
     if (result3.status === 200){
@@ -1125,6 +1125,11 @@ const MiroAuthorize = () => {
       }
     };
 
+    const updateAgendaWithTimer = async (updatedAgenda) => {
+      const result1 = await getWorkshopByNameAPI(global.workshopname );
+      const result2 = await addAgendaAPI(result1.data[0]._id, updatedAgenda );
+    }
+
     const newSessionTime = async () => {
         // let time = document.getElementById("newTimer").value
         let hour = parseInt( document.getElementById("hour").value )
@@ -1144,6 +1149,7 @@ const MiroAuthorize = () => {
                 
             console.log("updatedCountdowns")
             console.log(updatedCountdowns)
+            let updatedAgenda = ""
             
             for (let i = 0;i<updatedCountdowns.length;i++){
               let sessionName = updatedCountdowns[i].name
@@ -1151,7 +1157,11 @@ const MiroAuthorize = () => {
               console.log("updated session")
               console.log(sessionName)
               console.log(sessionTime)
+              updatedAgenda = updatedAgenda + sessionName + " " + sessionTime + '\n'
             }
+            
+            updateAgendaWithTimer(updatedAgenda);
+            
 
             const data = {
               agenda: updatedCountdowns ,
@@ -1450,7 +1460,7 @@ const MiroAuthorize = () => {
                   <br></br>
                   <label >For the current workshop: </label>
                   <br></br>
-                  <button class="button-orange" onClick={addAgenda}>Add agenda</button>
+                  <button class="button-orange" onClick={addAgenda}>Add the above sessions to agenda</button>
                   <br></br>
                   <button class="button-orange" onClick={clearAgenda}>Clear agenda</button>
                   <br></br>
