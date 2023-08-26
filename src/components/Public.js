@@ -18,14 +18,14 @@ const Public = () => {
 
                 <h1>
                     <Link to="/dash">
-                    <h1>Whiteboard DJ</h1>
+                    <h1 class="sectionHeading">Whiteboard DJ</h1>
                     </Link >
                 </h1>
             </header>
             <main className="public__main">
                 <h1 class="sectionHeading">Welcome</h1>
-                <h3>User story:</h3>
                 <br></br>
+                <h3>User story:</h3>
                 <p>The application is used for design thinking workshop facilitator to better manage the workshop. So you should be able to use the application to better manage the workshop, such as viewing participant’s sticky notes, add agenda to the workshop, change time, summarise sticky notes and message other coaches in the workshop, without using the mobile Miro app.</p>
                 <p className="public__addr">
                     developed by Devon Yeung<br />

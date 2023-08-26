@@ -674,6 +674,9 @@ const createWorkshop = async () => {
     const result2 = await createWorkshopAPI(global.userid, global.workshopname );
     console.log(result2)
     document.getElementById("notesSection").hidden = false
+    if (result2 === "Duplicate workshopname"){
+      document.getElementById("workshopError").innerHTML = "Workshop name already exists"
+    }
     document.getElementById("workshopError").innerHTML = "Workshop created successfully"
 }
 
@@ -1139,10 +1142,14 @@ const MiroAuthorize = () => {
               };
             //   updateAgendaTimer(currentCountdown.time-1)
                 
+            console.log("updatedCountdowns")
+            console.log(updatedCountdowns)
             const data = {
               agenda: updatedCountdowns ,
               recipients: selectedRecipients
             };
+            console.log("data")
+            console.log(data)
             socket.emit('sendAgenda', data);
 
             // socket.emit('sendAgenda', updatedCountdowns);
@@ -1408,7 +1415,7 @@ const MiroAuthorize = () => {
                   <br></br>
                   <button class="button-orange" onClick={setTimer}>Create a Timer on Miro board</button>
                   <p class="errorMessage" id="agendaError"></p>
-                  <br></br>
+                  
                   <br></br>
                   <label className="sectionHeading">Second step</label>
                   <br></br>
