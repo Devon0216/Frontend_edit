@@ -36,7 +36,7 @@ const Welcome = () => {
         <section className="welcome">
 
             <div>
-                <h1>Home Screen!</h1>
+                <h1 class="sectionHeading">Home</h1>
                 <h1>If you want to sign up an account, you can sign up on the welcome page.</h1>
                 <button class="button-orange" onClick={gotoWelcome }>Go back to welcome</button>
                 <br></br>

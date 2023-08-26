@@ -23,6 +23,7 @@ const Public = () => {
                 </h1>
             </header>
             <main className="public__main">
+                <h1 class="sectionHeading">Welcome</h1>
                 <p>developed by Devon.</p>
                 <address className="public__addr">
                     Devon Yeung<br />

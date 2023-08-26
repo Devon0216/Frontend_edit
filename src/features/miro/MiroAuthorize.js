@@ -1294,9 +1294,11 @@ const MiroAuthorize = () => {
         <section>
 
             <div id="loginSection">
-              <label>Please authorize again if any unexpected behaviour occurs</label>
+              <h1 className="sectionHeading">Please authorize again if any unexpected behaviour occurs</h1>
               <br></br>
               <h1 className="sectionHeading">Log in:</h1>
+              <br>
+              <label>You can sign up on the welcome Page</label></br>
               <label>User name:</label>
               <br></br>
               <input type="text" id="username" required minLength="2" maxLength="15" size="20" />
