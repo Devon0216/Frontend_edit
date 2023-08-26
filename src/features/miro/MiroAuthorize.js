@@ -863,33 +863,8 @@ const summarise = async () => {
     }
 
 
-    const natural = require('natural');
-const tokenizer = new natural.SentenceTokenizer();
-const sentences = tokenizer.tokenize(notesText);
-
-const { Tfidf, TextRank } = natural;
-const tfidf = new Tfidf();
-const rank = new TextRank();
-
-sentences.forEach(sentence => {
-  const tokens = sentence.split(' ');
-  tfidf.addDocument(tokens);
-  rank.addNode(tokens);
-});
-
-rank.calculate(0.85, 0.0001, 10);
-
-const rankedSentences = rank.top(3); // Adjust the number of sentences you want in the summary
-
-const summary = rankedSentences.map(index => sentences[index]).join(' ');
-
-console.log(summary);
-
-document.getElementById("summarisation").textContent = "Summary:\n" + summary;
-
-
-
-    // const result1 = await summariseAPI(notesText, sensitivityScore );
+    
+    const result1 = await summariseAPI(notesText, sensitivityScore );
     // console.log("result1.data")
     // console.log(result1.data)
     // document.getElementById("summarisation").textContent = "Summary:\n" + result1.data;
