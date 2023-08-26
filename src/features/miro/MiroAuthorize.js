@@ -872,22 +872,22 @@ const summarise = async () => {
     console.log("result1.data")
     console.log(result1.data)
     document.getElementById("summarisation").textContent = "Summary:\n" + result1.data.summary;
-    // // global.userid = result1.data[0]._id
-    // // const result2 = await addAgendaAPI(global.userid, agenda );
-    // // console.log(result2)
+    // global.userid = result1.data[0]._id
+    // const result2 = await addAgendaAPI(global.userid, agenda );
+    // console.log(result2)
 
-    // // document.getElementById("agendaTest").value = ""
-    // const result2 = await getWorkshopByNameAPI(global.workshopname );
-    // // global.userid = result1.data[0]._id
-    // const result3 = await addSummaryAPI(result2.data[0]._id, result1.data );
-    // console.log(result3)
+    // document.getElementById("agendaTest").value = ""
+    const result2 = await getWorkshopByNameAPI(global.workshopname );
+    // global.userid = result1.data[0]._id
+    const result3 = await addSummaryAPI(result2.data[0]._id, result1.data );
+    console.log(result3)
 
-    // if (result3.status === 200){
-    //   document.getElementById("notesError").innerHTML = "Summary saved successfully"
-    // }
-    // else{
-    //   document.getElementById("notesError").innerHTML = "Summary save failed"
-    // }
+    if (result3.status === 200){
+      document.getElementById("notesError").innerHTML = "Summary saved successfully"
+    }
+    else{
+      document.getElementById("notesError").innerHTML = "Summary save failed"
+    }
 }
 
 
@@ -1093,7 +1093,7 @@ const MiroAuthorize = () => {
       
             const newItem = { name: itemName, time: finalTime, id: i };
             setCountdowns((prevItems) => [...prevItems, newItem]);
-          }
+        }
 
     }
 
@@ -1144,6 +1144,15 @@ const MiroAuthorize = () => {
                 
             console.log("updatedCountdowns")
             console.log(updatedCountdowns)
+            
+            for (let i = 0;i<updatedCountdowns.length;i++){
+              let sessionName = updatedCountdowns[i].name
+              let sessionTime = changeTimeFormat(updatedCountdowns[i].time)
+              console.log("updated session")
+              console.log(sessionName)
+              console.log(sessionTime)
+            }
+
             const data = {
               agenda: updatedCountdowns ,
               recipients: selectedRecipients
@@ -1413,7 +1422,7 @@ const MiroAuthorize = () => {
               <div id="agendaCoach">
                   <label className="sectionHeading">First step</label>
                   <br></br>
-                  <button class="button-orange" onClick={setTimer}>Create a Timer on Miro board</button>
+                  {/* <button class="button-orange" onClick={setTimer}>Create a Timer on Miro board</button> */}
                   <p class="errorMessage" id="agendaError"></p>
                   
                   <br></br>
@@ -1474,7 +1483,7 @@ const MiroAuthorize = () => {
 
 
 
-            
+
             <div id="timerSection" hidden>
               <h1 className="sectionHeading">Timer: </h1>
 
@@ -1510,14 +1519,14 @@ const MiroAuthorize = () => {
               <br></br>
               <label>To send messages and synchronize time with coaches, please click the button:</label>
               <br></br>
-              <button class="button-orange" onClick={connectToServer}>Connect facilitator and coaches</button>
+              {/* <button class="button-orange" onClick={connectToServer}>Connect facilitator and coaches</button> */}
               <br></br>
               <label class="errorMessage" id="messageError"></label>
               <br></br>
               <br></br>
               <label className="sectionHeading">Second step</label>
               <br></br>
-              <label>Enter recepients names, seperated by "," E.g. Devon,Joshua,Gary:</label>
+              <label>Enter recepients names, seperated by "," E.g. Devon,Joshua,Gary</label>
               <br></br>
               <input type="text" id="recepient" onChange={(e) => createRecepients(e.target.value)}></input>
               <br></br>
