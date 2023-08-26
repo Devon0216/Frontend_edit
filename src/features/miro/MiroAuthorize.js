@@ -982,29 +982,6 @@ const MiroAuthorize = () => {
 
 
 
-    // const DynamicComponent = ({ id }) => {
-    //     return (
-    //         <div>
-    //             <label>{document.getElementById("sessionName").value}</label>
-    //             <br></br>
-    //             <label>{"Duration:" + document.getElementById("sessionTime").value}</label>
-
-                
-    //         </div>
-    //     )
-    // };
-    // const [componentCount, setComponentCount] = useState(0);
-    // const [components, setComponents] = useState([]);
-
-    // const addComponent = () => {
-    //     const newComponentCount = componentCount + 1;
-    //     setComponentCount(newComponentCount);
-
-    //     const newComponent = <DynamicComponent key={newComponentCount} id={newComponentCount} />;
-    //     setComponents([...components, newComponent]);
-    // };
-
-
 
     /*
     ******************************************************
@@ -1068,6 +1045,7 @@ const MiroAuthorize = () => {
 
 
     const getAgenda = async () => {
+      setFetcgedAgendaSession("");
         const result1 = await getWorkshopByNameAPI(global.workshopname );
         setFetcgedAgendaSession(result1.data[0].workshopAgenda)
         document.getElementById("fetchedAgenda").innerHTML = "Your Agenda:"
@@ -1553,10 +1531,11 @@ const MiroAuthorize = () => {
 
               
               <button class="button-orange" onClick={sendMessage}>Send</button>
+              <br></br>
               <label id="messageSent"></label>
               {/* <button onClick={receiveMessage}>Receive</button> */}
               <br></br>
-              <label>Received Messages:</label>
+              <label className="sectionHeading">Received Messages:</label>
               <br></br>
               <ul>
                 {receivedMessages.map((msg, index) => (
