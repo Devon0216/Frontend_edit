@@ -71,6 +71,7 @@ const connectMiroBoard = async () => {
       // responseBoard = await getBoardID(responseToken.data);
       globalBoardID = document.getElementById("boardID").value
       document.getElementById("notesError").innerHTML = "You have successfully connected to the Miro board"
+      setTimer();
 
       document.getElementById("agendaSection").hidden = false
       document.getElementById("timerSection").hidden = false
@@ -964,6 +965,9 @@ const MiroAuthorize = () => {
         notes = responseNotes.data.data
         console.log("notes")
         console.log(notes)
+        for (let i =0;i<notes.length;i++){
+          notes[i] = notes[i].replace(/<\/?[^>]+(>|$)/g, '');
+        }
         if (notes !== undefined){
             currentNotes = notes
             currentNotesLength = currentNotes.length
@@ -1359,7 +1363,7 @@ const MiroAuthorize = () => {
               <br></br>
               <input id="boardID"></input>
               <br></br>
-              <button class="button-orange" onClick={() => {connectMiroBoard();setTimer();connectToServer();}} >Connect to the Miro board</button>
+              <button class="button-orange" onClick={() => {connectMiroBoard();connectToServer();}} >Connect to the Miro board</button>
               <p class="errorMessage" id="notesError"></p>
               <br></br>
               <br></br>
