@@ -1151,14 +1151,14 @@ const MiroAuthorize = () => {
         var hours = 0;
         var minutes = 0;
         var seconds = 0;
-        if (document.getElementById("newSessionHour").value !== ""){
-          hours = parseInt( document.getElementById("newSessionHour").value )
+        if (document.getElementById("hour").value !== ""){
+          hours = parseInt( document.getElementById("hour").value )
         }
-        if (document.getElementById("newSessionMinute").value !== ""){
-          minutes = parseInt( document.getElementById("newSessionMinute").value )
+        if (document.getElementById("minute").value !== ""){
+          minutes = parseInt( document.getElementById("minute").value )
         }
-        if (document.getElementById("newSessionSecond").value !== ""){
-          seconds = parseInt( document.getElementById("newSessionSecond").value )
+        if (document.getElementById("second").value !== ""){
+          seconds = parseInt( document.getElementById("second").value )
         }
         finalTime = hours*3600 + minutes*60 + seconds;
 
