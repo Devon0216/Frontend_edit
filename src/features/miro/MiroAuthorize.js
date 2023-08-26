@@ -445,10 +445,10 @@ const setTimer = async () => {
     console.log(timerText.status)
     // document.getElementById("timerID").textContent = timerID;
     if (timerText.status === 201){
-      document.getElementById("agendaError").textContent = "Timer created successfully";
+      document.getElementById("agendaError").textContent = "Timer on Miro board created successfully";
     } 
     else{
-      document.getElementById("agendaError").textContent = "Timer create failed";
+      document.getElementById("agendaError").textContent = "Timer on Miro board create failed";
     }
 
 }
@@ -1430,13 +1430,13 @@ const MiroAuthorize = () => {
             <div id="agendaSection" hidden>
               <h1 className="sectionHeading">Agenda: </h1>
               <div id="agendaCoach">
-                  <label className="sectionHeading">First step</label>
+                  {/* <label className="sectionHeading">First step</label>
                   <br></br>
-                  {/* <button class="button-orange" onClick={setTimer}>Create a Timer on Miro board</button> */}
+                  <button class="button-orange" onClick={setTimer}>Create a Timer on Miro board</button> */}
                   <p class="errorMessage" id="agendaError"></p>
                   
                   <br></br>
-                  <label className="sectionHeading">Second step</label>
+                  <label className="sectionHeading">First step</label>
                   <br></br>
                   <label >Session name: </label>
                   <br></br>
@@ -1456,7 +1456,7 @@ const MiroAuthorize = () => {
                   <p key={index}>{line}</p>
                   ))}
                   <br></br>
-                  <label className="sectionHeading">Third step</label>
+                  <label className="sectionHeading">Second step</label>
                   <br></br>
                   <label >For the current workshop: </label>
                   <br></br>
@@ -1474,7 +1474,7 @@ const MiroAuthorize = () => {
 
               <br></br>
               <div>
-                  <label className="sectionHeading">Fourth step</label>
+                  <label className="sectionHeading">Third step</label>
                   <br></br>
                   <button class="button-orange" onClick={startCountdown}>Start Countdown</button>
                   {countdowns.map((countdown, index) => (
@@ -1525,23 +1525,23 @@ const MiroAuthorize = () => {
 
             <div id="messageSection" hidden>
               <h1 className="sectionHeading">Message: </h1>
-              <label className="sectionHeading">First step</label>
+              {/* <label className="sectionHeading">First step</label>
               <br></br>
               <label>To send messages and synchronize time with coaches, please click the button:</label>
               <br></br>
-              {/* <button class="button-orange" onClick={connectToServer}>Connect facilitator and coaches</button> */}
+              <button class="button-orange" onClick={connectToServer}>Connect facilitator and coaches</button> */}
               <br></br>
               <label class="errorMessage" id="messageError"></label>
               <br></br>
               <br></br>
-              <label className="sectionHeading">Second step</label>
+              <label className="sectionHeading">First step</label>
               <br></br>
               <label>Enter recepients names, seperated by "," E.g. Devon,Joshua,Gary</label>
               <br></br>
               <input type="text" id="recepient" onChange={(e) => createRecepients(e.target.value)}></input>
               <br></br>
               
-              <label className="sectionHeading">Third step</label>
+              <label className="sectionHeading">Second step</label>
               <br></br>
               <label>Send a Message:</label>
               <br></br>
