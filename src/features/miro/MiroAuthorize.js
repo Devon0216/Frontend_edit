@@ -1303,7 +1303,7 @@ const MiroAuthorize = () => {
     let content = (
         <section>
 
-            <div id="loginSection">
+            <div id="loginSection" class="section">
               <h1 className="sectionHeading">Please authorize again if any unexpected behaviour occurs</h1>
               <br></br>
               <h1 className="sectionHeading">Log in:</h1>
@@ -1323,7 +1323,7 @@ const MiroAuthorize = () => {
               <br></br>
             </div>
 
-            <div id="workshopSection" hidden>
+            <div id="workshopSection" class="section" hidden>
               <h1 className="sectionHeading">Please create or join a workshop:</h1>
               {/* <br></br> */}
               <label>Workshop name:</label>
@@ -1347,7 +1347,7 @@ const MiroAuthorize = () => {
 
 
 
-            <div id="notesSection" hidden>
+            <div id="notesSection"  class="section" hidden>
               <h1 className="sectionHeading">Participants' Sticky Notes: </h1>
               <label className="sectionHeading">First step</label>
               <br></br>
@@ -1405,7 +1405,7 @@ const MiroAuthorize = () => {
 
 
 
-            <div id="agendaSection" hidden>
+            <div id="agendaSection" class="section" hidden>
               <h1 className="sectionHeading">Agenda: </h1>
               <div id="agendaCoach">
                   {/* <label className="sectionHeading">First step</label>
@@ -1472,7 +1472,7 @@ const MiroAuthorize = () => {
 
 
 
-            <div id="timerSection" hidden>
+            <div id="timerSection" class="section" hidden>
               <h1 className="sectionHeading">Timer: </h1>
 
               {/* <h1 id="timer">Time left: </h1> */}
@@ -1501,7 +1501,7 @@ const MiroAuthorize = () => {
 
 
 
-            <div id="messageSection" hidden>
+            <div id="messageSection" class="section" hidden>
               <h1 className="sectionHeading">Message: </h1>
               {/* <label className="sectionHeading">First step</label>
               <br></br>
