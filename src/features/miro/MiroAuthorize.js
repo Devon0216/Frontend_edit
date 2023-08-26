@@ -1056,7 +1056,7 @@ const MiroAuthorize = () => {
     }
 
     const addItems = async () => {
-
+      setCountdowns([]);
         var sessions = fetchedAgendaSession.split('\n')
         console.log(sessions)
 
