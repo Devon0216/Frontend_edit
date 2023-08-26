@@ -863,27 +863,52 @@ const summarise = async () => {
     }
 
 
+    const natural = require('natural');
+const tokenizer = new natural.SentenceTokenizer();
+const sentences = tokenizer.tokenize(notesText);
 
-    const result1 = await summariseAPI(notesText, sensitivityScore );
-    console.log("result1.data")
-    console.log(result1.data)
-    document.getElementById("summarisation").textContent = "Summary:\n" + result1.data;
-    // global.userid = result1.data[0]._id
-    // const result2 = await addAgendaAPI(global.userid, agenda );
-    // console.log(result2)
+const { Tfidf, TextRank } = natural;
+const tfidf = new Tfidf();
+const rank = new TextRank();
 
-    // document.getElementById("agendaTest").value = ""
-    const result2 = await getWorkshopByNameAPI(global.workshopname );
-    // global.userid = result1.data[0]._id
-    const result3 = await addSummaryAPI(result2.data[0]._id, result1.data );
-    console.log(result3)
+sentences.forEach(sentence => {
+  const tokens = sentence.split(' ');
+  tfidf.addDocument(tokens);
+  rank.addNode(tokens);
+});
 
-    if (result3.status === 200){
-      document.getElementById("notesError").innerHTML = "Summary saved successfully"
-    }
-    else{
-      document.getElementById("notesError").innerHTML = "Summary save failed"
-    }
+rank.calculate(0.85, 0.0001, 10);
+
+const rankedSentences = rank.top(3); // Adjust the number of sentences you want in the summary
+
+const summary = rankedSentences.map(index => sentences[index]).join(' ');
+
+console.log(summary);
+
+document.getElementById("summarisation").textContent = "Summary:\n" + summary;
+
+
+
+    // const result1 = await summariseAPI(notesText, sensitivityScore );
+    // console.log("result1.data")
+    // console.log(result1.data)
+    // document.getElementById("summarisation").textContent = "Summary:\n" + result1.data;
+    // // global.userid = result1.data[0]._id
+    // // const result2 = await addAgendaAPI(global.userid, agenda );
+    // // console.log(result2)
+
+    // // document.getElementById("agendaTest").value = ""
+    // const result2 = await getWorkshopByNameAPI(global.workshopname );
+    // // global.userid = result1.data[0]._id
+    // const result3 = await addSummaryAPI(result2.data[0]._id, result1.data );
+    // console.log(result3)
+
+    // if (result3.status === 200){
+    //   document.getElementById("notesError").innerHTML = "Summary saved successfully"
+    // }
+    // else{
+    //   document.getElementById("notesError").innerHTML = "Summary save failed"
+    // }
 }
 
 
