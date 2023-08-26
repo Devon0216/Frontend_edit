@@ -438,6 +438,11 @@ const setTimer = async () => {
     if (timerID.indexOf('"') !== -1){
         timerID = timerID.slice(1,timerID.length-1);
     }
+
+    console.log("timerText")
+    console.log(timerText)
+    console.log("timerText.status")
+    console.log(timerText.status)
     // document.getElementById("timerID").textContent = timerID;
     if (timerText.status === 200){
       document.getElementById("agendaError").textContent = "Timer created successfully";
