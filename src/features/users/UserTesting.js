@@ -3,7 +3,7 @@ import axios from "axios";
 const getUsers = async () => {
     const options = {
         'method': 'GET',
-        'url': `https://whiteboarddj-server.onrender.com/users`,
+        'url': `https://whiteboard-server-7kf51co6i-devon0216.vercel.app//users`,
         'headers': {
             
         },
@@ -29,7 +29,7 @@ const getUsers = async () => {
 const createUsers = async () => {
     const options = {
         'method': 'POST',
-        'url': `https://whiteboarddj-server.onrender.com/users`,
+        'url': `https://whiteboard-server-7kf51co6i-devon0216.vercel.app//users`,
         'headers': {
         },
         data: { 
@@ -56,7 +56,7 @@ const createUsers = async () => {
 const updateUsers = async () => {
     const options = {
         'method': 'PATCH',
-        'url': `https://whiteboarddj-server.onrender.com/users`,
+        'url': `https://whiteboard-server-7kf51co6i-devon0216.vercel.app//users`,
         'headers': {
             
         },

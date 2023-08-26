@@ -15,7 +15,7 @@
 
 //   const connectToServer = () => {
 //     userId = global.username;
-//     socket = io.connect('https://whiteboarddj-server.onrender.com', {
+//     socket = io.connect('https://whiteboard-server-7kf51co6i-devon0216.vercel.app/', {
 //       query:  {userId} 
 //     }); // Adjust the URL to your server's URL
 //     console.log("socket")

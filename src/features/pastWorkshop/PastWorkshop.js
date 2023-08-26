@@ -31,7 +31,7 @@ const PastWorkshop = () => {
     const getUserWorkshops = async () => {
       const options = {
           'method': 'POST',
-          'url': `https://whiteboarddj-server.onrender.com/workshops/userworkshop`,
+          'url': `https://whiteboard-server-7kf51co6i-devon0216.vercel.app//workshops/userworkshop`,
           'headers': {
               
           },

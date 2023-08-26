@@ -24,7 +24,7 @@ const WorkshopNotes = () => {
     const getNotesByWorkshop = async () => {
         const options = {
             'method': 'POST',
-            'url': `https://whiteboarddj-server.onrender.com/notes/workshopNotes`,
+            'url': `https://whiteboard-server-7kf51co6i-devon0216.vercel.app//notes/workshopNotes`,
             'headers': {
               'Content-Type': 'application/json'
             },
@@ -56,7 +56,7 @@ const WorkshopNotes = () => {
     const getyWorkshopById = async () => {
       const options = {
           'method': 'POST',
-          'url': `https://whiteboarddj-server.onrender.com/workshops/workshopById`,
+          'url': `https://whiteboard-server-7kf51co6i-devon0216.vercel.app//workshops/workshopById`,
           'headers': {
             'Content-Type': 'application/json'
           },
