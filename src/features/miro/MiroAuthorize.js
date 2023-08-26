@@ -62,14 +62,25 @@ const connectMiroBoard = async () => {
     responseToken = await getAccessToken(jsonCode);
     console.log("responseToken")
     console.log(responseToken)
-    if (responseToken === "Please check your if board ID is correct. If it is correct, please authorize again due to invalid authorization code from Miro"){
+    if (responseToken === "Please please authorize again due to invalid authorization code from Miro"){
       console.log("invalid auth")
       document.getElementById("notesError").innerHTML = responseToken
     }
     else{
       console.log("connected to the miro board")
-      // responseBoard = await getBoardID(responseToken.data);
-      globalBoardID = document.getElementById("boardID").value
+
+      responseBoard = await getBoardID(responseToken.data, document.getElementById("boardID").value);
+      console.log("responseBoard.status")
+      console.log(responseBoard.status)
+
+      // if (){
+      //   document.getElementById("notesError").innerHTML = "You have entered wrong board ID"
+      // }
+
+
+      // globalBoardID = document.getElementById("boardID").value
+
+
       document.getElementById("notesError").innerHTML = "You have successfully connected to the Miro board"
       setTimer();
 
@@ -124,10 +135,10 @@ const getAccessToken = async (code) => {
       }
 }
 
-const getBoardID = async (access_token) => {
+const getBoardID = async (access_token, boardId) => {
     const options = {
         'method': 'GET',
-        'url': `https://api.miro.com/v2/boards/uXjVMy3XuMY=`,
+        'url': `https://api.miro.com/v2/boards/${boardId}`,
         'headers': {
             'Authorization': `Bearer ${access_token}`
         },
@@ -142,6 +153,7 @@ const getBoardID = async (access_token) => {
         return result;
       } catch (e) {
            console.log(e);
+           return e;
       }
 }
 
@@ -1002,9 +1014,21 @@ const MiroAuthorize = () => {
     const [fetchedAgendaSession, setFetcgedAgendaSession] = useState('');
 
     const addSession =  () => {
-        let hours = parseInt( document.getElementById("newSessionHour").value )
-        let minutes = parseInt( document.getElementById("newSessionMinute").value )
-        let seconds = parseInt( document.getElementById("newSessionSecond").value )
+        var hours = 0;
+        var minutes = 0;
+        var seconds = 0;
+        if (document.getElementById("newSessionHour").value !== ""){
+          hours = parseInt( document.getElementById("newSessionHour").value )
+        }
+        if (document.getElementById("newSessionMinute").value !== ""){
+          minutes = parseInt( document.getElementById("newSessionMinute").value )
+        }
+        if (document.getElementById("newSessionSecond").value !== ""){
+          seconds = parseInt( document.getElementById("newSessionSecond").value )
+        }
+        // let hours = parseInt( document.getElementById("newSessionHour").value )
+        // let minutes = parseInt( document.getElementById("newSessionMinute").value )
+        // let seconds = parseInt( document.getElementById("newSessionSecond").value )
 
         if (hours < 10){
             hours = "0" + hours;
@@ -1116,10 +1140,19 @@ const MiroAuthorize = () => {
 
     const newSessionTime = async () => {
         // let time = document.getElementById("newTimer").value
-        let hour = parseInt( document.getElementById("hour").value )
-        let minute = parseInt( document.getElementById("minute").value )
-        let second = parseInt( document.getElementById("second").value )
-        finalTime = hour*3600 + minute*60 + second;
+        var hours = 0;
+        var minutes = 0;
+        var seconds = 0;
+        if (document.getElementById("newSessionHour").value !== ""){
+          hours = parseInt( document.getElementById("newSessionHour").value )
+        }
+        if (document.getElementById("newSessionMinute").value !== ""){
+          minutes = parseInt( document.getElementById("newSessionMinute").value )
+        }
+        if (document.getElementById("newSessionSecond").value !== ""){
+          seconds = parseInt( document.getElementById("newSessionSecond").value )
+        }
+        finalTime = hours*3600 + minutes*60 + seconds;
 
         setCountdowns((prevCountdowns) => {
             const updatedCountdowns = [...prevCountdowns];
@@ -1446,11 +1479,13 @@ const MiroAuthorize = () => {
                   <br></br>
                   <button class="button-orange" onClick={addAgenda}>Add the above sessions to agenda</button>
                   <br></br>
-                  <button class="button-orange" onClick={clearAgenda}>Clear agenda</button>
-                  <br></br>
+
               </div>
 
               <button class="button-orange"  onClick={getAgenda}>Get agenda</button>
+              <br></br>
+              <button class="button-orange" onClick={clearAgenda}>Clear agenda</button>
+              <br></br>
               <h1 id="fetchedAgenda"></h1>
               {fetchedAgendaSession.split('\n').map((line, index) => (
                 <p key={index}>{line}</p>
