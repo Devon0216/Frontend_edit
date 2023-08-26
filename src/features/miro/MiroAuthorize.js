@@ -865,9 +865,9 @@ const summarise = async () => {
 
     
     const result1 = await summariseAPI(notesText, sensitivityScore );
-    // console.log("result1.data")
-    // console.log(result1.data)
-    // document.getElementById("summarisation").textContent = "Summary:\n" + result1.data;
+    console.log("result1.data")
+    console.log(result1.data)
+    document.getElementById("summarisation").textContent = "Summary:\n" + result1.data.summary;
     // // global.userid = result1.data[0]._id
     // // const result2 = await addAgendaAPI(global.userid, agenda );
     // // console.log(result2)
