@@ -62,7 +62,7 @@ const connectMiroBoard = async () => {
     responseToken = await getAccessToken(jsonCode);
     console.log("responseToken")
     console.log(responseToken)
-    if (responseToken === "Please authorize again, due to invalid authorization code from Miro"){
+    if (responseToken === "Please check your if board ID is correct. If it is correct, please authorize again due to invalid authorization code from Miro"){
       console.log("invalid auth")
       document.getElementById("notesError").innerHTML = responseToken
     }
@@ -444,7 +444,7 @@ const setTimer = async () => {
     console.log("timerText.status")
     console.log(timerText.status)
     // document.getElementById("timerID").textContent = timerID;
-    if (timerText.status === 200){
+    if (timerText.status === 201){
       document.getElementById("agendaError").textContent = "Timer created successfully";
     } 
     else{
@@ -528,7 +528,8 @@ const createWorkshopAPI = async (userID, workshopname) => {
         return result;
       } catch (e) {
            console.log(e);
-           document.getElementById("workshopError").innerHTML = JSON.parse(e.request.responseText).message
+           return JSON.parse(e.request.responseText).message
+          //  document.getElementById("workshopError").innerHTML = JSON.parse(e.request.responseText).message
       }
 }
 
@@ -1302,7 +1303,6 @@ const MiroAuthorize = () => {
               <h1 className="sectionHeading">Please authorize again if any unexpected behaviour occurs</h1>
               <br></br>
               <h1 className="sectionHeading">Log in:</h1>
-              <br></br>
               <label>You can sign up on the welcome Page</label>
               <br></br>
               <label>User name:</label>
@@ -1381,7 +1381,6 @@ const MiroAuthorize = () => {
                   </tbody>
               </table>
               <br></br>
-              
               <label className="sectionHeading">Third step</label>
               <br></br>
               <label>Please select sensitivity for the summarisation</label>

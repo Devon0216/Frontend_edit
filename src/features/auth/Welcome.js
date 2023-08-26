@@ -37,8 +37,8 @@ const Welcome = () => {
 
             <div>
                 <h1 class="sectionHeading">Home</h1>
-                <h1>If you want to sign up an account, you can sign up on the welcome page.</h1>
                 <button class="button-orange" onClick={gotoWelcome }>Go back to welcome</button>
+                <br></br>
                 <br></br>
                 <h1>Please click the authorize button to use the application. You will then need to log in with your account, and follow the instructions.</h1>
 
