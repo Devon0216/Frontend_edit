@@ -79,7 +79,6 @@ const connectMiroBoard = async () => {
         setTimer();
 
         document.getElementById("agendaSection").hidden = false
-        document.getElementById("timerSection").hidden = false
         document.getElementById("messageSection").hidden = false
 
         if (coach === true){
@@ -1131,6 +1130,9 @@ const MiroAuthorize = () => {
       if (!isRunning) {
         setIsRunning(true);
         setCurrentCountdownIndex(0);
+      }
+      if (coach === false){
+        document.getElementById("timerSection").hidden = false
       }
     };
 
