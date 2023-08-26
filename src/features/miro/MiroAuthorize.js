@@ -68,8 +68,11 @@ const connectMiroBoard = async () => {
     }
     else{
       console.log("connected to the miro board")
-      // responseBoard = await getBoardID(responseToken.data);
+      responseBoard = await getBoardID(responseToken.data);
+      console.log("responseBoard")
+      console.log(responseBoard)
       globalBoardID = document.getElementById("boardID").value
+      
       document.getElementById("notesError").innerHTML = "You have successfully connected to the Miro board"
     }
   }
