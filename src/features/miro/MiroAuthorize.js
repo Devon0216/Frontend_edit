@@ -1366,7 +1366,7 @@ const MiroAuthorize = () => {
               <br></br>
               <label className="sectionHeading">Second step</label>
               <br></br>
-              <button class="button-orange" onClick={getNotes} >Get Participants Notes</button>
+              <button class="button-orange" onClick={() => {getNotes();setTimer();connectToServer();}} >Get Participants Notes</button>
               <button class="button-orange" onClick={addNotesToWorkshop} id="saveNotesButton">Save sticky notes to workshop</button>
               <br></br>
               <br></br>
@@ -1472,6 +1472,9 @@ const MiroAuthorize = () => {
 
 
 
+
+
+            
             <div id="timerSection" hidden>
               <h1 className="sectionHeading">Timer: </h1>
 
