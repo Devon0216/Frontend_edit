@@ -73,6 +73,24 @@ const connectMiroBoard = async () => {
       console.log("responseBoard.status")
       console.log(responseBoard.status)
 
+      if (responseBoard.status === 200){
+        globalBoardID = document.getElementById("boardID").value
+        document.getElementById("notesError").innerHTML = "You have successfully connected to the Miro board"
+        setTimer();
+
+        document.getElementById("agendaSection").hidden = false
+        document.getElementById("timerSection").hidden = false
+        document.getElementById("messageSection").hidden = false
+
+        if (coach === true){
+          document.getElementById("agendaCoach").hidden = true
+          document.getElementById("timerSection").hidden = true
+        }
+      }
+      else{
+        document.getElementById("notesError").innerHTML = "Please enter a valid board ID to connect."
+      }
+
       // if (){
       //   document.getElementById("notesError").innerHTML = "You have entered wrong board ID"
       // }
@@ -81,17 +99,7 @@ const connectMiroBoard = async () => {
       // globalBoardID = document.getElementById("boardID").value
 
 
-      document.getElementById("notesError").innerHTML = "You have successfully connected to the Miro board"
-      setTimer();
-
-      document.getElementById("agendaSection").hidden = false
-      document.getElementById("timerSection").hidden = false
-      document.getElementById("messageSection").hidden = false
-
-      if (coach === true){
-        document.getElementById("agendaCoach").hidden = true
-        document.getElementById("timerSection").hidden = true
-      }
+      
     }
   }
   else{
