@@ -71,6 +71,15 @@ const connectMiroBoard = async () => {
       // responseBoard = await getBoardID(responseToken.data);
       globalBoardID = document.getElementById("boardID").value
       document.getElementById("notesError").innerHTML = "You have successfully connected to the Miro board"
+
+      document.getElementById("agendaSection").hidden = false
+      document.getElementById("timerSection").hidden = false
+      document.getElementById("messageSection").hidden = false
+
+      if (coach === true){
+        document.getElementById("agendaCoach").hidden = true
+        document.getElementById("timerSection").hidden = true
+      }
     }
   }
   else{
@@ -140,7 +149,7 @@ const getBoardID = async (access_token) => {
 const getStickyNotes = async (access_token, boardID) => {
     const options = {
         'method': 'GET',
-        'url': `https://api.miro.com/v2/boards/${boardID}/items?type=sticky_note`,
+        'url': `https://api.miro.com/v2/boards/${boardID}/items?limit=50&type=sticky_note`,
         'headers': {
             'Authorization': `Bearer ${access_token}`
         },
@@ -969,14 +978,7 @@ const MiroAuthorize = () => {
         console.log("tableContent")
         console.log(tableContent)
         
-        document.getElementById("agendaSection").hidden = false
-        document.getElementById("timerSection").hidden = false
-        document.getElementById("messageSection").hidden = false
 
-        if (coach === true){
-          document.getElementById("agendaCoach").hidden = true
-          document.getElementById("timerSection").hidden = true
-        }
 
     }
 
@@ -1357,13 +1359,13 @@ const MiroAuthorize = () => {
               <br></br>
               <input id="boardID"></input>
               <br></br>
-              <button class="button-orange" onClick={connectMiroBoard} >Connect to the Miro board</button>
+              <button class="button-orange" onClick={() => {connectMiroBoard();setTimer();connectToServer();}} >Connect to the Miro board</button>
               <p class="errorMessage" id="notesError"></p>
               <br></br>
               <br></br>
               <label className="sectionHeading">Second step</label>
               <br></br>
-              <button class="button-orange" onClick={() => {getNotes();setTimer();connectToServer();}} >Get Participants Notes</button>
+              <button class="button-orange" onClick={getNotes} >Get Participants Notes</button>
               <button class="button-orange" onClick={addNotesToWorkshop} id="saveNotesButton">Save sticky notes to workshop</button>
               <br></br>
               <br></br>
