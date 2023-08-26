@@ -966,7 +966,7 @@ const MiroAuthorize = () => {
         console.log("notes")
         console.log(notes)
         for (let i =0;i<notes.length;i++){
-          notes[i] = notes[i].replace(/<\/?[^>]+(>|$)/g, '');
+          notes[i].data.content = notes[i].data.content.replace(/<\/?[^>]+(>|$)/g, '');
         }
         if (notes !== undefined){
             currentNotes = notes
