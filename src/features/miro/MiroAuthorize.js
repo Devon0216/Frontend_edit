@@ -76,7 +76,7 @@ const connectMiroBoard = async () => {
       if (responseBoard.status === 200){
         globalBoardID = document.getElementById("boardID").value
         document.getElementById("notesError").innerHTML = "You have successfully connected to the Miro board"
-        setTimer();
+        
 
         document.getElementById("agendaSection").hidden = false
         document.getElementById("messageSection").hidden = false
@@ -84,6 +84,9 @@ const connectMiroBoard = async () => {
         if (coach === true){
           document.getElementById("agendaCoach").hidden = true
           document.getElementById("timerSection").hidden = true
+        }
+        else{
+          setTimer();
         }
       }
       else{
@@ -694,19 +697,25 @@ const getUserByName = async (username, password) => {
     }
 
 const createWorkshop = async () => {
-    global.workshopname = document.getElementById("workshopname").value
-    global.username = document.getElementById("username").value
-    global.password = document.getElementById("password").value
-
-    const result1 = await getUserByName(global.username, global.password );
-    global.userid = result1.data[0]._id
-    const result2 = await createWorkshopAPI(global.userid, global.workshopname );
-    console.log(result2)
-    document.getElementById("notesSection").hidden = false
-    if (result2 === "Duplicate workshopname"){
-      document.getElementById("workshopError").innerHTML = "Workshop name already exists"
+    if (document.getElementById("workshopname").value === ""){
+      document.getElementById("workshopError").innerHTML = "Please enter a workshop name"
     }
-    document.getElementById("workshopError").innerHTML = "Workshop created successfully"
+    else{
+      global.workshopname = document.getElementById("workshopname").value
+      global.username = document.getElementById("username").value
+      global.password = document.getElementById("password").value
+  
+      const result1 = await getUserByName(global.username, global.password );
+      global.userid = result1.data[0]._id
+      const result2 = await createWorkshopAPI(global.userid, global.workshopname );
+      console.log(result2)
+      document.getElementById("notesSection").hidden = false
+      if (result2 === "Duplicate workshopname"){
+        document.getElementById("workshopError").innerHTML = "Workshop name already exists"
+      }
+      document.getElementById("workshopError").innerHTML = "Workshop created successfully"
+    }
+
 }
 
 const joinWorkshopAsFacilitator = async () => {
@@ -1021,42 +1030,49 @@ const MiroAuthorize = () => {
     const [fetchedAgendaSession, setFetcgedAgendaSession] = useState('');
 
     const addSession =  () => {
-        var hours = 0;
-        var minutes = 0;
-        var seconds = 0;
-        if (document.getElementById("newSessionHour").value !== ""){
-          hours = parseInt( document.getElementById("newSessionHour").value )
-        }
-        if (document.getElementById("newSessionMinute").value !== ""){
-          minutes = parseInt( document.getElementById("newSessionMinute").value )
-        }
-        if (document.getElementById("newSessionSecond").value !== ""){
-          seconds = parseInt( document.getElementById("newSessionSecond").value )
-        }
-        // let hours = parseInt( document.getElementById("newSessionHour").value )
-        // let minutes = parseInt( document.getElementById("newSessionMinute").value )
-        // let seconds = parseInt( document.getElementById("newSessionSecond").value )
 
-        if (hours < 10){
-            hours = "0" + hours;
+        if (document.getElementById("newSession").value === ""){
+          document.getElementById("agendaError").innerHTML = "Please enter a session name"
+        }
+        else{
+          var hours = 0;
+          var minutes = 0;
+          var seconds = 0;
+          if (document.getElementById("newSessionHour").value !== ""){
+            hours = parseInt( document.getElementById("newSessionHour").value )
           }
-          if (minutes < 10){
-            minutes = "0" + minutes;
+          if (document.getElementById("newSessionMinute").value !== ""){
+            minutes = parseInt( document.getElementById("newSessionMinute").value )
           }
-          if (seconds < 10){
-            seconds = "0" + seconds;
+          if (document.getElementById("newSessionSecond").value !== ""){
+            seconds = parseInt( document.getElementById("newSessionSecond").value )
           }
+          // let hours = parseInt( document.getElementById("newSessionHour").value )
+          // let minutes = parseInt( document.getElementById("newSessionMinute").value )
+          // let seconds = parseInt( document.getElementById("newSessionSecond").value )
 
-        agenda = agenda + document.getElementById("newSession").value + " " 
-        + hours + ":" 
-        + minutes + ":" 
-        + seconds + '\n'
-        setAgendaSession(agenda);
+          if (hours < 10){
+              hours = "0" + hours;
+            }
+            if (minutes < 10){
+              minutes = "0" + minutes;
+            }
+            if (seconds < 10){
+              seconds = "0" + seconds;
+            }
+
+          agenda = agenda + document.getElementById("newSession").value + " " 
+          + hours + ":" 
+          + minutes + ":" 
+          + seconds + '\n'
+          setAgendaSession(agenda);
+          
+          document.getElementById("newSession").value = "";
+          document.getElementById("newSessionHour").value = "";
+          document.getElementById("newSessionMinute").value = "";
+          document.getElementById("newSessionSecond").value = "";
+        }
         
-        document.getElementById("newSession").value = "";
-        document.getElementById("newSessionHour").value = "";
-        document.getElementById("newSessionMinute").value = "";
-        document.getElementById("newSessionSecond").value = "";
     }
 
     const clearAgenda = async () => {
@@ -1373,8 +1389,10 @@ const MiroAuthorize = () => {
             </div>
 
             <div id="workshopSection" class="section" hidden>
-              <h1 className="sectionHeading">Please create or join a workshop:</h1>
+              <h1 className="sectionHeading">Create or join a workshop:</h1>
               {/* <br></br> */}
+              <label>Please enter the workshop name to create or join a workshop</label>
+              <br></br>
               <label>Workshop name:</label>
               <br></br>
               <input type="text" id="workshopname" required minLength="2" size="20" />
@@ -1539,7 +1557,7 @@ const MiroAuthorize = () => {
               <label>:</label>
               <input type="text" id="second" required minLength="5" maxLength="15" size="3" />
               <br></br>
-              <button class="button-orange" onClick={newSessionTime}>Update Timer: </button>
+              <button class="button-orange" onClick={newSessionTime}>Update Timer </button>
               <h1 id="timerID"></h1>
               <br></br>
               <br></br>
@@ -1565,7 +1583,7 @@ const MiroAuthorize = () => {
               <br></br>
               <label className="sectionHeading">First step</label>
               <br></br>
-              <label>Enter recepients names, seperated by "," E.g. Devon,Joshua,Gary</label>
+              <label>Enter recepients' usernames, seperated by "," E.g. Devon666,Joshua,Gary123</label>
               <br></br>
               <input type="text" id="recepient" onChange={(e) => createRecepients(e.target.value)}></input>
               <br></br>
