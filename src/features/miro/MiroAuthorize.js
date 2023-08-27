@@ -90,7 +90,7 @@ const connectMiroBoard = async () => {
         }
       }
       else{
-        document.getElementById("notesError").innerHTML = "Please enter a valid board ID to connect."
+        document.getElementById("notesError").innerHTML = "Please enter a valid board ID to connect. Or please authorize again"
       }
 
       // if (){
