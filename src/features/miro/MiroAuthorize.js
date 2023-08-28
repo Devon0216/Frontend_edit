@@ -84,8 +84,6 @@ const connectMiroBoard = async () => {
         if (coach === true){
           document.getElementById("agendaCoach").hidden = true
           document.getElementById("timerSection").hidden = true
-          document.getElementById("saveNotesButton").hidden = true
-          document.getElementById("clearAgendaButton").hidden = true
         }
         else{
           setTimer();
