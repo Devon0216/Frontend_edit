@@ -84,6 +84,8 @@ const connectMiroBoard = async () => {
         if (coach === true){
           document.getElementById("agendaCoach").hidden = true
           document.getElementById("timerSection").hidden = true
+          document.getElementById("saveNotesButton").hidden = true
+          document.getElementById("clearAgendaButton").hidden = true
         }
         else{
           setTimer();
@@ -1452,21 +1454,24 @@ const MiroAuthorize = () => {
                   </tbody>
               </table>
               <br></br>
-              <label className="sectionHeading">Third step</label>
-              <br></br>
-              <label>Please select sensitivity for the summarisation</label>
-              <br></br>
-              <select id="sensitivity">
-                <option value="lowSensitivity">Low</option>
-                <option value="mediumSensitivity">Medium</option>
-                <option value="highSensitivity">High</option>
-              </select>
-              <br></br>
-              <button class="button-orange" onClick={summarise} id="summariseNotesButton">Summarise the notes</button>
-              <br></br>
-              <p id="summarisation"></p>
-              <br></br>
-              <br></br>
+              <div id="summariseDiv">
+                <label className="sectionHeading">Third step</label>
+                <br></br>
+                <label>Please select sensitivity for the summarisation</label>
+                <br></br>
+                <select id="sensitivity">
+                  <option value="lowSensitivity">Low</option>
+                  <option value="mediumSensitivity">Medium</option>
+                  <option value="highSensitivity">High</option>
+                </select>
+                <br></br>
+                <button class="button-orange" onClick={summarise} id="summariseNotesButton">Summarise the notes</button>
+                <br></br>
+                <p id="summarisation"></p>
+                <br></br>
+                <br></br>
+              </div>
+
             </div>
 
 
@@ -1512,7 +1517,7 @@ const MiroAuthorize = () => {
 
               <button class="button-orange"  onClick={getAgenda}>Get agenda</button>
               <br></br>
-              <button class="button-orange" onClick={clearAgenda}>Clear agenda</button>
+              <button id="clearAgendaButton" class="button-orange" onClick={clearAgenda}>Clear agenda</button>
               <br></br>
               <h1 id="fetchedAgenda"></h1>
               {fetchedAgendaSession.split('\n').map((line, index) => (
