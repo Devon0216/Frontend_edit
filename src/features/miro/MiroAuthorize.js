@@ -1508,6 +1508,7 @@ const MiroAuthorize = () => {
             // socket.emit('sendAgenda', updatedCountdowns);
 
             }
+            document.getElementById("timerError").textContent = "time updated succesfully";
             return updatedCountdowns;
         });
     }
@@ -1747,7 +1748,6 @@ const MiroAuthorize = () => {
               <br></br>
               <p class="errorMessage" id="notesButtonError"></p>
               <br></br>
-              <br></br>
               {/* <h1 id="response">response</h1>
               <h1 id="test">test</h1>
               <h1 id="test2">test2</h1> */}
@@ -1815,11 +1815,13 @@ const MiroAuthorize = () => {
                   <input type="text" id="newSessionSecond" required minLength="5" maxLength="15" size="3"/>
                   <br></br>
                   <button class="button-orange" onClick={addSession}>Create session</button>
-                  <p class="errorMessage" id="sessionError"></p>
+                  
                   {/* <h1 id="output"></h1> */}
                   {agendaSession.split('\n').map((line, index) => (
                   <p key={index}>{line}</p>
                   ))}
+                  <br></br>
+                  <p class="errorMessage" id="sessionError"></p>
                   <br></br>
                   <label className="sectionHeading">Second step</label>
                   <br></br>
@@ -1862,7 +1864,7 @@ const MiroAuthorize = () => {
 
 
             <div id="timerSection" class="section" hidden>
-              <h1 className="sectionHeading">Timer: </h1>
+              <h1 className="sectionHeading">Update Timer: </h1>
 
               {/* <h1 id="timer">Time left: </h1> */}
               {/* <h1 id="timer2">Time2 left: </h1> */}
@@ -1878,6 +1880,8 @@ const MiroAuthorize = () => {
               <input type="text" id="second" required minLength="5" maxLength="15" size="3" />
               <br></br>
               <button class="button-orange" onClick={newSessionTime}>Update Timer </button>
+              <br></br>
+              <p class="errorMessage" id="timerError"></p>
               <h1 id="timerID"></h1>
               <br></br>
               <br></br>
