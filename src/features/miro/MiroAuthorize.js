@@ -24,16 +24,163 @@ var coach = false;
 
 
 
+/*
+    ******************************************************
+    ******************************************************
+    Admin section
+    ******************************************************
+    ******************************************************
+*/
+const getAccessToken = async (code) => {
+  const options = {
+      'method': 'POST',
+      'url': `http://localhost:3500/auth`,
+      'headers': {
+        'Content-Type': 'application/json'
+      },
+      data: {
+        code: code
+      }
+  };
+  
+  try {
+      const result = await axios(options);
+      console.log("hi")
+      console.log(result);
+      return result;
+    } catch (e) {
+        console.log(e);
+        return JSON.parse(e.request.responseText).message
+    }
+}
+
+const getAccessTokenContext = async (access_token) => {
+console.log("access_token");
+console.log(access_token);
+const options = {
+  'method': 'GET',
+  'url': `https://api.miro.com/v1/oauth-token`,
+  'headers': {
+    'Authorization': `Bearer ${access_token}`,
+    'accept': 'application/json',
+    'content-type': 'application/json'
+  },
+  data: {
+
+  }
+};
+
+try {
+  const result = await axios(options);
+  console.log("context result")
+  console.log(result)
+  console.log("user")
+  console.log(result.data.createdBy.name)
+  console.log("user id")
+  console.log(result.data.createdBy.id)
+  console.log("team id")
+  console.log(result.data.team.name)
+  console.log("tean id")
+  console.log(result.data.team.id)
+  // console.log(body);
+  return result;
+} catch (e) {
+     console.log("e.response.data");
+     console.log(e.response.data);
+    // console.log("e")
+    // console.log(e)
+     return e;
+}
+}
+
+const getBoards = async (access_token, teamId) => {
+console.log("access_token");
+console.log(access_token);
+console.log("teamId");
+console.log(teamId);
+const options = {
+  'method': 'GET',
+  'url': `https://api.miro.com/v2/boards?team_id=${teamId}`,
+  'headers': {
+    'Authorization': `Bearer ${access_token}`,
+    'accept': 'application/json',
+    'content-type': 'application/json'
+  },
+  data: {
+
+  }
+};
+
+try {
+  const result = await axios(options);
+  console.log("boards result")
+  console.log(result)
+
+  // console.log(body);
+  return result;
+} catch (e) {
+     console.log("e.response.data");
+     console.log(e.response.data);
+    // console.log("e")
+    // console.log(e)
+     return e;
+}
+}
+
+const getBoardID = async (access_token, boardId) => {
+  const options = {
+      'method': 'GET',
+      'url': `https://api.miro.com/v2/boards/${boardId}`,
+      'headers': {
+          'Authorization': `Bearer ${access_token}`
+      },
+      data: {
+        
+      }
+  };
+  
+  try {
+      const result = await axios(options);
+      console.log(result);
+      return result;
+    } catch (e) {
+         console.log(e);
+         return e;
+    }
+}
+
+const createBoardAPI = async (access_token, teamId) => {
+  const options = {
+      'method': 'POST',
+      'url': `https://api.miro.com/v2/boards`,
+      'headers': {
+        'Authorization': `Bearer ${access_token}`,
+        'accept': 'application/json',
+        'content-type': 'application/json'
+      },
+      data: {
+        "teamId": `${teamId}`,
+        "name": "WhiteboardDJ"
+      }
+  };
+  
+  try {
+      const result = await axios(options);
+      return result;
+    } catch (e) {
+        console.log(e);
+        return JSON.parse(e.request.responseText).message
+    }
+}
+
+
 
 const login = async () => {
   const loginUsername = document.getElementById("username").value
   const loginPassword = document.getElementById("password").value
 
-  const result1 = await getUserByName(loginUsername, loginPassword );
+  const result1 = await getUserByMiroId(loginUsername, loginPassword );
   
-
-
-
   if (result1.data[0].username !== undefined){
     const loginUserName = result1.data[0].username
     console.log("loginUserName")
@@ -51,9 +198,107 @@ const login = async () => {
   // console.log(result1.data[0].User)
 }
 
+const createUser = async (username, miroId) => {
+  const options = {
+      'method': 'POST',
+      'url': `http://localhost:3500/users`,
+      'headers': {
+        'Content-Type': 'application/json'
+      },
+      data: {
+        username: `${username}`,
+        miroId: `${miroId}`
+      }
+  };
+  
+  try {
+      const result = await axios(options);
+      console.log("create user result")
+      console.log(result);
+      return result;
+    } catch (e) {
+        console.log(e);
+        return JSON.parse(e.request.responseText).message
+    }
+}
+
+const getUsername = async () => {
+  const result1 = await getAccessTokenContext(responseToken.data);
+  // console.log("context result")
+  // console.log(username)
+  // console.log("user")
+  // console.log(username.data.createdBy.name)
+  // console.log("user id")
+  // console.log(username.data.createdBy.id)
+  // console.log("team name")
+  // console.log(username.data.team.name)
+  // console.log("tean id")
+  // console.log(username.data.team.id)
+  global.username = result1.data.createdBy.name;
+  console.log("global.username")
+  console.log(global.username)
+
+  global.miroId = result1.data.createdBy.id;
+  console.log("global.miroId")
+  console.log(global.miroId)
+
+  const resultGetUser = await getUserByMiroId(global.username, global.miroId );
+  console.log("resultGetUser")
+  console.log(resultGetUser)
+  if (resultGetUser.status === 200){
+    if (resultGetUser.data[0].username !== undefined){
+      global.userid = resultGetUser.data[0]._id
+    }
+  }
+  else{
+    if (resultGetUser.response.data.message === "No user found"){
+      const resultCreateUser = await createUser(global.username, global.miroId );
+      console.log("resultCreateUser")
+      console.log(resultCreateUser)
+      global.userid = resultCreateUser.data[0]._id
+  
+    }
+    else if (resultGetUser.response.status === 400){
+      console.log(resultGetUser.response.data.message)
+    }
+  }
+
+
+  
+
+
+
+
+  let tempboardid = "";
+  const boards = await getBoards(responseToken.data, result1.data.team.id);
+  for(let i =0; i < boards.data.data.length; i++){
+    if (boards.data.data[i].name === "WhiteboardDJ"){
+      // console.log("boards.data.data[i].name")
+      // console.log(boards.data.data[i].id)
+      // console.log("boards.data.data[i].id")
+      // console.log(boards.data.data[i].id)
+      tempboardid = boards.data.data[i].id
+    }
+  }
+  if (tempboardid === ""){
+    // console.log("create board")
+    const result2 = await createBoardAPI(responseToken.data, result1.data.team.id);
+    // console.log("result2")
+    // console.log(result2)
+    tempboardid = result2.data.id
+    globalBoardID = tempboardid
+  }
+  else{
+    globalBoardID = tempboardid
+    // console.log("globalBoardID")
+    // console.log(globalBoardID)
+  }
+
+}
+
 const connectMiroBoard = async () => {
 
-  if (document.getElementById("boardID").value !== ""){
+  // if (document.getElementById("boardID").value !== ""){
     const str = window.location.href;
     const jsonCode = str.slice(str.indexOf('=') + 1,str.indexOf('&'));
   
@@ -62,55 +307,37 @@ const connectMiroBoard = async () => {
     responseToken = await getAccessToken(jsonCode);
     console.log("responseToken")
     console.log(responseToken)
-    if (responseToken === "Please please authorize again due to invalid authorization code from Miro"){
+    if (responseToken === "Please authorize again, due to invalid authorization code from Miro!!!"){
       console.log("invalid auth")
-      document.getElementById("notesError").innerHTML = responseToken
+      document.getElementById("loading").innerHTML = responseToken
     }
     else{
+      await getUsername();
+
       console.log("connected to the miro board")
 
-      responseBoard = await getBoardID(responseToken.data, document.getElementById("boardID").value);
-      console.log("responseBoard.status")
-      console.log(responseBoard.status)
+      // responseBoard = await getBoardID(responseToken.data, document.getElementById("boardID").value);
+      // console.log("responseBoard.status")
+      // console.log(responseBoard.status)
 
-      if (responseBoard.status === 200){
-        globalBoardID = document.getElementById("boardID").value
-        document.getElementById("notesError").innerHTML = "You have successfully connected to the Miro board"
-        
-
-        document.getElementById("agendaSection").hidden = false
-        document.getElementById("messageSection").hidden = false
-
-        if (coach === true){
-          document.getElementById("agendaCoach").hidden = true
-          document.getElementById("timerSection").hidden = true
-        }
-        else{
-          setTimer();
-        }
-      }
-      else{
-        document.getElementById("notesError").innerHTML = "Please enter a valid board ID to connect. Or please authorize again"
-      }
-
-      // if (){
-      //   document.getElementById("notesError").innerHTML = "You have entered wrong board ID"
-      // }
-
-
-      // globalBoardID = document.getElementById("boardID").value
-
-
+      // if (responseBoard.status === 200){
+      //   globalBoardID = document.getElementById("boardID").value
       
+      
+      // document.getElementById("workshopSection").hidden = false;
+      // document.getElementById("agendaSection").hidden = false
+      // document.getElementById("messageSection").hidden = false
+
+      // if (coach === true){
+      //   document.getElementById("agendaCoach").hidden = true
+      //   document.getElementById("timerSection").hidden = true
+      // }
+      if (coach === false){
+        await setTimer();
+      }
+
+      document.getElementById("loading").innerHTML = "You have successfully connected to the Miro board!"
     }
-  }
-  else{
-    document.getElementById("notesError").innerHTML = "Please enter a board ID to connect."
-  }
-
-
-        // document.getElementById("response").innerHTML = responseToken.data
-    
 
 }
 
@@ -122,53 +349,6 @@ const connectMiroBoard = async () => {
     ******************************************************
     ******************************************************
 */
-const getAccessToken = async (code) => {
-    const options = {
-        'method': 'POST',
-        'url': `https://whiteboarddj-server.onrender.com/auth`,
-        'headers': {
-          'Content-Type': 'application/json'
-        },
-        data: {
-          code: code
-        }
-    };
-    
-    try {
-        const result = await axios(options);
-        console.log("hi")
-        console.log(result);
-        return result;
-      } catch (e) {
-          console.log(e);
-          return JSON.parse(e.request.responseText).message
-      }
-}
-
-const getBoardID = async (access_token, boardId) => {
-    const options = {
-        'method': 'GET',
-        'url': `https://api.miro.com/v2/boards/${boardId}`,
-        'headers': {
-            'Authorization': `Bearer ${access_token}`
-        },
-        data: {
-          
-        }
-    };
-    
-    try {
-        const result = await axios(options);
-        console.log(result);
-        return result;
-      } catch (e) {
-           console.log(e);
-           return e;
-      }
-}
-
-
-
 const getStickyNotes = async (access_token, boardID) => {
     const options = {
         'method': 'GET',
@@ -204,7 +384,7 @@ const NoteItem = ({ noteContent }) => {
 const saveStickyNotes = async (workshop, content) => {
     const options = {
         'method': 'POST',
-        'url': `https://whiteboarddj-server.onrender.com/notes`,
+        'url': `http://localhost:3500/notes`,
         'headers': {
           'Content-Type': 'application/json'
         },
@@ -230,7 +410,7 @@ const saveStickyNotes = async (workshop, content) => {
 const deleteNotesByWorkshopAPI = async (workshop) => {
     const options = {
         'method': 'DELETE',
-        'url': `https://whiteboarddj-server.onrender.com/notes/workshopNotes`,
+        'url': `http://localhost:3500/notes/workshopNotes`,
         'headers': {
           'Content-Type': 'application/json'
         },
@@ -250,6 +430,55 @@ const deleteNotesByWorkshopAPI = async (workshop) => {
       }
 }
 
+
+const getFrames = async (access_token, boardID) => {
+  const options = {
+      'method': 'GET',
+      'url': `https://api.miro.com/v2/boards/${boardID}/items?limit=50&type=frame`,
+      'headers': {
+        'Authorization': `Bearer ${access_token}`,
+        'accept': 'application/json',
+        'content-type': 'application/json'
+      },
+      data: {
+        
+      }
+  };
+  
+  try {
+      const result = await axios(options);
+      console.log(result);
+      
+      return result;
+    } catch (e) {
+         console.log(e);
+    }
+}
+
+
+const getFrameNotes = async (access_token, boardID, frameId) => {
+  const options = {
+      'method': 'GET',
+      'url': `https://api.miro.com/v2/boards/${boardID}/items?parent_item_id=${frameId}`,
+      'headers': {
+        'Authorization': `Bearer ${access_token}`,
+        'accept': 'application/json',
+        'content-type': 'application/json'
+      },
+      data: {
+        
+      }
+  };
+  
+  try {
+      const result = await axios(options);
+      console.log(result);
+      
+      return result;
+    } catch (e) {
+         console.log(e);
+    }
+}
 
 /*
     ******************************************************
@@ -463,8 +692,15 @@ const updateTimerAPI = async (access_token, boardID, itemID, content) => {
 
 const setTimer = async () => {
     let time = "Time left:"
+    console.log("in setTimer")
+    console.log("responseToken.data")
+    console.log(responseToken.data)
+    console.log("globalBoardID")
+    console.log(globalBoardID)
     // const timerText = await createTimerAPI(responseToken.data, responseBoard.data.id, time );
     const timerText = await createTimerAPI(responseToken.data, globalBoardID, time );
+    console.log("timerText")
+    console.log(timerText)
     
     timerID = JSON.stringify(timerText.data.id);
     if (timerID.indexOf('"') !== -1){
@@ -543,7 +779,7 @@ const startAgendaTime = async () => {
 const createWorkshopAPI = async (userID, workshopname) => {
     const options = {
         'method': 'POST',
-        'url': `https://whiteboarddj-server.onrender.com/workshops`,
+        'url': `http://localhost:3500/workshops`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -568,7 +804,7 @@ const createWorkshopAPI = async (userID, workshopname) => {
 const getWorkshopByNameAPI = async ( workshopname) => {
     const options = {
         'method': 'POST',
-        'url': `https://whiteboarddj-server.onrender.com/workshops/workshopByName`,
+        'url': `http://localhost:3500/workshops/workshopByName`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -587,13 +823,14 @@ const getWorkshopByNameAPI = async ( workshopname) => {
       } catch (e) {
            console.log(e);
            document.getElementById("workshopError").innerHTML = JSON.parse(e.request.responseText).message
+           return JSON.parse(e.request.responseText).message
       }
 }
 
 const updateWorkshopAPI = async (workshopID, userID, notes) => {
     const options = {
         'method': 'PATCH',
-        'url': `https://whiteboarddj-server.onrender.com/workshops`,
+        'url': `http://localhost:3500/workshops`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -617,7 +854,7 @@ const updateWorkshopAPI = async (workshopID, userID, notes) => {
 const addAgendaAPI = async (workshopID, workshopAgenda) => {
     const options = {
         'method': 'PATCH',
-        'url': `https://whiteboarddj-server.onrender.com/workshops/userworkshop`,
+        'url': `http://localhost:3500/workshops/userworkshop`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -640,7 +877,7 @@ const addAgendaAPI = async (workshopID, workshopAgenda) => {
 const deleteAgendaAPI = async (workshopID) => {
     const options = {
         'method': 'DELETE',
-        'url': `https://whiteboarddj-server.onrender.com/workshops/userworkshop`,
+        'url': `http://localhost:3500/workshops/userworkshop`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -659,20 +896,20 @@ const deleteAgendaAPI = async (workshopID) => {
       }
 }
 
-const getUserByName = async (username, password) => {
+const getUserByMiroId = async (username, miroId) => {
         // const username = document.getElementById("loginUsername").value
         // const password = document.getElementById("loginPassword").value
         // console.log(username);
         // console.log(password);
         const options = {
             'method': 'POST',
-            'url': `https://whiteboarddj-server.onrender.com/users/username`,
+            'url': `http://localhost:3500/users/username`,
             'headers': {
                 
             },
             data: {
               "username": `${username}`,
-              "password": `${password}`
+              "miroId": `${miroId}`
             }
         };
         
@@ -691,8 +928,9 @@ const getUserByName = async (username, password) => {
             return result;
           } catch (e) {
                 // document.getElementById("test").innerHTML = "Your entered information is wrong"
-                document.getElementById("loginError").textContent = "You have entered wrong username or password"
+                // document.getElementById("loginError").textContent = "You have entered wrong username or miroId"
                 console.log(e);
+                return e
           }
     }
 
@@ -702,80 +940,107 @@ const createWorkshop = async () => {
     }
     else{
       global.workshopname = document.getElementById("workshopname").value
-      global.username = document.getElementById("username").value
-      global.password = document.getElementById("password").value
+      await connectMiroBoard();
+      // global.username = document.getElementById("username").value
+
   
-      const result1 = await getUserByName(global.username, global.password );
+      const result1 = await getUserByMiroId(global.username, global.miroId );
       global.userid = result1.data[0]._id
       const result2 = await createWorkshopAPI(global.userid, global.workshopname );
       console.log(result2)
-      document.getElementById("notesSection").hidden = false
+      
       if (result2 === "Duplicate workshopname"){
         document.getElementById("workshopError").innerHTML = "Workshop name already exists"
       }
-      document.getElementById("workshopError").innerHTML = "Workshop created successfully"
+      else{
+        document.getElementById("notesSection").hidden = false
+        document.getElementById("agendaSection").hidden = false
+        document.getElementById("messageSection").hidden = false
+        document.getElementById("workshopError").innerHTML = "Workshop created successfully"
+      }
+      
     }
 
 }
 
 const joinWorkshopAsFacilitator = async () => {
-  global.workshopname = document.getElementById("workshopname").value
-  // global.username = document.getElementById("username").value
-  // global.password = document.getElementById("password").value
-
-  const result1 = await getWorkshopByNameAPI(global.workshopname );
-
-  // const result1 = await getUserByName(global.username, global.password );
-  // global.userid = result1.data[0]._id
-  // const result2 = await createWorkshopAPI(global.userid, global.workshopname );
-  const facilitatorUserId = result1.data[0].User
-  console.log("facilitatorUserId")
-  console.log(facilitatorUserId)
-
-  const result2 = await getUserByName(global.username, global.password );
-  // global.userid = result1.data[0].USER
-
-  const loginUserId = result2.data[0]._id
-  console.log("loginUserId")
-  console.log(loginUserId)
-
-  if (facilitatorUserId === loginUserId){
-    // console.log("sucesss")
-    document.getElementById("workshopError").innerHTML = "Joined as facilitator successfully"
-    document.getElementById("notesSection").hidden = false
+  if (document.getElementById("workshopname").value === ""){
+    document.getElementById("workshopError").innerHTML = "Please enter a workshop name"
   }
   else{
-    document.getElementById("workshopError").innerHTML = "Wrong username or password for facilitator"
-    // console.log("wrong username or password")
+    global.workshopname = document.getElementById("workshopname").value
+    const result1 = await getWorkshopByNameAPI(global.workshopname );
+    console.log("responsetoken join facilitator")
+    console.log(responseToken)
+    if (!responseToken){
+      const resultConnect = await connectMiroBoard();
+    }
+
+
+    // const result1 = await getUserByName(global.username, global.password );
+    // global.userid = result1.data[0]._id
+    // const result2 = await createWorkshopAPI(global.userid, global.workshopname );
+    const facilitatorUserId = result1.data[0].User
+    console.log("facilitatorUserId")
+    console.log(facilitatorUserId)
+
+    const result2 = await getUserByMiroId(global.username, global.miroId );
+    // global.userid = result1.data[0].USER
+
+    const loginUserId = result2.data[0]._id
+    console.log("loginUserId")
+    console.log(loginUserId)
+
+    if (facilitatorUserId === loginUserId){
+      
+      document.getElementById("workshopError").innerHTML = "Joined as facilitator successfully"
+      document.getElementById("notesSection").hidden = false
+      document.getElementById("agendaSection").hidden = false
+      document.getElementById("messageSection").hidden = false
+    }
+    else{
+      document.getElementById("workshopError").innerHTML = "Wrong username or miroId for facilitator"
+    }
   }
-
-  
-
-  // console.log(result1.data[0].User)
 }
 
 const joinWorkshopAsCoach = async () => {
-  global.workshopname = document.getElementById("workshopname").value
-  // global.username = document.getElementById("username").value
-  // global.password = document.getElementById("password").value
+  if (document.getElementById("workshopname").value === ""){
+    document.getElementById("workshopError").innerHTML = "Please enter a workshop name"
+  }
+  else{
+    global.workshopname = document.getElementById("workshopname").value
+    const result1 = await getWorkshopByNameAPI(global.workshopname );
 
-  const result1 = await getWorkshopByNameAPI(global.workshopname );
 
-  // const result1 = await getUserByName(global.username, global.password );
-  // global.userid = result1.data[0]._id
-  // const result2 = await createWorkshopAPI(global.userid, global.workshopname );
-  console.log(result1)
-  coach = true;
-  document.getElementById("notesSection").hidden = false
-  document.getElementById("saveNotesButton").hidden = true
-  document.getElementById("summariseNotesButton").hidden = true
-  document.getElementById("workshopError").innerHTML = "Joined as coach successfully"
+    console.log("coach result1")
+    console.log(result1)
+    if (result1 !== "No workshops found"){
+      await connectMiroBoard();
+      console.log(result1)
+      coach = true;
+      document.getElementById("notesSection").hidden = false
+      document.getElementById("agendaSection").hidden = false
+      document.getElementById("messageSection").hidden = false
+      document.getElementById("saveNotesButton").style.display = "none";
+      document.getElementById("addAgendaButton").style.display = "none";
+      document.getElementById("clearAgendaButton").style.display = "none";
+      document.getElementById("agendaCoach").hidden = true;
+      document.getElementById("summaryCoach").hidden = true;
+      document.getElementById("workshopError").innerHTML = "Joined as coach successfully"
+    }
+
+    // const result1 = await getUserByName(global.username, global.password );
+    // global.userid = result1.data[0]._id
+    // const result2 = await createWorkshopAPI(global.userid, global.workshopname );
+    
+  }
   // console.log(result1.data[0].User)
 }
 
 const addNotesToWorkshop = async () => {
     global.workshopname = document.getElementById("workshopname").value
-    global.username = document.getElementById("username").value
+    // global.username = document.getElementById("username").value
     // console.log("global.username")
     // console.log(global.username)
     // global.password = document.getElementById("password").value
@@ -789,6 +1054,7 @@ const addNotesToWorkshop = async () => {
     const result1 = await getWorkshopByNameAPI(global.workshopname );
     const workshopid = result1.data[0]._id
     const deleteResult = await deleteNotesByWorkshopAPI(workshopid );
+    document.getElementById("notesError").innerHTML = "Saving notes..."
 
     var notesId = []
     for  (let i = 0; i < currentNotes.length; i++) {
@@ -834,7 +1100,7 @@ const addAgenda = async () => {
 const summariseAPI = async (notes, sensitivity) => {
     const options = {
         'method': 'POST',
-        'url': `https://whiteboarddj-server.onrender.com/summarise`,
+        'url': `http://localhost:3500/summarise`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -856,7 +1122,7 @@ const summariseAPI = async (notes, sensitivity) => {
 const addSummaryAPI = async (workshopID, workshopSummary) => {
   const options = {
       'method': 'PATCH',
-      'url': `https://whiteboarddj-server.onrender.com/workshops/workshopByName`,
+      'url': `http://localhost:3500/workshops/workshopByName`,
       'headers': {
           'content-type': 'application/json'
       },
@@ -905,11 +1171,42 @@ const summarise = async () => {
     }
 
 
+    let frameSensitivityScore = 2
+
+
+    const resultFrames = await getFrames(responseToken.data, globalBoardID );
+    console.log("resultFrames")
+    console.log(resultFrames)
+    let summarsationText = ""
+    if (resultFrames.data.total !== 0){
+      for (let i = 0; i<resultFrames.data.total;i++){
+        const resultFrameNotes = await getFrameNotes(responseToken.data, globalBoardID, resultFrames.data.data[i].id );
+        console.log("resultFrame Notes")
+        console.log(resultFrameNotes)
+        summarsationText = summarsationText + "Cluster  " + resultFrames.data.data[i].data.title + " \n"
+        let frameSummary = ""
+        if (resultFrameNotes.data.total !== 0){
+          for (let j = 0; j<resultFrameNotes.data.total;j++){
+            resultFrameNotes.data.data[j].data.content = resultFrameNotes.data.data[j].data.content.replace(/<\/?[^>]+(>|$)/g, '');
+            frameSummary = frameSummary + resultFrameNotes.data.data[j].data.content + ". "
+          }
+        }//if statement for each frame's notes
+        if (frameSummary !== ""){
+          const resultFrameSummary = await summariseAPI(frameSummary, frameSensitivityScore );
+          summarsationText = summarsationText + resultFrameSummary.data.summary + "\n\n"
+        }
+
+      }//for loop for each frame
+    }
+    document.getElementById("summarisation2").textContent = "\nSummary of clusters: \n" + summarsationText;
+
     
     const result1 = await summariseAPI(notesText, sensitivityScore );
     console.log("result1.data")
     console.log(result1.data)
-    document.getElementById("summarisation").textContent = "Summary:\n" + result1.data.summary;
+    document.getElementById("summarisation").textContent = "Summary of the whole workshop: \n" + result1.data.summary;
+
+    let finalSummary = "Summary of the whole workshop: \n" + result1.data.summary + "\n\nSummary of clusters: \n" + summarsationText
     // global.userid = result1.data[0]._id
     // const result2 = await addAgendaAPI(global.userid, agenda );
     // console.log(result2)
@@ -917,7 +1214,7 @@ const summarise = async () => {
     // document.getElementById("agendaTest").value = ""
     const result2 = await getWorkshopByNameAPI(global.workshopname );
     // global.userid = result1.data[0]._id
-    const result3 = await addSummaryAPI(result2.data[0]._id, result1.data.summary );
+    const result3 = await addSummaryAPI(result2.data[0]._id, finalSummary );
     console.log(result3)
 
     if (result3.status === 200){
@@ -939,30 +1236,8 @@ const summarise = async () => {
 
 
 
+
 const MiroAuthorize = () => {
-
-    console.log(window.location.href)
-
-    // const navigate = useNavigate();
-    // useEffect(() => {
-    //     async function autoLogin() {
-    //       const response = await fetch("https://whiteboarddj-server.onrender.com/autoLogin", {
-    //         method: "GET",
-    //         credentials: "include",
-    //       });
-    //       if (response.status === 200) {
-    //         navigate("/dash/authorize");
-    //       } else {
-    //         navigate("/login");
-    //       }
-    //     }
-    //     autoLogin();
-    //   }, []);
-
-
-
-
-
     /*
     ******************************************************
     ******************************************************
@@ -970,6 +1245,8 @@ const MiroAuthorize = () => {
     ******************************************************
     ******************************************************
     */
+
+
 
 
     const [tableContent, setTableContent] = useState([]);
@@ -986,6 +1263,8 @@ const MiroAuthorize = () => {
 
         console.log("responseToken.data")
         console.log(responseToken.data)
+        console.log("globalBoardID")
+        console.log(globalBoardID)
 
         
         const responseNotes = await getStickyNotes(responseToken.data, globalBoardID);
@@ -1221,56 +1500,7 @@ const MiroAuthorize = () => {
         });
     }
   
-    useEffect(() => {
-      let timerId;
-  
-      if (isRunning && currentCountdownIndex < countdowns.length && coach === true) {
-        timerId = setInterval(() => {
-          setCountdowns((prevCountdowns) => {
-            const updatedCountdowns = [...prevCountdowns];
-            const currentCountdown = updatedCountdowns[currentCountdownIndex];
-            if (currentCountdown.time > 0) {
-              updatedCountdowns[currentCountdownIndex] = {
-                ...currentCountdown,
-                time: currentCountdown.time - 1,
-              };
-              // updateAgendaTimer(currentCountdown.time-1)
-                
 
-            } else {
-              clearInterval(timerId);
-              setCurrentCountdownIndex(currentCountdownIndex + 1);
-            }
-            return updatedCountdowns;
-          });
-        }, 1000);
-      }
-      else if (isRunning && currentCountdownIndex < countdowns.length && coach === false) {
-        timerId = setInterval(() => {
-          setCountdowns((prevCountdowns) => {
-            const updatedCountdowns = [...prevCountdowns];
-            const currentCountdown = updatedCountdowns[currentCountdownIndex];
-            if (currentCountdown.time > 0) {
-              updatedCountdowns[currentCountdownIndex] = {
-                ...currentCountdown,
-                time: currentCountdown.time - 1,
-              };
-              updateAgendaTimer(currentCountdown.time-1)
-                
-
-            } else {
-              clearInterval(timerId);
-              setCurrentCountdownIndex(currentCountdownIndex + 1);
-            }
-            return updatedCountdowns;
-          });
-        }, 1000);
-      }
-  
-      return () => {
-        clearInterval(timerId);
-      };
-    }, [isRunning, currentCountdownIndex, countdowns]);
 
 
 
@@ -1289,7 +1519,7 @@ const MiroAuthorize = () => {
 
     const connectToServer = () => {
       userId = global.username;
-      socket = io.connect('https://whiteboarddj-server.onrender.com', {
+      socket = io.connect('http://localhost:3500', {
         query:  {userId},
         transports: ['websocket'] 
       }); // Adjust the URL to your server's URL
@@ -1364,11 +1594,77 @@ const MiroAuthorize = () => {
   
     };
 
+    // useEffect(() => {
+    //   connectMiroBoard();
+    // }, []);
+
+    // Connect to the server after connecting to the Miro board
+    useEffect(() => {
+        if (globalBoardID) { // Assuming globalBoardID is set in connectMiroBoard
+            connectToServer();
+        }
+    }, [globalBoardID]);
+
+    useEffect(() => {
+      let timerId;
+  
+      if (isRunning && currentCountdownIndex < countdowns.length && coach === true) {
+        timerId = setInterval(() => {
+          setCountdowns((prevCountdowns) => {
+            const updatedCountdowns = [...prevCountdowns];
+            const currentCountdown = updatedCountdowns[currentCountdownIndex];
+            if (currentCountdown.time > 0) {
+              updatedCountdowns[currentCountdownIndex] = {
+                ...currentCountdown,
+                time: currentCountdown.time - 1,
+              };
+              // updateAgendaTimer(currentCountdown.time-1)
+                
+
+            } else {
+              clearInterval(timerId);
+              setCurrentCountdownIndex(currentCountdownIndex + 1);
+            }
+            return updatedCountdowns;
+          });
+        }, 1000);
+      }
+      else if (isRunning && currentCountdownIndex < countdowns.length && coach === false) {
+        timerId = setInterval(() => {
+          setCountdowns((prevCountdowns) => {
+            const updatedCountdowns = [...prevCountdowns];
+            const currentCountdown = updatedCountdowns[currentCountdownIndex];
+            if (currentCountdown.time > 0) {
+              updatedCountdowns[currentCountdownIndex] = {
+                ...currentCountdown,
+                time: currentCountdown.time - 1,
+              };
+              updateAgendaTimer(currentCountdown.time-1)
+                
+
+            } else {
+              clearInterval(timerId);
+              setCurrentCountdownIndex(currentCountdownIndex + 1);
+            }
+            return updatedCountdowns;
+          });
+        }, 1000);
+      }
+  
+      return () => {
+        clearInterval(timerId);
+      };
+    }, [isRunning, currentCountdownIndex, countdowns]);
+
 
     let content = (
         <section>
-
-            <div id="loginSection" class="section">
+              <h1 className="sectionHeading">Please authorize again if any unexpected behaviour occurs</h1>
+              <h3 id="loading"></h3>
+{/* 
+            <button class="button-orange" onClick={() => {connectMiroBoard();connectToServer();}} >Connect to the Miro board</button>
+            <br></br> */}
+            {/* <div id="loginSection" class="section" >
               <h1 className="sectionHeading">Please authorize again if any unexpected behaviour occurs</h1>
               <br></br>
               <h1 className="sectionHeading">Log in:</h1>
@@ -1386,26 +1682,26 @@ const MiroAuthorize = () => {
               <p class="errorMessage" id="loginError"></p>
               <br></br>
               <br></br>
-            </div>
+            </div> */}
 
-            <div id="workshopSection" class="section" hidden>
+            {/* <div id="workshopSection" class="section" hidden> */}
+            <div id="workshopSection" class="section" >
               <h1 className="sectionHeading">Create or join a workshop:</h1>
               {/* <br></br> */}
-              <label>Please enter the workshop name to create or join a workshop</label>
+              {/* <label>Please enter the workshop name to create or join a workshop</label>
+              <br></br> */}
+              <p class="errorMessage" id="workshopError"></p>
               <br></br>
               <label>Workshop name:</label>
               <br></br>
               <input type="text" id="workshopname" required minLength="2" size="20" />
               <br></br>
-              <button class="button-orange" onClick={createWorkshop}>Create a  workshop</button>
+              <button class="button-orange" onClick={() => {createWorkshop();connectToServer();}}>Create a  workshop</button>
               <br></br>
-              <br></br>
-              <button class="button-orange" onClick={joinWorkshopAsFacilitator}>Join a workshop as facilitator</button>
-              <button class="button-orange" onClick={joinWorkshopAsCoach}>Join a workshop as coach</button>
-              <p class="errorMessage" id="workshopError"></p>
-              <br></br>
-              <br></br>
-              <br></br>
+              <button class="button-orange" onClick={() => {joinWorkshopAsFacilitator();connectToServer();}}>Join a workshop as facilitator</button>
+              <button class="button-orange" onClick={() => {joinWorkshopAsCoach();connectToServer();}}>Join a workshop as coach</button>
+
+
             </div>
 
 
@@ -1414,21 +1710,23 @@ const MiroAuthorize = () => {
 
 
 
+            {/* <div id="notesSection"  class="section" hidden> */}
             <div id="notesSection"  class="section" hidden>
               <h1 className="sectionHeading">Participants' Sticky Notes: </h1>
-              <label className="sectionHeading">First step</label>
+              {/* <label className="sectionHeading">First step</label>
               <br></br>
               <label>Please enter your board ID. It should be in your website URL when you open a Miro board.</label>
               <br></br>
               <label>E.g. https://miro.com/app/board/uXjVMy3XuMY=/, the board ID is "uXjVMy3XuMY="</label>
               <br></br>
               <input id="boardID"></input>
-              <br></br>
-              <button class="button-orange" onClick={() => {connectMiroBoard();connectToServer();}} >Connect to the Miro board</button>
+              <br></br> */}
+              
+              {/* <button class="button-orange" onClick={getUsername} >Get context</button> */}
+            
               <p class="errorMessage" id="notesError"></p>
-              <br></br>
-              <br></br>
-              <label className="sectionHeading">Second step</label>
+              {/* <br></br>
+              <label className="sectionHeading">View sticky </label> */}
               <br></br>
               <button class="button-orange" onClick={getNotes} >Get Participants Notes</button>
               <button class="button-orange" onClick={addNotesToWorkshop} id="saveNotesButton">Save sticky notes to workshop</button>
@@ -1452,11 +1750,10 @@ const MiroAuthorize = () => {
                   </tbody>
               </table>
               <br></br>
-              <div id="summariseDiv">
-                <label className="sectionHeading">Third step</label>
+              <div id="summaryCoach">
+                <label className="sectionHeading">Summary</label>
                 <br></br>
-                <label>Please select sensitivity for the summarisation</label>
-                <br></br>
+                <label>Sensitivity for the summarisation: </label>
                 <select id="sensitivity">
                   <option value="lowSensitivity">Low</option>
                   <option value="mediumSensitivity">Medium</option>
@@ -1465,7 +1762,8 @@ const MiroAuthorize = () => {
                 <br></br>
                 <button class="button-orange" onClick={summarise} id="summariseNotesButton">Summarise the notes</button>
                 <br></br>
-                <p id="summarisation"></p>
+                <p id="summarisation" style={{ whiteSpace: 'pre-line' }}></p>
+                <p id="summarisation2" style={{ whiteSpace: 'pre-line' }}></p>
                 <br></br>
                 <br></br>
               </div>
@@ -1498,7 +1796,7 @@ const MiroAuthorize = () => {
                   <label >: </label>
                   <input type="text" id="newSessionSecond" required minLength="5" maxLength="15" size="3"/>
                   <br></br>
-                  <button class="button-orange" onClick={addSession}>Add a session</button>
+                  <button class="button-orange" onClick={addSession}>Create session</button>
                   {/* <h1 id="output"></h1> */}
                   {agendaSession.split('\n').map((line, index) => (
                   <p key={index}>{line}</p>
@@ -1508,7 +1806,7 @@ const MiroAuthorize = () => {
                   <br></br>
                   <label >For the current workshop: </label>
                   <br></br>
-                  <button class="button-orange" onClick={addAgenda}>Add the above sessions to agenda</button>
+                  <button id="addAgendaButton" class="button-orange" onClick={addAgenda}>Add the above sessions to agenda</button>
                   <br></br>
 
               </div>
@@ -1580,7 +1878,6 @@ const MiroAuthorize = () => {
               <label>To send messages and synchronize time with coaches, please click the button:</label>
               <br></br>
               <button class="button-orange" onClick={connectToServer}>Connect facilitator and coaches</button> */}
-              <br></br>
               <label class="errorMessage" id="messageError"></label>
               <br></br>
               <br></br>

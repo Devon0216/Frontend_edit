@@ -3,13 +3,13 @@
 import { useNavigate, Link } from 'react-router-dom'
 
 const openURL = async () =>  {
-    window.open(`https://whiteboarddj-server.onrender.com/miro`, "_self")
+    window.open(`http://localhost:3500/miro`, "_self")
 }
 
 const Welcome = () => {
     const navigate = useNavigate();
     async function logout() {
-        const response = await fetch("https://whiteboarddj-server.onrender.com/logout", {
+        const response = await fetch("http://localhost:3500/logout", {
         method: "GET",
         credentials: "include",
         });
@@ -36,11 +36,11 @@ const Welcome = () => {
         <section className="welcome">
 
             <div>
-                <h1 class="sectionHeading">Home</h1>
-                <button class="button-orange" onClick={gotoWelcome }>Go back to welcome</button>
+                <h1 class="sectionHeading">Home Page!</h1>
+                <button class="button-orange" onClick={gotoWelcome }>Back to Welcome Page</button>
                 <br></br>
                 <br></br>
-                <h1>Please click the authorize button to use the application. You will then need to log in with your account, and follow the instructions.</h1>
+                <h1>Please click the authorize button to use the application.</h1>
 
                 <div>
                     <button class="button-orange" onClick={openURL}>Authorize</button>

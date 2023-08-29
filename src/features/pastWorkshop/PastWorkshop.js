@@ -31,7 +31,7 @@ const PastWorkshop = () => {
     const getUserWorkshops = async () => {
       const options = {
           'method': 'POST',
-          'url': `https://whiteboarddj-server.onrender.com/workshops/userworkshop`,
+          'url': `http://localhost:3500/workshops/userworkshop`,
           'headers': {
               
           },
@@ -59,7 +59,7 @@ const PastWorkshop = () => {
     return (
       <section>
         {/* <button onClick={getUserWorkshops}>get workshops for you</button> */}
-        <h1 id="Title">Workshops: </h1>
+        <h1 id="Title" className="sectionHeading">Workshops: </h1>
 
         <table className="table_workshop table--users">
           <thead className="table__thead">

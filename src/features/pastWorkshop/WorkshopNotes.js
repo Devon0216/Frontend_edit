@@ -24,7 +24,7 @@ const WorkshopNotes = () => {
     const getNotesByWorkshop = async () => {
         const options = {
             'method': 'POST',
-            'url': `https://whiteboarddj-server.onrender.com/notes/workshopNotes`,
+            'url': `http://localhost:3500/notes/workshopNotes`,
             'headers': {
               'Content-Type': 'application/json'
             },
@@ -56,7 +56,7 @@ const WorkshopNotes = () => {
     const getyWorkshopById = async () => {
       const options = {
           'method': 'POST',
-          'url': `https://whiteboarddj-server.onrender.com/workshops/workshopById`,
+          'url': `http://localhost:3500/workshops/workshopById`,
           'headers': {
             'Content-Type': 'application/json'
           },
@@ -116,7 +116,7 @@ const WorkshopNotes = () => {
     return (
       <section>
         {/* <button onClick={getUserWorkshops}>get workshops for you</button> */}
-        <h1 id="test">Workshops: </h1>
+        <h1 id="test" className="sectionHeading" >Participants Sticky Notes: </h1>
 
   
         <table className="table_workshop table--users">
@@ -135,10 +135,10 @@ const WorkshopNotes = () => {
         </table>
         <p id="notesError"></p>
 
-        <h1 id="Summarisation">Summary:</h1>
-        <p id="summary"></p>
+        <h1 id="Summarisation" className="sectionHeading">Summary:</h1>
+        <p id="summary" style={{ whiteSpace: 'pre-line' }}></p>
         <p id="summaryError"></p>
-        <h1 id="agenda">Agenda:</h1>
+        <h1 id="agenda" className="sectionHeading">Agenda:</h1>
         <p id="agendaError"></p>
         {fetchedAgendaSession.split('\n').map((line, index) => (
               <p key={index}>{line}</p>
@@ -147,7 +147,7 @@ const WorkshopNotes = () => {
         <p id="textfileContent"></p>
         <br></br>
         <br></br>
-        <button onClick={downloadTxt}>Download workshop content as txt file</button>
+        <button class="button-orange" onClick={downloadTxt}>Download workshop content as txt file</button>
       </section>
     );
 
