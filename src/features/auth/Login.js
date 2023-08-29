@@ -25,7 +25,7 @@ const Login = () => {
     //     console.log(password);
     //     const options = {
     //         'method': 'POST',
-    //         'url': `https://whiteboarddj-server.onrender.com/users/username`,
+    //         'url': `http://localhost:3500/users/username`,
     //         'headers': {
                 
     //         },
@@ -58,7 +58,7 @@ const Login = () => {
 const getUserByNameAPI = async ( username) => {
   const options = {
       'method': 'POST',
-      'url': `https://whiteboarddj-server.onrender.com/users/useridByName`,
+      'url': `http://localhost:3500/users/useridByName`,
       'headers': {
           'content-type': 'application/json'
       },
@@ -87,7 +87,7 @@ const [userInfo, setuserInfo] = useState({ username: "", password: "" });
 
   useEffect(() => {
     async function autoLogin() {
-      const response = await fetch("https://whiteboarddj-server.onrender.com/autoLogin", {
+      const response = await fetch("http://localhost:3500/autoLogin", {
         method: "GET",
         credentials: "include",
       });
@@ -117,7 +117,7 @@ const [userInfo, setuserInfo] = useState({ username: "", password: "" });
         // console.log(userInfo);
 
     if (username.length > 0 && password.length > 0) {
-      const response = await fetch("https://whiteboarddj-server.onrender.com/", {
+      const response = await fetch("http://localhost:3500/", {
         method: "POST",
         credentials: "include",
         headers: {

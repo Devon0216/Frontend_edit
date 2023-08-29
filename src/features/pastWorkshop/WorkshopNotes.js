@@ -24,7 +24,7 @@ const WorkshopNotes = () => {
     const getNotesByWorkshop = async () => {
         const options = {
             'method': 'POST',
-            'url': `https://whiteboarddj-server.onrender.com/notes/workshopNotes`,
+            'url': `http://localhost:3500/notes/workshopNotes`,
             'headers': {
               'Content-Type': 'application/json'
             },
@@ -56,7 +56,7 @@ const WorkshopNotes = () => {
     const getyWorkshopById = async () => {
       const options = {
           'method': 'POST',
-          'url': `https://whiteboarddj-server.onrender.com/workshops/workshopById`,
+          'url': `http://localhost:3500/workshops/workshopById`,
           'headers': {
             'Content-Type': 'application/json'
           },

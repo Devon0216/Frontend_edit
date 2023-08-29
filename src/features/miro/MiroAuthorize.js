@@ -34,7 +34,7 @@ var coach = false;
 const getAccessToken = async (code) => {
   const options = {
       'method': 'POST',
-      'url': `https://whiteboarddj-server.onrender.com/auth`,
+      'url': `http://localhost:3500/auth`,
       'headers': {
         'Content-Type': 'application/json'
       },
@@ -201,7 +201,7 @@ const login = async () => {
 const createUser = async (username, miroId) => {
   const options = {
       'method': 'POST',
-      'url': `https://whiteboarddj-server.onrender.com/users`,
+      'url': `http://localhost:3500/users`,
       'headers': {
         'Content-Type': 'application/json'
       },
@@ -337,7 +337,7 @@ const connectMiroBoard = async () => {
       //   document.getElementById("timerSection").hidden = true
       // }
       if (coach === false){
-        await setTimer();
+        //await setTimer();
       }
 
       document.getElementById("loading").innerHTML = "You have successfully connected to the Miro board!"
@@ -388,7 +388,7 @@ const NoteItem = ({ noteContent }) => {
 const saveStickyNotes = async (workshop, content) => {
     const options = {
         'method': 'POST',
-        'url': `https://whiteboarddj-server.onrender.com/notes`,
+        'url': `http://localhost:3500/notes`,
         'headers': {
           'Content-Type': 'application/json'
         },
@@ -414,7 +414,7 @@ const saveStickyNotes = async (workshop, content) => {
 const deleteNotesByWorkshopAPI = async (workshop) => {
     const options = {
         'method': 'DELETE',
-        'url': `https://whiteboarddj-server.onrender.com/notes/workshopNotes`,
+        'url': `http://localhost:3500/notes/workshopNotes`,
         'headers': {
           'Content-Type': 'application/json'
         },
@@ -783,7 +783,7 @@ const startAgendaTime = async () => {
 const createWorkshopAPI = async (userID, workshopname) => {
     const options = {
         'method': 'POST',
-        'url': `https://whiteboarddj-server.onrender.com/workshops`,
+        'url': `http://localhost:3500/workshops`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -808,7 +808,7 @@ const createWorkshopAPI = async (userID, workshopname) => {
 const getWorkshopByNameAPI = async ( workshopname) => {
     const options = {
         'method': 'POST',
-        'url': `https://whiteboarddj-server.onrender.com/workshops/workshopByName`,
+        'url': `http://localhost:3500/workshops/workshopByName`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -834,7 +834,7 @@ const getWorkshopByNameAPI = async ( workshopname) => {
 const updateWorkshopAPI = async (workshopID, userID, notes) => {
     const options = {
         'method': 'PATCH',
-        'url': `https://whiteboarddj-server.onrender.com/workshops`,
+        'url': `http://localhost:3500/workshops`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -858,7 +858,7 @@ const updateWorkshopAPI = async (workshopID, userID, notes) => {
 const addAgendaAPI = async (workshopID, workshopAgenda) => {
     const options = {
         'method': 'PATCH',
-        'url': `https://whiteboarddj-server.onrender.com/workshops/userworkshop`,
+        'url': `http://localhost:3500/workshops/userworkshop`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -881,7 +881,7 @@ const addAgendaAPI = async (workshopID, workshopAgenda) => {
 const deleteAgendaAPI = async (workshopID) => {
     const options = {
         'method': 'DELETE',
-        'url': `https://whiteboarddj-server.onrender.com/workshops/userworkshop`,
+        'url': `http://localhost:3500/workshops/userworkshop`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -907,7 +907,7 @@ const getUserByMiroId = async (username, miroId) => {
         // console.log(password);
         const options = {
             'method': 'POST',
-            'url': `https://whiteboarddj-server.onrender.com/users/username`,
+            'url': `http://localhost:3500/users/username`,
             'headers': {
                 
             },
@@ -1091,6 +1091,7 @@ const addNotesToWorkshop = async () => {
 
 
 const addAgenda = async () => {
+    document.getElementById("agendaError").innerHTML = "Saving agenda..."
     const result1 = await getWorkshopByNameAPI(global.workshopname );
     // console.log(result1.data[0])
     // global.userid = result1.data[0]._id
@@ -1098,10 +1099,10 @@ const addAgenda = async () => {
     console.log(result2)
 
     if (result2.status === 200){
-      document.getElementById("sessionError").innerHTML = "Agenda saved successfully"
+      document.getElementById("agendaError").innerHTML = "Agenda saved successfully"
     }
     else{
-      document.getElementById("sessionError").innerHTML = "Agenda save failed"
+      document.getElementById("agendaError").innerHTML = "Agenda save failed"
     }
 
     // document.getElementById("agendaTest").value = ""
@@ -1110,7 +1111,7 @@ const addAgenda = async () => {
 const summariseAPI = async (notes, sensitivity) => {
     const options = {
         'method': 'POST',
-        'url': `https://whiteboarddj-server.onrender.com/summarise`,
+        'url': `http://localhost:3500/summarise`,
         'headers': {
             'content-type': 'application/json'
         },
@@ -1132,7 +1133,7 @@ const summariseAPI = async (notes, sensitivity) => {
 const addSummaryAPI = async (workshopID, workshopSummary) => {
   const options = {
       'method': 'PATCH',
-      'url': `https://whiteboarddj-server.onrender.com/workshops/workshopByName`,
+      'url': `http://localhost:3500/workshops/workshopByName`,
       'headers': {
           'content-type': 'application/json'
       },
@@ -1324,8 +1325,8 @@ const MiroAuthorize = () => {
     const [agendaSession, setAgendaSession] = useState('');
     const [fetchedAgendaSession, setFetcgedAgendaSession] = useState('');
 
-    const addSession =  () => {
-
+    //const addSession =  () => {
+      const addSessions=  () => {
         if (document.getElementById("newSession").value === ""){
           document.getElementById("sessionError").innerHTML = "Please enter a session name"
         }
@@ -1371,6 +1372,7 @@ const MiroAuthorize = () => {
     }
 
     const clearAgenda = async () => {
+        document.getElementById("agendaError").innerHTML = "Clearing agenda..."
         // const result1 = await getWorkshopByNameAPI(global.workshopname );
         // global.userid = result1.data[0]._id
         // const result2 = await addAgendaAPI(global.userid, agenda );
@@ -1379,28 +1381,49 @@ const MiroAuthorize = () => {
         // global.userid = result1.data[0]._id
         const result2 = await deleteAgendaAPI(result1.data[0]._id );
         console.log(result2)
-        setAgendaSession("");
-        agenda = ""
+        // setAgendaSession("");
+        // agenda = ""
 
         if (result2.status === 200){
-          document.getElementById("sessionError").innerHTML = "Agenda cleared successfully"
+          document.getElementById("agendaError").innerHTML = "Agenda cleared successfully"
         }
         else{
-          document.getElementById("sessionError").innerHTML = "Agenda clear failed"
+          document.getElementById("agendaError").innerHTML = "Agenda clear failed"
         }
     }
 
 
 
     const getAgenda = async () => {
-      setFetcgedAgendaSession("");
-        const result1 = await getWorkshopByNameAPI(global.workshopname );
-        setFetcgedAgendaSession(result1.data[0].workshopAgenda)
-        document.getElementById("fetchedAgenda").innerHTML = "Your Agenda:"
-        // const result2 = await addAgendaAPI(global.userid, agenda );
-        // console.log(result2)
-    
-        // document.getElementById("agendaTest").value = ""
+      // setFetcgedAgendaSession("");
+      //   const result1 = await getWorkshopByNameAPI(global.workshopname );
+      //   setFetcgedAgendaSession(result1.data[0].workshopAgenda)
+      //   document.getElementById("fetchedAgenda").innerHTML = "Your Agenda:"
+      const result1 = await getWorkshopByNameAPI(global.workshopname );
+      console.log("result1.data[0].workshopAgenda")
+      console.log(result1.data[0].workshopAgenda)
+      if (result1.data[0].workshopAgenda !== ""){
+        document.getElementById("agendaError").innerHTML = "Getting agenda..."
+        const lines = result1.data[0].workshopAgenda.trim().split('\n');
+        console.log("lines")
+        console.log(lines)
+        console.log("lines.length")
+        console.log(lines.length)
+  
+        const sessionData = lines.map(line => {
+          const [sessionName, sessionTime] = line.trim().split(/\s+/);
+          return { name: sessionName, time: sessionTime };
+        });
+        setSessions(sessionData);
+        document.getElementById("agendaError").innerHTML = "Get agenda successfully"
+      }
+      else{
+        document.getElementById("agendaError").innerHTML = "Agenda is empty"
+      }
+
+      
+
+
     }
 
     const addItems = async () => {
@@ -1536,7 +1559,7 @@ const MiroAuthorize = () => {
 
     const connectToServer = () => {
       userId = global.username;
-      socket = io.connect('https://whiteboarddj-server.onrender.com', {
+      socket = io.connect('http://localhost:3500', {
         query:  {userId},
         transports: ['websocket'] 
       }); // Adjust the URL to your server's URL
@@ -1586,6 +1609,9 @@ const MiroAuthorize = () => {
       console.log(document.getElementById("recepient").value)
       console.log("selectedRecipients")
       console.log(selectedRecipients)
+      console.log("selectedRecipients.length")
+      console.log(selectedRecipients.length)
+      let sentRecipients = ""
   
       const data = {
         message: message + " (from " + global.username + ")",
@@ -1674,6 +1700,108 @@ const MiroAuthorize = () => {
       };
     }, [isRunning, currentCountdownIndex, countdowns]);
 
+
+
+
+
+      /*
+      ******************************************************
+      ******************************************************
+      New agenda section
+      ******************************************************
+      ******************************************************
+      */
+
+    const [sessions, setSessions] = useState([]);
+    const [sessionName, setSessionName] = useState('');
+    const [sessionTime, setSessionTime] = useState('');
+    const [extraTimes, setExtraTimes] = useState([]);
+    // const [extraTimeError, setExtraTimeError] = useState('');
+    const [extraTimeErrors, setExtraTimeErrors] = useState([]);
+    const [showTable, setShowTable] = useState(false);
+  
+    const handleAddSession = () => {
+      if (sessionName && sessionTime) {
+        const newSession = { name: sessionName, time: sessionTime };
+        setSessions([...sessions, newSession]);
+        setSessionName('');
+        setSessionTime('');
+        setShowTable(false);
+
+        
+
+          
+        
+      }
+    };
+  
+    const handleTimeChange = (index, newTime) => {
+      const updatedSessions = sessions.map((session, i) =>
+        i === index ? { ...session, time: newTime } : session
+      );
+      setSessions(updatedSessions);
+      console.log("sessions")
+      console.log(sessions)
+    };
+  
+    const handleDeleteSession = index => {
+      const updatedSessions = sessions.filter((session, i) => i !== index);
+      setSessions(updatedSessions);
+    };
+  
+    const handleUpdateSession = index => {
+      // if (document.getElementById("extraTime").value == "") {
+      //   document.getElementById("agendaError").innerHTML = "Please enter a number";
+      // }
+      // else{
+      if (!extraTimes[index]) {
+        const newErrors = [...extraTimeErrors];
+        newErrors[index] = 'Please enter a value';
+        setExtraTimeErrors(newErrors);
+        return; // Stop execution if there's an error
+      } else {
+        const newErrors = [...extraTimeErrors];
+        newErrors[index] = ''; // Clear the error message
+        setExtraTimeErrors(newErrors);
+        const updatedSessions = sessions.map((session, i) =>
+          i === index ? { ...session, time: session.time + extraTimes[index] } : session
+        );
+        setSessions(updatedSessions);
+        console.log("sessions")
+        console.log(sessions)
+      }
+  
+  
+      // }
+      
+    }
+  
+    const handleClearAgenda = () => {
+      // clearAgenda();
+      setSessions([]);
+    };
+  
+    const handleSaveAgenda = () => {
+      // You can implement saving logic here
+      const updatedSessions = sessions.map((session) =>
+        agenda = agenda + session.name + " " + changeTimeFormat(session.time) + '\n'
+      );
+      addAgenda();
+      console.log('Agenda saved:', sessions);
+    };
+  
+    const addSession = () => {
+      // document.getElementById("addSessionName").hidden = false;
+      // document.getElementById("addSessionTime").hidden = false;
+      setShowTable(true);
+    }
+
+    const handleGetAgenda = () => {
+      // document.getElementById("addSessionName").hidden = false;
+      // document.getElementById("addSessionTime").hidden = false;
+      getAgenda();
+    }
+    
 
     let content = (
         <section>
@@ -1796,12 +1924,12 @@ const MiroAuthorize = () => {
 
 
 
-            <div id="agendaSection" class="section" hidden>
+            {/* <div id="agendaSection" class="section" hidden>
               <h1 className="sectionHeading">Agenda: </h1>
               <div id="agendaCoach">
                   {/* <label className="sectionHeading">First step</label>
                   <br></br>
-                  <button class="button-orange" onClick={setTimer}>Create a Timer on Miro board</button> */}
+                  <button class="button-orange" onClick={setTimer}>Create a Timer on Miro board</button>
                   <p class="errorMessage" id="agendaError"></p>
                   
                   <br></br>
@@ -1821,7 +1949,7 @@ const MiroAuthorize = () => {
                   <br></br>
                   <button class="button-orange" onClick={addSession}>Create session</button>
                   
-                  {/* <h1 id="output"></h1> */}
+
                   {agendaSession.split('\n').map((line, index) => (
                   <p key={index}>{line}</p>
                   ))}
@@ -1863,6 +1991,10 @@ const MiroAuthorize = () => {
 
 
 
+            
+        
+
+
 
 
 
@@ -1871,11 +2003,7 @@ const MiroAuthorize = () => {
             <div id="timerSection" class="section" hidden>
               <h1 className="sectionHeading">Update Timer: </h1>
 
-              {/* <h1 id="timer">Time left: </h1> */}
-              {/* <h1 id="timer2">Time2 left: </h1> */}
-              {/* <button onClick={openURL}>Authorize</button> */}
-              {/* <br></br> */}
-              {/* <button onClick={getTimer}>Get Timer Text: </button> */}
+
               <label>Please format your new time - Hours:Minutes:Seconds</label>
               <br></br>
               <input type="text" id="hour" required minLength="5" maxLength="15" size="3" />
@@ -1890,6 +2018,106 @@ const MiroAuthorize = () => {
               <h1 id="timerID"></h1>
               <br></br>
               <br></br>
+            </div> */}
+
+
+            <div id="agendaSection" class="section" hidden>
+              <h1 className="sectionHeading">Workshop Agenda:</h1>
+              <table className="table_agenda ">
+                <thead className="table__thead">
+                  <tr>
+                    <th scope="col" className="table__th ">Session Name</th>
+                    <th scope="col" className="table__th ">Session Time</th>
+                    <th scope="col" className="table__th ">Current Time Left</th>
+                    <th scope="col" className="table__th ">Add minutes</th>
+                    <th scope="col" className="table__th ">Action</th>
+        
+                  </tr>
+                </thead>
+                <tbody>
+                  {sessions.map((session, index) => (
+                    <tr key={index}>
+                      <td className={`table__cell `}>{session.name}</td>
+                      <td  className={`table__cell `}>{session.time}</td>
+                      <td  className={`table__cell `}>{session.time}</td>
+                      <td className={`table__cell `}>
+                        <input
+                          type="text"
+                          value={extraTimes[index]}
+                          placeholder="00"
+                          minLength="1"
+                          maxLength="5"
+                          size="5"
+                          onChange={e => {
+                            const newExtraTimes = [...extraTimes];
+                            newExtraTimes[index] = e.target.value;
+                            setExtraTimes(newExtraTimes);
+                          }}
+                        />
+                        <button onClick={() => handleUpdateSession(index)}>Update</button>
+                        <p >{extraTimeErrors[index]}</p>
+                      </td>
+                      <td className={`table__cell `}>
+                      
+                        <button onClick={() => handleDeleteSession(index)}>Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <div>
+                <button onClick={addSession}>+</button>
+                <br></br>
+                {showTable && (
+                <table id="addSessionTable" className="table_session " hidden>
+                <thead className="table__thead">
+                  <tr>
+                    <th scope="col" className="table__th ">Session Name</th>
+                    <th scope="col" className="table__th ">Session Time (hour:min:sec)</th>
+                    <th scope="col" className="table__th ">Action</th>
+        
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                      <td className={`table__cell `}>
+                        <input
+                          id="addSessionName"
+                          type="text"
+                          placeholder="Session Name"
+                          value={sessionName}
+                          onChange={e => setSessionName(e.target.value)} 
+                        />
+                      </td>
+                      <td  className={`table__cell `}>
+                        <input
+                          id="addSessionTime"
+                          type="text"
+                          placeholder="00:00:00"
+                          value={sessionTime}
+                          onChange={e => setSessionTime(e.target.value)} 
+                        />
+                      </td>
+                      <td className={`table__cell `}>
+                      <button onClick={handleAddSession}>Add Session</button>
+                      </td>
+                    </tr>
+                  
+                  </tbody>
+                </table>
+                )}
+                <br></br>
+                <br></br>
+                <button class="button-orange" >Start Count Down!</button>
+                <p class="errorMessage" id="agendaError"></p>
+                <br></br>
+                
+                <button class="button-orange" onClick={handleGetAgenda}>Get Agenda</button>
+                <button class="button-orange" onClick={handleSaveAgenda}>Save Agenda</button>
+                <button class="button-orange" onClick={handleClearAgenda}>Clear Agenda</button>
+
+              </div>
             </div>
 
 

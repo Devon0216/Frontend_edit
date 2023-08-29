@@ -12,7 +12,7 @@ const Public = () => {
     }
 
     const content = (
-        
+
         <section className="public">
              <header>
 
@@ -36,18 +36,20 @@ const Public = () => {
                 <br />
 
                 {/* <button onClick={gotoLogin} >Log in</button> */}
-                <button class="button-orange" onClick={gotoHome} >Go to Home Page</button>
-                <br/>
-                <br/>
+
+
                 {/* <button class="button-orange" onClick={gotoSignup }>Sign up</button> */}
-
-
-
             </main> 
+
+            <footer>
+                    <button class="button-orange" onClick={gotoHome} >Home Page</button>
+                </footer>
 
             
 
         </section>
+
+
 
     )
     return content

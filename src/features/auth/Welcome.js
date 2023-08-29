@@ -3,13 +3,13 @@
 import { useNavigate, Link } from 'react-router-dom'
 
 const openURL = async () =>  {
-    window.open(`https://whiteboarddj-server.onrender.com/miro`, "_self")
+    window.open(`http://localhost:3500/miro`, "_self")
 }
 
 const Welcome = () => {
     const navigate = useNavigate();
     async function logout() {
-        const response = await fetch("https://whiteboarddj-server.onrender.com/logout", {
+        const response = await fetch("http://localhost:3500/logout", {
         method: "GET",
         credentials: "include",
         });
@@ -34,48 +34,36 @@ const Welcome = () => {
 
     const content = (
         <section className="welcome">
+            <main>
+                <div>
+                    <h1 class="sectionHeading">Home Page!</h1>
+                    <p>This application is used to interact with Miro board, to be able to do this, please authorize through Miro first, so that you can use this application properly</p>
+                    <button class="button-orange" onClick={openURL}>Authorize</button>                
+                </div>
 
-            <div>
-                <h1 class="sectionHeading">Home Page!</h1>
-                <button class="button-orange" onClick={gotoWelcome }>Back to Welcome Page</button>
-                <br></br>
-                <br></br>
-                <h1>Please click the authorize button to use the application.</h1>
+                <p><Link to="/dash/notes">View techNotes</Link></p>
+
+                {/* <p><Link to="/dash/users">View User Settings</Link></p> */}
+
+                {/* <p><Link to="/dash/authorize">View participants' notes and timer</Link></p>
+
+                <p><Link to="/dash/pastWorkshop">Past Workshop</Link></p> */}
 
                 <div>
-                    <button class="button-orange" onClick={openURL}>Authorize</button>
+                    {/* <button class="button-orange" onClick={gotoAuthorize} >View participants' notes and timer</button> */}
+                    <br/>
+                    <br/>
+                    <button class="button-orange" onClick={gotoPastWorkshop }>Past Workshop</button>
+                    <br/>
+                    <br/>
+                    
                 </div>
-                
-            </div>
-
-            
-            <br></br>
-            <br></br>
+            </main>
 
 
-            {/* <p><Link to="/dash/notes">View techNotes</Link></p> */}
-
-            {/* <p><Link to="/dash/users">View User Settings</Link></p> */}
-
-            {/* <p><Link to="/dash/authorize">View participants' notes and timer</Link></p>
-
-            <p><Link to="/dash/pastWorkshop">Past Workshop</Link></p> */}
-
-            <div>
-                {/* <button class="button-orange" onClick={gotoAuthorize} >View participants' notes and timer</button> */}
-                <br/>
-                <br/>
-                <button class="button-orange" onClick={gotoPastWorkshop }>Past Workshop</button>
-                <br/>
-                <br/>
-                
-            </div>
-
-
-
-            {/* <div>
-                <button onClick={logout}>Log out</button>
-            </div> */}
+            {/* <footer>
+                <button class="button-orange" onClick={gotoWelcome }>Go to Welcome Page</button>
+            </footer> */}
 
         </section>
 
