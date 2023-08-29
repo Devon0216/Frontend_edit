@@ -1057,7 +1057,8 @@ const addNotesToWorkshop = async () => {
     const result1 = await getWorkshopByNameAPI(global.workshopname );
     const workshopid = result1.data[0]._id
     const deleteResult = await deleteNotesByWorkshopAPI(workshopid );
-    document.getElementById("notesError").innerHTML = "Saving notes..."
+
+    document.getElementById("notesButtonError").innerHTML = "Saving notes..."
 
     var notesId = []
     for  (let i = 0; i < currentNotes.length; i++) {
@@ -1075,10 +1076,12 @@ const addNotesToWorkshop = async () => {
     console.log(result2)
 
     if (result2.status === 200){
-      document.getElementById("notesError").innerHTML = "Notes saved successfully"
+      // document.getElementById("notesError").innerHTML = "Notes saved successfully"
+      document.getElementById("notesButtonError").innerHTML = "Notes saved successfully"
     }
     else{
-      document.getElementById("notesError").innerHTML = "Notes save failed"
+      // document.getElementById("notesError").innerHTML = "Notes save failed"
+      document.getElementById("notesButtonError").innerHTML = "Notes save failed"
     }
 }
 
@@ -1091,10 +1094,10 @@ const addAgenda = async () => {
     console.log(result2)
 
     if (result2.status === 200){
-      document.getElementById("agendaError").innerHTML = "Agenda saved successfully"
+      document.getElementById("sessionError").innerHTML = "Agenda saved successfully"
     }
     else{
-      document.getElementById("agendaError").innerHTML = "Agenda save failed"
+      document.getElementById("sessionError").innerHTML = "Agenda save failed"
     }
 
     // document.getElementById("agendaTest").value = ""
@@ -1147,6 +1150,7 @@ const addSummaryAPI = async (workshopID, workshopSummary) => {
 
 
 const summarise = async () => {
+    document.getElementById("notesSummaryError").innerHTML = "Summarising notes..."
     console.log("currentNotes")
     console.log(currentNotes)
 
@@ -1221,10 +1225,12 @@ const summarise = async () => {
     console.log(result3)
 
     if (result3.status === 200){
-      document.getElementById("notesError").innerHTML = "Summary saved successfully"
+      // document.getElementById("notesError").innerHTML = "Summary saved successfully"
+      document.getElementById("notesSummaryError").innerHTML = "Summary saved successfully"
     }
     else{
-      document.getElementById("notesError").innerHTML = "Summary save failed"
+      // document.getElementById("notesError").innerHTML = "Summary save failed"
+      document.getElementById("notesSummaryError").innerHTML = "Summary save failed"
     }
 }
 
@@ -1269,6 +1275,8 @@ const MiroAuthorize = () => {
         console.log("globalBoardID")
         console.log(globalBoardID)
 
+        document.getElementById("notesButtonError").innerHTML = "Loading notes..."
+
         
         const responseNotes = await getStickyNotes(responseToken.data, globalBoardID);
         // const responseNotes = await getStickyNotes(responseToken.data, responseBoard.data.id);
@@ -1291,6 +1299,7 @@ const MiroAuthorize = () => {
 
         console.log("tableContent")
         console.log(tableContent)
+        document.getElementById("notesButtonError").innerHTML = "Notes loaded sucessfully"
         
 
 
@@ -1314,7 +1323,7 @@ const MiroAuthorize = () => {
     const addSession =  () => {
 
         if (document.getElementById("newSession").value === ""){
-          document.getElementById("agendaError").innerHTML = "Please enter a session name"
+          document.getElementById("sessionError").innerHTML = "Please enter a session name"
         }
         else{
           var hours = 0;
@@ -1370,10 +1379,10 @@ const MiroAuthorize = () => {
         agenda = ""
 
         if (result2.status === 200){
-          document.getElementById("agendaError").innerHTML = "Agenda cleared successfully"
+          document.getElementById("sessionError").innerHTML = "Agenda cleared successfully"
         }
         else{
-          document.getElementById("agendaError").innerHTML = "Agenda clear failed"
+          document.getElementById("sessionError").innerHTML = "Agenda clear failed"
         }
     }
 
@@ -1736,6 +1745,8 @@ const MiroAuthorize = () => {
               <button class="button-orange" onClick={getNotes} >Get Participants Notes</button>
               <button class="button-orange" onClick={addNotesToWorkshop} id="saveNotesButton">Save sticky notes to workshop</button>
               <br></br>
+              <p class="errorMessage" id="notesButtonError"></p>
+              <br></br>
               <br></br>
               {/* <h1 id="response">response</h1>
               <h1 id="test">test</h1>
@@ -1766,6 +1777,8 @@ const MiroAuthorize = () => {
                 </select>
                 <br></br>
                 <button class="button-orange" onClick={summarise} id="summariseNotesButton">Summarise the notes</button>
+                <br></br>
+                <p class="errorMessage" id="notesSummaryError"></p>
                 <br></br>
                 <p id="summarisation" style={{ whiteSpace: 'pre-line' }}></p>
                 <p id="summarisation2" style={{ whiteSpace: 'pre-line' }}></p>
@@ -1802,6 +1815,7 @@ const MiroAuthorize = () => {
                   <input type="text" id="newSessionSecond" required minLength="5" maxLength="15" size="3"/>
                   <br></br>
                   <button class="button-orange" onClick={addSession}>Create session</button>
+                  <p class="errorMessage" id="sessionError"></p>
                   {/* <h1 id="output"></h1> */}
                   {agendaSession.split('\n').map((line, index) => (
                   <p key={index}>{line}</p>
@@ -1888,11 +1902,11 @@ const MiroAuthorize = () => {
               <br></br>
               <label className="sectionHeading">First step</label>
               <br></br>
+              <label className="sectionHeading">(Your username is {global.username})</label>
+              <br></br>
               <label>Enter recepients' usernames:</label>
               <br></br>
               <label>(seperated by "," E.g. Devon,Joshua,Gary)</label>
-              <br></br>
-              <label>(Your username is {global.username})</label>
               <br></br>
               <input type="text" id="recepient" onChange={(e) => createRecepients(e.target.value)}></input>
               <br></br>
@@ -1910,7 +1924,7 @@ const MiroAuthorize = () => {
               
               <button class="button-orange" onClick={sendMessage}>Send</button>
               <br></br>
-              <label id="messageSent"></label>
+              <label class="errorMessage" id="messageSent"></label>
               {/* <button onClick={receiveMessage}>Receive</button> */}
               <br></br>
               <label className="sectionHeading">Received Messages:</label>
