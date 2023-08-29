@@ -1209,7 +1209,7 @@ const summarise = async () => {
 
       }//for loop for each frame
     }
-    document.getElementById("summarisation2").textContent = "\nSummary of clusters: \n" + summarsationText;
+    document.getElementById("summarisation2").textContent = "\n<strong>Summary of clusters</strong>: \n" + summarsationText;
 
     
     const result1 = await summariseAPI(notesText, sensitivityScore );
@@ -1592,6 +1592,7 @@ const MiroAuthorize = () => {
         recipients: selectedRecipients
       };
       socket.emit('sendMessage', data);
+      setReceivedMessages(prevMessages => [...prevMessages, message + " (from " + global.username + ")"]);
       document.getElementById("messageSent").textContent = "Message sent successfully"
     };
   

@@ -49,7 +49,7 @@ const PastWorkshop = () => {
 
     useEffect(() => {
       if (global.userid === undefined){
-        document.getElementById("Title").innerHTML = "Please log in to view your past workshops"
+        document.getElementById("Title").innerHTML = "Please authorize and create or join a workshop to view your past workshops"
       }
       else{
         getUserWorkshops();
