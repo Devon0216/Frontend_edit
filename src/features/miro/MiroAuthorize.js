@@ -260,8 +260,12 @@ const getUsername = async () => {
     }
     else if (resultGetUser.response.status === 400){
       console.log(resultGetUser.response.data.message)
+      document.getElementById("loading").innerHTML = resultGetUser.response.data.message
     }
   }
+
+  console.log("global.userid")
+  console.log(global.userid)
 
 
   
@@ -945,8 +949,8 @@ const createWorkshop = async () => {
       // global.username = document.getElementById("username").value
 
   
-      const result1 = await getUserByMiroId(global.username, global.miroId );
-      global.userid = result1.data[0]._id
+      // const result1 = await getUserByMiroId(global.username, global.miroId );
+      // global.userid = result1.data[0]._id
       const result2 = await createWorkshopAPI(global.userid, global.workshopname );
       console.log(result2)
       
@@ -1372,8 +1376,8 @@ const MiroAuthorize = () => {
         // const result2 = await addAgendaAPI(global.userid, agenda );
         // console.log(result2)
         const result1 = await getWorkshopByNameAPI(global.workshopname );
-        global.userid = result1.data[0]._id
-        const result2 = await deleteAgendaAPI(global.userid );
+        // global.userid = result1.data[0]._id
+        const result2 = await deleteAgendaAPI(result1.data[0]._id );
         console.log(result2)
         setAgendaSession("");
         agenda = ""
