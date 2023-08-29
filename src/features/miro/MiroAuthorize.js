@@ -1889,8 +1889,10 @@ const MiroAuthorize = () => {
               <label className="sectionHeading">First step</label>
               <br></br>
               <label>Enter recepients' usernames:</label>
+              <br></br>
               <label>(seperated by "," E.g. Devon,Joshua,Gary)</label>
-              <label>(Your username is your Miro account name)</label>
+              <br></br>
+              <label>(Your username is {global.username})</label>
               <br></br>
               <input type="text" id="recepient" onChange={(e) => createRecepients(e.target.value)}></input>
               <br></br>
