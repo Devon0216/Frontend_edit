@@ -939,6 +939,7 @@ const createWorkshop = async () => {
       document.getElementById("workshopError").innerHTML = "Please enter a workshop name"
     }
     else{
+      document.getElementById("loading").textContent = "Creating workshop..."
       global.workshopname = document.getElementById("workshopname").value
       await connectMiroBoard();
       // global.username = document.getElementById("username").value
@@ -968,6 +969,7 @@ const joinWorkshopAsFacilitator = async () => {
     document.getElementById("workshopError").innerHTML = "Please enter a workshop name"
   }
   else{
+    document.getElementById("loading").textContent = "Joining workshop..."
     global.workshopname = document.getElementById("workshopname").value
     const result1 = await getWorkshopByNameAPI(global.workshopname );
     console.log("responsetoken join facilitator")
@@ -1009,6 +1011,7 @@ const joinWorkshopAsCoach = async () => {
     document.getElementById("workshopError").innerHTML = "Please enter a workshop name"
   }
   else{
+    document.getElementById("loading").textContent = "Joining workshop..."
     global.workshopname = document.getElementById("workshopname").value
     const result1 = await getWorkshopByNameAPI(global.workshopname );
 
@@ -1660,7 +1663,8 @@ const MiroAuthorize = () => {
     let content = (
         <section>
               <h1 className="sectionHeading">Please authorize again if any unexpected behaviour occurs</h1>
-              <h3 id="loading"></h3>
+              <br></br>
+              <h3 class="errorMessage" id="loading"></h3>
 {/* 
             <button class="button-orange" onClick={() => {connectMiroBoard();connectToServer();}} >Connect to the Miro board</button>
             <br></br> */}
@@ -1685,6 +1689,7 @@ const MiroAuthorize = () => {
             </div> */}
 
             {/* <div id="workshopSection" class="section" hidden> */}
+            <br></br>
             <div id="workshopSection" class="section" >
               <h1 className="sectionHeading">Create or join a workshop:</h1>
               {/* <br></br> */}
@@ -1883,7 +1888,9 @@ const MiroAuthorize = () => {
               <br></br>
               <label className="sectionHeading">First step</label>
               <br></br>
-              <label>Enter recepients' usernames, seperated by "," E.g. Devon666,Joshua,Gary123</label>
+              <label>Enter recepients' usernames:</label>
+              <label>(seperated by "," E.g. Devon,Joshua,Gary)</label>
+              <label>(Your username is your Miro account name)</label>
               <br></br>
               <input type="text" id="recepient" onChange={(e) => createRecepients(e.target.value)}></input>
               <br></br>

@@ -62,7 +62,7 @@ const Welcome = () => {
             <p><Link to="/dash/pastWorkshop">Past Workshop</Link></p> */}
 
             <div>
-                <button class="button-orange" onClick={gotoAuthorize} >View participants' notes and timer</button>
+                {/* <button class="button-orange" onClick={gotoAuthorize} >View participants' notes and timer</button> */}
                 <br/>
                 <br/>
                 <button class="button-orange" onClick={gotoPastWorkshop }>Past Workshop</button>
