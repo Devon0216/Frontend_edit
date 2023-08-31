@@ -2255,8 +2255,7 @@ const MiroAuthorize = () => {
 
 
 
-            <br></br>
-            <br></br>
+
             <div id="notesSection"  class="section" hidden>
               <h1 className="sectionHeading">Participants' Sticky Notes: </h1>
               <button class="button-orange" onClick={getNotes} >Get Participants Notes</button>
@@ -2320,9 +2319,8 @@ const MiroAuthorize = () => {
                 <tbody>
                   {sessions.map((session, index) => (
                     <tr key={index}
-                        className={currentSessionIndex === index && isRunning ? 'runningSession' : ''}
                     >
-                      <td className={`table__cell `}>{session.name}</td>
+                      <td className={currentSessionIndex === index && isRunning ? 'runningSession' : 'table__cell'}  >{session.name}</td>
                       <td  className={`table__cell `}>{session.time}</td>
                       <td  className={`table__cell `}>{currentTime[index]}</td>
                       <td className={`table__cell `}>

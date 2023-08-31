@@ -416,12 +416,19 @@ tr {
 
 
 
+
 .runningSession {
-  background-color: coral; /* Example: Yellow background */
-  font-weight: bold; /* Example: Bold text */
+  background-color: coral;
+  text-align: left;
+  border: 1px solid var(--TABLE-COLOR);
+  padding: 0.5em;
+  font-weight: bold;
 }
 
-
+.runningSession:hover {
+  background-color: --TABLE-BGCOLOR;
+  text-decoration: underline;
+}
 
 
 
