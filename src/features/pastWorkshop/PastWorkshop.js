@@ -31,7 +31,7 @@ const PastWorkshop = () => {
     const getUserWorkshops = async () => {
       const options = {
           'method': 'POST',
-          'url': `http://localhost:3500/workshops/userworkshop`,
+          'url': `https://whiteboarddj-server.onrender.com/workshops/userworkshop`,
           'headers': {
               
           },
