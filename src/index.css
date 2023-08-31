@@ -416,7 +416,10 @@ tr {
 
 
 
-
+.runningSession {
+  background-color: coral; /* Example: Yellow background */
+  font-weight: bold; /* Example: Bold text */
+}
 
 
 

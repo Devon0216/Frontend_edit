@@ -1710,6 +1710,7 @@ const MiroAuthorize = () => {
     const [extraTimesConfirmed, setExtraTimesConfirmed] = useState([]);
     const [extraTimeErrors, setExtraTimeErrors] = useState([]);
     const [showTable, setShowTable] = useState(false);
+    const [currentSessionIndex, setCurrentSessionIndex] = useState(0);
 
     function isValidTimeFormat(time) {
       const parts = time.split(':'); // Split the input by colon
@@ -2067,6 +2068,14 @@ const MiroAuthorize = () => {
 
 
 
+
+    useEffect(() => {
+      if (isRunning) {
+        setCurrentSessionIndex(currentTimeIndex);
+      }
+    }, [isRunning, currentTimeIndex]);
+
+
     useEffect(() => {
       let timerId;
     
@@ -2217,14 +2226,15 @@ const MiroAuthorize = () => {
               <h1 className="sectionHeading">Please authorize again if any unexpected behaviour occurs</h1>
               <br></br>
               <h3 class="errorMessage" id="loading"></h3>
+              <br></br>
+              <br></br>
             </div>
 
 
 
 
 
-            <br></br>
-            <br></br>
+
             <div id="workshopSection" class="section" >
               <h1 className="sectionHeading">Create or join a workshop:</h1>
               <p class="errorMessage" id="workshopError"></p>
@@ -2237,6 +2247,8 @@ const MiroAuthorize = () => {
               <br></br>
               <button class="button-orange" onClick={() => {handleJoinWorkshopFacilitatorAndConnect();}}>Join a workshop as facilitator</button>
               <button class="button-orange" onClick={() => {handleJoinWorkshopCoachAndConnect();}}>Join a workshop as coach</button>
+              <br></br>
+              <br></br>
             </div>
 
 
@@ -2284,14 +2296,14 @@ const MiroAuthorize = () => {
                 <br></br>
                 <br></br>
               </div>
+              <br></br>
+              <br></br>
             </div>
 
 
 
 
 
-            <br></br>
-            <br></br>
             <div id="agendaSection" class="section" hidden>
               <h1 className="sectionHeading">Workshop Agenda:</h1>
               <table className="table_agenda ">
@@ -2307,7 +2319,9 @@ const MiroAuthorize = () => {
                 </thead>
                 <tbody>
                   {sessions.map((session, index) => (
-                    <tr key={index}>
+                    <tr key={index}
+                        className={currentSessionIndex === index && isRunning ? 'runningSession' : ''}
+                    >
                       <td className={`table__cell `}>{session.name}</td>
                       <td  className={`table__cell `}>{session.time}</td>
                       <td  className={`table__cell `}>{currentTime[index]}</td>
@@ -2324,13 +2338,13 @@ const MiroAuthorize = () => {
                             newExtraTimes[index] = e.target.value;
                             setExtraTimes(newExtraTimes);
                           }}
-                          disabled={!coach}
+                          disabled={coach}
                         />
-                        <button disabled={!coach} onClick={() => handleUpdateSession(index)}>Update</button>
+                        <button disabled={coach} onClick={() => handleUpdateSession(index)}>Update</button>
                         <p >{extraTimeErrors[index]}</p>
                       </td>
                       <td className={`table__cell `}>
-                        <button disabled={!coach} onClick={() => handleDeleteSession(index)}>Delete</button>
+                        <button disabled={coach} onClick={() => handleDeleteSession(index)}>Delete</button>
                       </td>
                     </tr>
                   ))}
@@ -2390,6 +2404,8 @@ const MiroAuthorize = () => {
                 <button id="clearAgendaButton" class="button-orange" onClick={handleClearAgenda}>Clear Agenda</button>
 
               </div>
+              <br></br>
+              <br></br>
             </div>
 
 
@@ -2398,8 +2414,7 @@ const MiroAuthorize = () => {
 
 
 
-            <br></br>
-            <br></br>
+
             <div id="messageSection" class="section" hidden>
               <h1 className="sectionHeading">Message: </h1>
               <label class="errorMessage" id="messageError"></label>
