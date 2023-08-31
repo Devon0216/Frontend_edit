@@ -1779,12 +1779,20 @@ const MiroAuthorize = () => {
     };
   
     const handleUpdateSession = index => {
+
       if (!extraTimes[index]) {
         const newErrors = [...extraTimeErrors];
         newErrors[index] = 'Please enter a value';
         setExtraTimeErrors(newErrors);
         return; // Stop execution if there's an error
-      } else {
+      } 
+      else if ( isNaN(parseInt(extraTimes[index])) ){
+        const newErrors = [...extraTimeErrors];
+        newErrors[index] = 'Please enter a valid number';
+        setExtraTimeErrors(newErrors);
+        return; // Stop execution if there's an error
+      }
+      else {
         const newErrors = [...extraTimeErrors];
         newErrors[index] = ''; // Clear the error message
         setExtraTimeErrors(newErrors);
@@ -1818,7 +1826,7 @@ const MiroAuthorize = () => {
         setExtraTimes(newExtraTimes);
 
         const newUpdatedErrors = [...extraTimeErrors];
-        newUpdatedErrors[index] = 'updated'; // Clear the error message
+        newUpdatedErrors[index] = 'Updated!'; // Clear the error message
         setExtraTimeErrors(newUpdatedErrors);
 
         // socket.emit('sendRunnigAgenda', { agenda: updatedSessions, recipients: selectedRecipients });
@@ -2092,7 +2100,7 @@ const MiroAuthorize = () => {
             extraTimesConfirmed[currentTimeIndex] = undefined;
           }
     
-          const newTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+          const newTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")} (CURRENT SESSION)`;
     
           setCurrentTime(prevCurrentTime => {
             const updatedCurrentTime = [...prevCurrentTime];
@@ -2215,7 +2223,8 @@ const MiroAuthorize = () => {
 
 
 
-
+            <br></br>
+            <br></br>
             <div id="workshopSection" class="section" >
               <h1 className="sectionHeading">Create or join a workshop:</h1>
               <p class="errorMessage" id="workshopError"></p>
@@ -2234,7 +2243,8 @@ const MiroAuthorize = () => {
 
 
 
-
+            <br></br>
+            <br></br>
             <div id="notesSection"  class="section" hidden>
               <h1 className="sectionHeading">Participants' Sticky Notes: </h1>
               <button class="button-orange" onClick={getNotes} >Get Participants Notes</button>
@@ -2280,7 +2290,8 @@ const MiroAuthorize = () => {
 
 
 
-
+            <br></br>
+            <br></br>
             <div id="agendaSection" class="section" hidden>
               <h1 className="sectionHeading">Workshop Agenda:</h1>
               <table className="table_agenda ">
@@ -2313,13 +2324,13 @@ const MiroAuthorize = () => {
                             newExtraTimes[index] = e.target.value;
                             setExtraTimes(newExtraTimes);
                           }}
+                          disabled={!coach}
                         />
-                        <button onClick={() => handleUpdateSession(index)}>Update</button>
+                        <button disabled={!coach} onClick={() => handleUpdateSession(index)}>Update</button>
                         <p >{extraTimeErrors[index]}</p>
                       </td>
                       <td className={`table__cell `}>
-                      
-                        <button onClick={() => handleDeleteSession(index)}>Delete</button>
+                        <button disabled={!coach} onClick={() => handleDeleteSession(index)}>Delete</button>
                       </td>
                     </tr>
                   ))}
@@ -2387,7 +2398,8 @@ const MiroAuthorize = () => {
 
 
 
-
+            <br></br>
+            <br></br>
             <div id="messageSection" class="section" hidden>
               <h1 className="sectionHeading">Message: </h1>
               <label class="errorMessage" id="messageError"></label>
@@ -2395,7 +2407,7 @@ const MiroAuthorize = () => {
               <br></br>
               <label className="sectionHeading">(Your username is {global.username})</label>
               <br></br>
-
+              <label>Send a Message to selected recipients:</label>
               <select
                 id="userDropdown"
                 value={selectedRecipients}
@@ -2407,8 +2419,7 @@ const MiroAuthorize = () => {
 
               </select>
 
-              <br></br>
-              <label>Send a Message to selected recipients:</label>
+
               <br></br>
               <input
                 type="text"
