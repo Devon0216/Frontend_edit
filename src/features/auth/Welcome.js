@@ -37,7 +37,7 @@ const Welcome = () => {
             <main>
                 <div>
                     <h1 class="sectionHeading">Home Page!</h1>
-                    <p>This application is used to interact with Miro board, to be able to do this, please authorize through Miro first, so that you can use this application properly</p>
+                    <p>This application is used to interact with Miro board, to be able to do this, please authorize through Miro first, so that you can use this application properly.</p>
                     <button class="button-orange" onClick={openURL}>Authorize</button>                
                 </div>
 

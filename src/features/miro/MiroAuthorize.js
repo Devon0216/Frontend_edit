@@ -2341,7 +2341,7 @@ const MiroAuthorize = () => {
                         <button disabled={coach} onClick={() => handleUpdateSession(index)}>Update</button>
                         <p >{extraTimeErrors[index]}</p>
                       </td>
-                      <td className={`table__cell `}>
+                      <td className={currentSessionIndex === index && isRunning ? 'runningSession' : 'table__cell'}>
                         <button disabled={coach} onClick={() => handleDeleteSession(index)}>Delete</button>
                       </td>
                     </tr>
