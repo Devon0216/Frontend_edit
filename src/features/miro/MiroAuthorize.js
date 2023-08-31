@@ -1141,22 +1141,12 @@ const joinWorkshopAsCoach = async () => {
 
 const addNotesToWorkshop = async () => {
     global.workshopname = document.getElementById("workshopname").value
-    // global.username = document.getElementById("username").value
-    // console.log("global.username")
-    // console.log(global.username)
-    // global.password = document.getElementById("password").value
-    // console.log("global.password")
-    // console.log(global.password)
-
-    // const result1 = await getUserByName(global.username, global.password );
-    // global.userid = result1.data[0]._id
+    document.getElementById("notesButtonError").innerHTML = "Saving notes..."
     
     
     const result1 = await getWorkshopByNameAPI(global.workshopname );
     const workshopid = result1.data[0]._id
     const deleteResult = await deleteNotesByWorkshopAPI(workshopid );
-
-    document.getElementById("notesButtonError").innerHTML = "Saving notes..."
 
     var notesId = []
     for  (let i = 0; i < currentNotes.length; i++) {
@@ -1307,13 +1297,13 @@ const summarise = async () => {
     document.getElementById("wholeSummary").style.display = "block";
     document.getElementById("clusterSummary").style.display = "block";
 
-    document.getElementById("summarisation2").textContent = "\n\n" + summarsationText;
+    document.getElementById("summarisation2").textContent =  summarsationText;
 
     
     const result1 = await summariseAPI(notesText, sensitivityScore );
     console.log("result1.data")
     console.log(result1.data)
-    document.getElementById("summarisation").textContent = "\n" + result1.data.summary;
+    document.getElementById("summarisation").textContent =  result1.data.summary;
 
     let finalSummary = "Summary of the whole workshop: \n" + result1.data.summary + "\n\nSummary of clusters: \n" + summarsationText
     // global.userid = result1.data[0]._id
@@ -1518,7 +1508,7 @@ const MiroAuthorize = () => {
         document.getElementById("agendaError").innerHTML = "Get agenda successfully"
       }
       else{
-        document.getElementById("agendaError").innerHTML = "Agenda is empty"
+        document.getElementById("agendaError").innerHTML = "No agenda found for the current workshop"
       }
 
     }
@@ -1750,6 +1740,7 @@ const MiroAuthorize = () => {
           setSessionName('');
           setSessionTime('');
           setShowTable(false);
+          document.getElementById("sessionError").innerHTML = "Session added successfully "
         }
       }
       else{
@@ -2209,6 +2200,7 @@ const MiroAuthorize = () => {
                 <br></br>
                 <label id="wholeSummary" className="sectionHeading">Summary of the whole workshop:</label>
                 <p id="summarisation" style={{ whiteSpace: 'pre-line' }}></p>
+                <br></br>
                 <label id="clusterSummary" className="sectionHeading">Summary of clusters: (after clustering on Miro board)</label>
                 <p id="summarisation2" style={{ whiteSpace: 'pre-line' }}></p>
                 <br></br>
