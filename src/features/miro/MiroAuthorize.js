@@ -1033,6 +1033,8 @@ const createWorkshop = async () => {
         document.getElementById("notesSection").hidden = false
         document.getElementById("agendaSection").hidden = false
         document.getElementById("messageSection").hidden = false
+        document.getElementById("wholeSummary").style.display = "none";
+        document.getElementById("clusterSummary").style.display = "none";
         document.getElementById("workshopError").innerHTML = "Workshop created successfully"
       }
       
@@ -1080,6 +1082,8 @@ const joinWorkshopAsFacilitator = async () => {
       document.getElementById("notesSection").hidden = false
       document.getElementById("agendaSection").hidden = false
       document.getElementById("messageSection").hidden = false
+      document.getElementById("wholeSummary").style.display = "none";
+      document.getElementById("clusterSummary").style.display = "none";
     }
     else{
       document.getElementById("workshopError").innerHTML = "Wrong username or miroId for facilitator"
@@ -1118,6 +1122,8 @@ const joinWorkshopAsCoach = async () => {
       document.getElementById("saveAgendaButton").style.display = "none";
       document.getElementById("clearAgendaButton").style.display = "none";
       document.getElementById("addSessionButton").style.display = "none";
+      document.getElementById("wholeSummary").style.display = "none";
+      document.getElementById("clusterSummary").style.display = "none";
       // document.getElementById("addAgendaButton").style.display = "none";
       // document.getElementById("clearAgendaButton").style.display = "none";
       // document.getElementById("agendaCoach").hidden = true;
@@ -1298,13 +1304,16 @@ const summarise = async () => {
 
       }//for loop for each frame
     }
-    document.getElementById("summarisation2").textContent = "\n<strong>Summary of clusters</strong>: \n" + summarsationText;
+    document.getElementById("wholeSummary").style.display = "block";
+    document.getElementById("clusterSummary").style.display = "block";
+
+    document.getElementById("summarisation2").textContent = "\n\n" + summarsationText;
 
     
     const result1 = await summariseAPI(notesText, sensitivityScore );
     console.log("result1.data")
     console.log(result1.data)
-    document.getElementById("summarisation").textContent = "Summary of the whole workshop: \n" + result1.data.summary;
+    document.getElementById("summarisation").textContent = "\n" + result1.data.summary;
 
     let finalSummary = "Summary of the whole workshop: \n" + result1.data.summary + "\n\nSummary of clusters: \n" + summarsationText
     // global.userid = result1.data[0]._id
@@ -2198,7 +2207,9 @@ const MiroAuthorize = () => {
                 <br></br>
                 <p class="errorMessage" id="notesSummaryError"></p>
                 <br></br>
+                <label id="wholeSummary" className="sectionHeading">Summary of the whole workshop:</label>
                 <p id="summarisation" style={{ whiteSpace: 'pre-line' }}></p>
+                <label id="clusterSummary" className="sectionHeading">Summary of clusters: (after clustering on Miro board)</label>
                 <p id="summarisation2" style={{ whiteSpace: 'pre-line' }}></p>
                 <br></br>
                 <br></br>

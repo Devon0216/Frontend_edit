@@ -41,7 +41,7 @@ const Welcome = () => {
                     <button class="button-orange" onClick={openURL}>Authorize</button>                
                 </div>
 
-                <p><Link to="/dash/notes">View techNotes</Link></p>
+                {/* <p><Link to="/dash/notes">View techNotes</Link></p> */}
 
                 {/* <p><Link to="/dash/users">View User Settings</Link></p> */}
 
