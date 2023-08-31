@@ -1866,6 +1866,7 @@ const MiroAuthorize = () => {
 
     const handlePause = () => {
       setIsRunning(false);
+      document.getElementById("sessionError").textContent = "Count down has paused"
 
       const filteredRecipients = selectedRecipients.filter(user => user !== global.username);
       socket.emit('sendRunnigAgenda', {
@@ -1882,6 +1883,7 @@ const MiroAuthorize = () => {
       if (!isRunning) {
         setIsRunning(true);
         setCurrentTimeIndex(0);
+        document.getElementById("sessionError").textContent = "Count down has started"
       }
     };
     
@@ -2060,7 +2062,7 @@ const MiroAuthorize = () => {
     useEffect(() => {
       let timerId;
     
-      if (isRunning && currentTimeIndex < currentTime.length) {
+      if (isRunning && currentTimeIndex < currentTime.length && coach === false) {
         let [hours, minutes, seconds] = currentTime[currentTimeIndex].split(":");
         hours = parseInt(hours);
         minutes = parseInt(minutes);
@@ -2121,6 +2123,72 @@ const MiroAuthorize = () => {
           console.log("data")
           console.log(data)
           socket.emit('sendRunnigAgenda', data);
+          
+
+
+        }, 1000);
+      }
+      else if (isRunning && currentTimeIndex < currentTime.length && coach === true) {
+        let [hours, minutes, seconds] = currentTime[currentTimeIndex].split(":");
+        hours = parseInt(hours);
+        minutes = parseInt(minutes);
+        seconds = parseInt(seconds);
+    
+        timerId = setInterval(() => {
+          if (seconds > 0) {
+            seconds--;
+          } else {
+            if (minutes > 0) {
+              minutes--;
+              seconds = 59;
+            } else {
+              if (hours > 0) {
+                hours--;
+                minutes = 59;
+                seconds = 59;
+              }
+            }
+          }
+
+          if (extraTimesConfirmed[currentTimeIndex]) {
+            const extraMinutes = parseInt(extraTimesConfirmed[currentTimeIndex]);
+            minutes += extraMinutes;
+            hours += Math.floor(minutes / 60);
+            minutes %= 60;
+            extraTimesConfirmed[currentTimeIndex] = undefined;
+          }
+    
+          const newTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    
+          setCurrentTime(prevCurrentTime => {
+            const updatedCurrentTime = [...prevCurrentTime];
+            updatedCurrentTime[currentTimeIndex] = newTime;
+    
+            if (hours === 0 && minutes === 0 && seconds === 0) {
+              clearInterval(timerId);
+              if (currentTimeIndex < currentTime.length - 1) {
+                setCurrentTimeIndex(currentTimeIndex + 1);
+              }
+            }
+            
+            return updatedCurrentTime;
+          });
+          
+          // updateTimer("Time left: " + newTime);
+
+
+          // const filteredRecipients = selectedRecipients.filter(user => user !== global.username);
+
+          // const data = {
+          //   isRunning: isRunning,
+          //   sessions: sessions,
+          //   currentTime: currentTime,
+          //   currentTimeIndex: currentTimeIndex,
+          //   recipients: filteredRecipients
+          // };
+          // console.log("data")
+          // console.log(data)
+          // socket.emit('sendRunnigAgenda', data);
           
 
 
@@ -2221,7 +2289,7 @@ const MiroAuthorize = () => {
                     <th scope="col" className="table__th ">Session Name</th>
                     <th scope="col" className="table__th ">Session Time</th>
                     <th scope="col" className="table__th ">Current Time Left</th>
-                    <th scope="col" className="table__th ">+ Minutes</th>
+                    <th scope="col" className="table__th ">+ Extra Minutes</th>
                     <th scope="col" className="table__th ">Action</th>
         
                   </tr>
@@ -2334,7 +2402,7 @@ const MiroAuthorize = () => {
                 multiple
                 onChange={handleRecipientChange}
               >
-                <option value="">Select users...</option>
+                {/* <option value="">Select users...</option> */}
                 <option value="all">Select All</option> 
 
               </select>
