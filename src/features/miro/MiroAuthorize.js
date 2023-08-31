@@ -2109,7 +2109,7 @@ const MiroAuthorize = () => {
             extraTimesConfirmed[currentTimeIndex] = undefined;
           }
     
-          const newTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")} (CURRENT SESSION)`;
+          const newTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
     
           setCurrentTime(prevCurrentTime => {
             const updatedCurrentTime = [...prevCurrentTime];
@@ -2321,9 +2321,9 @@ const MiroAuthorize = () => {
                     <tr key={index}
                     >
                       <td className={currentSessionIndex === index && isRunning ? 'runningSession' : 'table__cell'}  >{session.name}</td>
-                      <td  className={`table__cell `}>{session.time}</td>
-                      <td  className={`table__cell `}>{currentTime[index]}</td>
-                      <td className={`table__cell `}>
+                      <td className={currentSessionIndex === index && isRunning ? 'runningSession' : 'table__cell'}>{session.time}</td>
+                      <td className={currentSessionIndex === index && isRunning ? 'runningSession' : 'table__cell'}>{currentTime[index]}</td>
+                      <td className={currentSessionIndex === index && isRunning ? 'runningSession' : 'table__cell'}>
                         <input
                           type="text"
                           value={extraTimes[index]}
