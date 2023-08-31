@@ -18,6 +18,10 @@ var socket
 var userId
 var coach = false;
 
+var intervalIds = [];
+var connected = false;
+var connectedServer = false;
+
 
 
 
@@ -315,9 +319,9 @@ const connectMiroBoard = async () => {
       console.log("invalid auth")
       document.getElementById("loading").innerHTML = responseToken
     }
-    else{
+    else if (connected === false){
       await getUsername();
-
+      connected = true;
       console.log("connected to the miro board")
 
       // responseBoard = await getBoardID(responseToken.data, document.getElementById("boardID").value);
@@ -337,7 +341,7 @@ const connectMiroBoard = async () => {
       //   document.getElementById("timerSection").hidden = true
       // }
       if (coach === false){
-        //await setTimer();
+        await setTimer();
       }
 
       document.getElementById("loading").innerHTML = "You have successfully connected to the Miro board!"
@@ -612,6 +616,69 @@ function changeTimeFormat(durationInSeconds) {
         return result
 }
 
+function changeTimeFormatHourMinute(time) {
+  var transformedTime = time.split(":")
+  // console.log("transformedTime")
+  // console.log(transformedTime)
+  var hours = parseInt(transformedTime[0])
+  var minutes = parseInt(transformedTime[1])
+  var finalTime = hours*3600 + minutes*60;
+  let remainingTime = finalTime;
+  let result = ""
+
+      if (remainingTime > 3600){
+          let hours = Math.floor(remainingTime / (60*60));
+          let minutes = Math.floor((remainingTime - 3600 * hours)/60) ;
+          let seconds = remainingTime % 60;
+          if (hours < 10){
+          hours = "0" + hours;
+          }
+          if (minutes < 10){
+          minutes = "0" + minutes;
+          }
+          if (seconds < 10){
+          seconds = "0" + seconds;
+          }
+          result =   hours + ":" + minutes + ":" + seconds ;
+      }
+      else if (remainingTime > 60){
+          let hours = 0 ;
+          let minutes = Math.floor(remainingTime /60);
+          let seconds = remainingTime % 60;
+          if (minutes === 60){
+          minutes = 59
+          seconds = remainingTime / 60;
+          }
+          if (hours < 10){
+          hours = "0" + hours;
+          }
+          if (minutes < 10){
+          minutes = "0" + minutes;
+          }
+          if (seconds < 10){
+          seconds = "0" + seconds;
+          }
+          result =   hours + ":" + minutes + ":" + seconds ;
+      }
+      else{
+        let hours = 0;
+        let minutes = Math.floor(remainingTime /60);
+        let seconds = remainingTime % 60;
+        if (hours < 10){
+        hours = "0" + hours;
+        }
+        if (minutes < 10){
+        minutes = "0" + minutes;
+        }
+        if (seconds < 10){
+        seconds = "0" + seconds;
+        }
+        result =   hours + ":" + minutes + ":" + seconds ;
+      }
+
+      return result
+}
+
 const createTimerAPI = async (access_token, boardID, content) => {
     const options = {
         'method': 'POST',
@@ -730,13 +797,13 @@ const setTimer = async () => {
 //     document.getElementById("timerID").textContent = JSON.stringify(timerText.data.data.content); 
 // }
 
-const updateTimer = async () => {
-    if (timerID !== undefined){
+const updateTimer = async (timeText) => {
+    // if (timerID !== undefined){
       
-      const timerText = await updateTimerAPI(responseToken.data, globalBoardID, timerID, document.getElementById("timer").textContent);
+      const timerText = await updateTimerAPI(responseToken.data, globalBoardID, timerID, timeText);
         // const timerText = await updateTimerAPI(responseToken.data, responseBoard.data.id, timerID, document.getElementById("timer").textContent);
-        document.getElementById("timerID").textContent = "changed time correctly"; 
-    }
+        // document.getElementById("timerID").textContent = "changed time correctly"; 
+    // }
 
 }
 
@@ -945,7 +1012,12 @@ const createWorkshop = async () => {
     else{
       document.getElementById("loading").textContent = "Creating workshop..."
       global.workshopname = document.getElementById("workshopname").value
-      await connectMiroBoard();
+      if (connected === false){
+        await connectMiroBoard();
+      }
+      else{
+        document.getElementById("loading").innerHTML = "You have successfully connected to the Miro board!"
+      }
       // global.username = document.getElementById("username").value
 
   
@@ -979,7 +1051,12 @@ const joinWorkshopAsFacilitator = async () => {
     console.log("responsetoken join facilitator")
     console.log(responseToken)
     if (!responseToken){
-      const resultConnect = await connectMiroBoard();
+      if (connected === false){
+        await connectMiroBoard();
+      }
+      else{
+        document.getElementById("loading").innerHTML = "You have successfully connected to the Miro board!"
+      }
     }
 
 
@@ -1023,17 +1100,28 @@ const joinWorkshopAsCoach = async () => {
     console.log("coach result1")
     console.log(result1)
     if (result1 !== "No workshops found"){
-      await connectMiroBoard();
+      if (connected === false){
+        await connectMiroBoard();
+      }
+      else{
+        document.getElementById("loading").innerHTML = "You have successfully connected to the Miro board!"
+      }
+      // await connectMiroBoard();
       console.log(result1)
       coach = true;
       document.getElementById("notesSection").hidden = false
       document.getElementById("agendaSection").hidden = false
       document.getElementById("messageSection").hidden = false
       document.getElementById("saveNotesButton").style.display = "none";
-      document.getElementById("addAgendaButton").style.display = "none";
+      document.getElementById("countDownAgendaButton").style.display = "none";
+      document.getElementById("pauseAgendaButton").style.display = "none";
+      document.getElementById("saveAgendaButton").style.display = "none";
       document.getElementById("clearAgendaButton").style.display = "none";
-      document.getElementById("agendaCoach").hidden = true;
-      document.getElementById("summaryCoach").hidden = true;
+      document.getElementById("addSessionButton").style.display = "none";
+      // document.getElementById("addAgendaButton").style.display = "none";
+      // document.getElementById("clearAgendaButton").style.display = "none";
+      // document.getElementById("agendaCoach").hidden = true;
+      // document.getElementById("summaryCoach").hidden = true;
       document.getElementById("workshopError").innerHTML = "Joined as coach successfully"
     }
 
@@ -1415,14 +1503,14 @@ const MiroAuthorize = () => {
           return { name: sessionName, time: sessionTime };
         });
         setSessions(sessionData);
+        const initialCurrentTime = sessionData.map(session => session.time);
+        setCurrentTime(initialCurrentTime);
+
         document.getElementById("agendaError").innerHTML = "Get agenda successfully"
       }
       else{
         document.getElementById("agendaError").innerHTML = "Agenda is empty"
       }
-
-      
-
 
     }
 
@@ -1544,115 +1632,17 @@ const MiroAuthorize = () => {
 
 
 
-    /*
-    ******************************************************
-    ******************************************************
-    Message section
-    ******************************************************
-    ******************************************************
-    */
 
-    const [message, setMessage] = useState('');
-    const [receivedMessages, setReceivedMessages] = useState([]);
-    const [selectedRecipients, setSelectedRecipients] = useState([]);
-
-
-    const connectToServer = () => {
-      userId = global.username;
-      socket = io.connect('http://localhost:3500', {
-        query:  {userId},
-        transports: ['websocket'] 
-      }); // Adjust the URL to your server's URL
-      console.log("socket")
-      console.log(socket)
-      // console.log("socket.connected")
-      // console.log(socket.connected)
-      // console.log("socket.id")
-      // console.log(socket.id)
-      //       console.log("socket.ids")
-      // console.log(socket.ids)
-      if (socket){
-        document.getElementById("messageError").textContent = "You are connected to the server successfully"
-      }
-      else{
-        document.getElementById("messageError").textContent = "You failed connecting to the server"
-      }
-      socket.on('receiveMessage', (message) => {
-        console.log("Received a new message: " + message)
-        setReceivedMessages(prevMessages => [...prevMessages, message]);
-      });
-
-      socket.on('receiveAgenda', (data) => {
-        console.log("Received a new agenda: " + data.agenda)
-        // console.log(agenda)
-        console.log("Received a new agenda: " + data.agenda[0].name)
-
-        setCountdowns(data.agenda);
-        console.log("countdowns")
-        console.log(countdowns)
-        startNewAgendaCountdown()
-
-        // setReceivedMessages(prevMessages => [...prevMessages, agenda[0].name]);
-      });
-    
-      
-    }
-  
-    const sendMessage = () => {
-      console.log( "global.username")
-      console.log(global.username)
-      console.log("userId")
-      console.log(userId)
-  
-      // setSelectedRecipients([document.getElementById("recepient").value])
-      console.log("document.getElementById(recepient).value")
-      console.log(document.getElementById("recepient").value)
-      console.log("selectedRecipients")
-      console.log(selectedRecipients)
-      console.log("selectedRecipients.length")
-      console.log(selectedRecipients.length)
-      let sentRecipients = ""
-  
-      const data = {
-        message: message + " (from " + global.username + ")",
-        recipients: selectedRecipients
-      };
-      socket.emit('sendMessage', data);
-      setReceivedMessages(prevMessages => [...prevMessages, message + " (from " + global.username + ")"]);
-      document.getElementById("messageSent").textContent = "Message sent successfully"
-    };
-  
-    const createRecepients = (recepients) => {
-      console.log("recepients")
-      console.log(recepients)
-      if (recepients.charAt(recepients.length - 1) === ","){
-        recepients = recepients.slice(0, -1)
-      }
-      console.log("recepients")
-      console.log(recepients)
-      const recepientsList = recepients.split(",")
-      console.log("recepientsList")
-      console.log(recepientsList)
-  
-      setSelectedRecipients(recepientsList)
-  
-    };
 
     // useEffect(() => {
     //   connectMiroBoard();
     // }, []);
 
-    // Connect to the server after connecting to the Miro board
-    useEffect(() => {
-        if (globalBoardID) { // Assuming globalBoardID is set in connectMiroBoard
-            connectToServer();
-        }
-    }, [globalBoardID]);
 
     useEffect(() => {
       let timerId;
   
-      if (isRunning && currentCountdownIndex < countdowns.length && coach === true) {
+      if (isRunning && currentTimeIndex < countdowns.length && coach === true) {
         timerId = setInterval(() => {
           setCountdowns((prevCountdowns) => {
             const updatedCountdowns = [...prevCountdowns];
@@ -1715,24 +1705,48 @@ const MiroAuthorize = () => {
     const [sessions, setSessions] = useState([]);
     const [sessionName, setSessionName] = useState('');
     const [sessionTime, setSessionTime] = useState('');
+    const [currentTime, setCurrentTime] = useState([]);
+    const [currentTimeIndex, setCurrentTimeIndex] = useState(0);
     const [extraTimes, setExtraTimes] = useState([]);
-    // const [extraTimeError, setExtraTimeError] = useState('');
+    const [extraTimesConfirmed, setExtraTimesConfirmed] = useState([]);
     const [extraTimeErrors, setExtraTimeErrors] = useState([]);
     const [showTable, setShowTable] = useState(false);
+
+    function isValidTimeFormat(time) {
+      const parts = time.split(':'); // Split the input by colon
+      // Ensure there are exactly two parts
+      if (parts.length !== 2) {
+        return false;
+      }
+    
+      const hours = parseInt(parts[0]); // Parse the hours part as an integer
+      const minutes = parseInt(parts[1]); // Parse the minutes part as an integer
+    
+      // Check if hours and minutes are valid numbers
+      if (isNaN(hours) || isNaN(minutes)) {
+        return false;
+      }
+    
+      return true;
+    }
   
     const handleAddSession = () => {
-      if (sessionName && sessionTime) {
-        const newSession = { name: sessionName, time: sessionTime };
-        setSessions([...sessions, newSession]);
-        setSessionName('');
-        setSessionTime('');
-        setShowTable(false);
-
-        
-
+      if (isValidTimeFormat(sessionTime)){
+        if (sessionName && sessionTime) {
+          var transformedTime = changeTimeFormatHourMinute(sessionTime+":00")
           
-        
+          const newSession = { name: sessionName, time: transformedTime };
+          setSessions([...sessions, newSession]);
+          setCurrentTime([...currentTime, transformedTime]);
+          setSessionName('');
+          setSessionTime('');
+          setShowTable(false);
+        }
       }
+      else{
+        document.getElementById("sessionError").innerHTML = "Please enter a session time in the given format"
+      }
+
     };
   
     const handleTimeChange = (index, newTime) => {
@@ -1747,13 +1761,24 @@ const MiroAuthorize = () => {
     const handleDeleteSession = index => {
       const updatedSessions = sessions.filter((session, i) => i !== index);
       setSessions(updatedSessions);
+  
+      const updatedCurrentTime = currentTime.filter((time, i) => i !== index);
+      setCurrentTime(updatedCurrentTime);
+  
+      const updatedExtraTimes = extraTimes.filter((extraTime, i) => i !== index);
+      setExtraTimes(updatedExtraTimes);
+
+      const filteredRecipients = selectedRecipients.filter(user => user !== global.username);
+      socket.emit('sendRunnigAgenda', {
+        isRunning: false,
+        sessions: [],
+        currentTime: [],
+        currentTimeIndex: 0,
+        recipients: filteredRecipients
+      });
     };
   
     const handleUpdateSession = index => {
-      // if (document.getElementById("extraTime").value == "") {
-      //   document.getElementById("agendaError").innerHTML = "Please enter a number";
-      // }
-      // else{
       if (!extraTimes[index]) {
         const newErrors = [...extraTimeErrors];
         newErrors[index] = 'Please enter a value';
@@ -1763,12 +1788,40 @@ const MiroAuthorize = () => {
         const newErrors = [...extraTimeErrors];
         newErrors[index] = ''; // Clear the error message
         setExtraTimeErrors(newErrors);
-        const updatedSessions = sessions.map((session, i) =>
-          i === index ? { ...session, time: session.time + extraTimes[index] } : session
+        setExtraTimesConfirmed(extraTimes)
+
+        const updatedSessions = sessions.map((session, i) => {
+            var hours = parseInt(session.time.split(":")[0])
+            var minutes = parseInt(session.time.split(":")[1])
+            minutes = minutes + parseInt(extraTimes[index])
+            if (minutes > 60){
+              hours = hours + Math.floor(minutes / 60)
+              minutes = minutes % 60
+            }
+            var newTimeText = `${hours}` + ":" + `${minutes}` + ":00"
+            var newTime = changeTimeFormatHourMinute(newTimeText)
+
+            if (i === index){
+              return { ...session, time: newTime };
+            }
+            else{
+              return session
+            }
+          }
         );
         setSessions(updatedSessions);
         console.log("sessions")
         console.log(sessions)
+
+        const newExtraTimes = [...extraTimes];
+        newExtraTimes[index] = ''; // Clear the value
+        setExtraTimes(newExtraTimes);
+
+        const newUpdatedErrors = [...extraTimeErrors];
+        newUpdatedErrors[index] = 'updated'; // Clear the error message
+        setExtraTimeErrors(newUpdatedErrors);
+
+        // socket.emit('sendRunnigAgenda', { agenda: updatedSessions, recipients: selectedRecipients });
       }
   
   
@@ -1779,77 +1832,315 @@ const MiroAuthorize = () => {
     const handleClearAgenda = () => {
       // clearAgenda();
       setSessions([]);
+      setCurrentTime([]);
+      setIsRunning(false);
+
+      const filteredRecipients = selectedRecipients.filter(user => user !== global.username);
+      socket.emit('sendRunnigAgenda', {
+        isRunning: false,
+        sessions: [],
+        currentTime: [],
+        currentTimeIndex: 0,
+        recipients: filteredRecipients
+      });
+
+      document.getElementById("agendaError").innerHTML = "Agenda cleared successfully"
     };
   
     const handleSaveAgenda = () => {
-      // You can implement saving logic here
-      const updatedSessions = sessions.map((session) =>
-        agenda = agenda + session.name + " " + changeTimeFormat(session.time) + '\n'
-      );
+      const updatedSessions = sessions.map((session) => {
+        agenda = agenda + session.name + " " + session.time + '\n'
+      });
       addAgenda();
       console.log('Agenda saved:', sessions);
     };
   
     const addSession = () => {
-      // document.getElementById("addSessionName").hidden = false;
-      // document.getElementById("addSessionTime").hidden = false;
       setShowTable(true);
     }
 
     const handleGetAgenda = () => {
-      // document.getElementById("addSessionName").hidden = false;
-      // document.getElementById("addSessionTime").hidden = false;
       getAgenda();
     }
+
+
+    const handlePause = () => {
+      setIsRunning(false);
+
+      const filteredRecipients = selectedRecipients.filter(user => user !== global.username);
+      socket.emit('sendRunnigAgenda', {
+        isRunning: false,
+        sessions: sessions,
+        currentTime: currentTime,
+        currentTimeIndex: currentTimeIndex,
+        recipients: filteredRecipients
+      });
+
+    };
+
+    const handleCountingDown = () => {
+      if (!isRunning) {
+        setIsRunning(true);
+        setCurrentTimeIndex(0);
+      }
+    };
+    
+
+
+    
+
+
+
+
+    /*
+    ******************************************************
+    ******************************************************
+    Message section
+    ******************************************************
+    ******************************************************
+    */
+
+    const [message, setMessage] = useState('');
+    const [receivedMessages, setReceivedMessages] = useState([]);
+    const [selectedRecipients, setSelectedRecipients] = useState([]);
+    const [usersInRoom, setUsersInRoom] = useState([]);
+
+
+    const connectToServer = () => {
+      userId = global.username;
+      console.log("connectToServer userId")
+      console.log(userId)
+      socket = io.connect('http://localhost:3500', {
+        query:  {userId},
+        transports: ['websocket'] 
+      }); // Adjust the URL to your server's URL
+      console.log("socket")
+      console.log(socket)
+
+      if (socket){
+        document.getElementById("messageError").textContent = "You are connected to the server successfully"
+        // socket.emit('userJoined', usersInRoom);
+      }
+      else{
+        document.getElementById("messageError").textContent = "You failed connecting to the server"
+      }
+      socket.on('receiveMessage', (message) => {
+        console.log("Received a new message: " + message)
+        setReceivedMessages(prevMessages => [...prevMessages, message]);
+      });
+
+      // socket.on('receiveAgenda', (data) => {
+      //   console.log("Received a new agenda: " + data.agenda)
+      //   // console.log(agenda)
+      //   console.log("Received a new agenda: " + data.agenda[0].name)
+
+      //   setCountdowns(data.agenda);
+      //   console.log("countdowns")
+      //   console.log(countdowns)
+      //   startNewAgendaCountdown()
+
+      // });
+
+      socket.on('receiveRunningAgenda', (data) => {
+        console.log("Received a new agenda: " + data)
+        setIsRunning(data.isRunning);
+        setSessions(data.sessions);
+        setCurrentTime(data.currentTime);
+        setCurrentTimeIndex(data.currentTimeIndex);
+      });
+
+      let selectedUsers = [];
+      socket.on('userList', (userList) => {
+
+        console.log("userList")
+        console.log(userList)
+
+        // Update dropdown menu with the new user list
+        const dropdown = document.getElementById('userDropdown');
+        dropdown.innerHTML = ''; // Clear existing options
+
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Select users...';
+        dropdown.appendChild(defaultOption);
+
+        const allOption = document.createElement('option');
+        allOption.value = 'all';
+        allOption.textContent = 'Select All';
+        dropdown.appendChild(allOption);
+
+        setUsersInRoom(userList);
+        const previouslySelected = Array.from(document.querySelectorAll('#userDropdown option:checked')).map(option => option.value);
+      
+        userList.forEach((user) => {
+          const option = document.createElement('option');
+          option.value = user;
+          option.textContent = user;
+          if (previouslySelected.includes(user)) {
+            option.selected = true; // Preserve selected options
+            selectedUsers.push(user);
+          }
+          dropdown.appendChild(option);
+        });
+      });
+
+      socket.on('disconnect', () => {
+        document.getElementById("messageError").textContent = "Disconnected from the server";
+        // Handle any additional UI or logic upon disconnection
+      });
+      
+    }
+  
+    const sendMessage = () => {
+      console.log( "global.username")
+      console.log(global.username)
+      console.log("userId")
+      console.log(userId)
+  
+      console.log("selectedRecipients")
+      console.log(selectedRecipients)
+      console.log("selectedRecipients.length")
+      console.log(selectedRecipients.length)
+      let sentRecipients = ""
+  
+      const data = {
+        message: message + " (from " + global.username + ")",
+        recipients: selectedRecipients
+      };
+      socket.emit('sendMessage', data);
+      setReceivedMessages(prevMessages => [...prevMessages, message + " (sent to " + selectedRecipients + ")"]);
+      document.getElementById("messageSent").textContent = "Message sent successfully"
+    };
+
+
+    const handleCreateWorkshopAndConnect = async () => {
+      await createWorkshop();
+      if (connectedServer === false){
+        connectToServer();
+        connectedServer = true;
+      }
+    };
+    
+    const handleJoinWorkshopFacilitatorAndConnect = async () => {
+      await joinWorkshopAsFacilitator();
+      if (connectedServer === false){
+        connectToServer();
+        connectedServer = true;
+      }
+    };
+    
+    const handleJoinWorkshopCoachAndConnect = async () => {
+      await joinWorkshopAsCoach();
+      if (connectedServer === false){
+        connectToServer();
+        connectedServer = true;
+      }
+    };
+
+  
+    const handleRecipientChange = (event) => {
+      const selectedOptions = Array.from(event.target.selectedOptions).map(
+        (option) => option.value
+      );
+
+      if (selectedOptions.includes("all")) {
+        const filteredRecipients = usersInRoom.filter(user => user !== global.username);
+        setSelectedRecipients(filteredRecipients);
+      } else {
+        setSelectedRecipients(selectedOptions);
+      }
+    };
+
+    useEffect(() => {
+      setSelectedRecipients(usersInRoom);
+    }, [usersInRoom]);
+
+
+
+    useEffect(() => {
+      let timerId;
+    
+      if (isRunning && currentTimeIndex < currentTime.length) {
+        let [hours, minutes, seconds] = currentTime[currentTimeIndex].split(":");
+        hours = parseInt(hours);
+        minutes = parseInt(minutes);
+        seconds = parseInt(seconds);
+    
+        timerId = setInterval(() => {
+          if (seconds > 0) {
+            seconds--;
+          } else {
+            if (minutes > 0) {
+              minutes--;
+              seconds = 59;
+            } else {
+              if (hours > 0) {
+                hours--;
+                minutes = 59;
+                seconds = 59;
+              }
+            }
+          }
+
+          if (extraTimesConfirmed[currentTimeIndex]) {
+            const extraMinutes = parseInt(extraTimesConfirmed[currentTimeIndex]);
+            minutes += extraMinutes;
+            hours += Math.floor(minutes / 60);
+            minutes %= 60;
+            extraTimesConfirmed[currentTimeIndex] = undefined;
+          }
+    
+          const newTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    
+          setCurrentTime(prevCurrentTime => {
+            const updatedCurrentTime = [...prevCurrentTime];
+            updatedCurrentTime[currentTimeIndex] = newTime;
+    
+            if (hours === 0 && minutes === 0 && seconds === 0) {
+              clearInterval(timerId);
+              if (currentTimeIndex < currentTime.length - 1) {
+                setCurrentTimeIndex(currentTimeIndex + 1);
+              }
+            }
+            
+            return updatedCurrentTime;
+          });
+          
+          updateTimer("Time left: " + newTime);
+
+
+          const filteredRecipients = selectedRecipients.filter(user => user !== global.username);
+
+          const data = {
+            isRunning: isRunning,
+            sessions: sessions,
+            currentTime: currentTime,
+            currentTimeIndex: currentTimeIndex,
+            recipients: filteredRecipients
+          };
+          console.log("data")
+          console.log(data)
+          socket.emit('sendRunnigAgenda', data);
+          
+
+
+        }, 1000);
+      }
+    
+      return () => {
+        clearInterval(timerId);
+      };
+    }, [isRunning, currentTimeIndex, currentTime]);
+
+    
     
 
     let content = (
         <section>
+            <div id="workshopSection" class="section" >
               <h1 className="sectionHeading">Please authorize again if any unexpected behaviour occurs</h1>
               <br></br>
               <h3 class="errorMessage" id="loading"></h3>
-{/* 
-            <button class="button-orange" onClick={() => {connectMiroBoard();connectToServer();}} >Connect to the Miro board</button>
-            <br></br> */}
-            {/* <div id="loginSection" class="section" >
-              <h1 className="sectionHeading">Please authorize again if any unexpected behaviour occurs</h1>
-              <br></br>
-              <h1 className="sectionHeading">Log in:</h1>
-              <label>You can sign up on the welcome Page</label>
-              <br></br>
-              <label>User name:</label>
-              <br></br>
-              <input type="text" id="username" required minLength="2" maxLength="15" size="20" />
-              <br></br>
-              <label>password:</label>
-              <br></br>
-              <input type="password" id="password" required minLength="2" maxLength="15" size="20" />
-              <br></br>
-              <button class="button-orange" onClick={login}>Log in</button>
-              <p class="errorMessage" id="loginError"></p>
-              <br></br>
-              <br></br>
-            </div> */}
-
-            {/* <div id="workshopSection" class="section" hidden> */}
-            <br></br>
-            <div id="workshopSection" class="section" >
-              <h1 className="sectionHeading">Create or join a workshop:</h1>
-              {/* <br></br> */}
-              {/* <label>Please enter the workshop name to create or join a workshop</label>
-              <br></br> */}
-              <p class="errorMessage" id="workshopError"></p>
-              <br></br>
-              <label>Workshop name:</label>
-              <br></br>
-              <input type="text" id="workshopname" required minLength="2" size="20" />
-              <br></br>
-              <button class="button-orange" onClick={() => {createWorkshop();connectToServer();}}>Create a  workshop</button>
-              <br></br>
-              <button class="button-orange" onClick={() => {joinWorkshopAsFacilitator();connectToServer();}}>Join a workshop as facilitator</button>
-              <button class="button-orange" onClick={() => {joinWorkshopAsCoach();connectToServer();}}>Join a workshop as coach</button>
-
-
             </div>
 
 
@@ -1857,33 +2148,30 @@ const MiroAuthorize = () => {
 
 
 
+            <div id="workshopSection" class="section" >
+              <h1 className="sectionHeading">Create or join a workshop:</h1>
+              <p class="errorMessage" id="workshopError"></p>
+              <br></br>
+              <label>Workshop name:</label>
+              <br></br>
+              <input type="text" id="workshopname" required minLength="2" size="20" />
+              <br></br>
+              <button class="button-orange" onClick={() => {handleCreateWorkshopAndConnect();}}>Create a  workshop</button>
+              <br></br>
+              <button class="button-orange" onClick={() => {handleJoinWorkshopFacilitatorAndConnect();}}>Join a workshop as facilitator</button>
+              <button class="button-orange" onClick={() => {handleJoinWorkshopCoachAndConnect();}}>Join a workshop as coach</button>
+            </div>
 
-            {/* <div id="notesSection"  class="section" hidden> */}
+
+
+
+
+
             <div id="notesSection"  class="section" hidden>
               <h1 className="sectionHeading">Participants' Sticky Notes: </h1>
-              {/* <label className="sectionHeading">First step</label>
-              <br></br>
-              <label>Please enter your board ID. It should be in your website URL when you open a Miro board.</label>
-              <br></br>
-              <label>E.g. https://miro.com/app/board/uXjVMy3XuMY=/, the board ID is "uXjVMy3XuMY="</label>
-              <br></br>
-              <input id="boardID"></input>
-              <br></br> */}
-              
-              {/* <button class="button-orange" onClick={getUsername} >Get context</button> */}
-            
-              <p class="errorMessage" id="notesError"></p>
-              {/* <br></br>
-              <label className="sectionHeading">View sticky </label> */}
-              <br></br>
               <button class="button-orange" onClick={getNotes} >Get Participants Notes</button>
               <button class="button-orange" onClick={addNotesToWorkshop} id="saveNotesButton">Save sticky notes to workshop</button>
-              <br></br>
               <p class="errorMessage" id="notesButtonError"></p>
-              <br></br>
-              {/* <h1 id="response">response</h1>
-              <h1 id="test">test</h1>
-              <h1 id="test2">test2</h1> */}
               <table className="table_workshop table--users">
                   <thead className="table__thead">
                   <tr>
@@ -1892,12 +2180,9 @@ const MiroAuthorize = () => {
                   </thead>
                   <tbody>
                       {tableContent}
-                      {/* {notes.map(note => (
-                          <NoteItem key={note.id} noteContent={note.data.content} />
-                          
-                      ))} */}
                   </tbody>
               </table>
+              <br></br>
               <br></br>
               <div id="summaryCoach">
                 <label className="sectionHeading">Summary</label>
@@ -1918,107 +2203,11 @@ const MiroAuthorize = () => {
                 <br></br>
                 <br></br>
               </div>
-
             </div>
 
 
 
 
-            {/* <div id="agendaSection" class="section" hidden>
-              <h1 className="sectionHeading">Agenda: </h1>
-              <div id="agendaCoach">
-                  {/* <label className="sectionHeading">First step</label>
-                  <br></br>
-                  <button class="button-orange" onClick={setTimer}>Create a Timer on Miro board</button>
-                  <p class="errorMessage" id="agendaError"></p>
-                  
-                  <br></br>
-                  <label className="sectionHeading">First step</label>
-                  <br></br>
-                  <label >Session name: </label>
-                  <br></br>
-                  <input type="text" id="newSession" required minLength="5" maxLength="15"/>
-                  <br></br>
-                  <label >Session time: </label>
-                  <br></br>
-                  <input type="text" id="newSessionHour" required minLength="5" maxLength="15" size="3" />
-                  <label >: </label>
-                  <input type="text" id="newSessionMinute" required minLength="5" maxLength="15" size="3" />
-                  <label >: </label>
-                  <input type="text" id="newSessionSecond" required minLength="5" maxLength="15" size="3"/>
-                  <br></br>
-                  <button class="button-orange" onClick={addSession}>Create session</button>
-                  
-
-                  {agendaSession.split('\n').map((line, index) => (
-                  <p key={index}>{line}</p>
-                  ))}
-                  <br></br>
-                  <p class="errorMessage" id="sessionError"></p>
-                  <br></br>
-                  <label className="sectionHeading">Second step</label>
-                  <br></br>
-                  <label >For the current workshop: </label>
-                  <br></br>
-                  <button id="addAgendaButton" class="button-orange" onClick={addAgenda}>Add the above sessions to agenda</button>
-                  <br></br>
-
-              </div>
-
-              <button class="button-orange"  onClick={getAgenda}>Get agenda</button>
-              <br></br>
-              <button id="clearAgendaButton" class="button-orange" onClick={clearAgenda}>Clear agenda</button>
-              <br></br>
-              <h1 id="fetchedAgenda"></h1>
-              {fetchedAgendaSession.split('\n').map((line, index) => (
-                <p key={index}>{line}</p>
-              ))}
-
-              <br></br>
-              <div>
-                  <label className="sectionHeading">Third step</label>
-                  <br></br>
-                  <button class="button-orange" onClick={startCountdown}>Start Countdown</button>
-                  {countdowns.map((countdown, index) => (
-                      <p key={countdown.id}>
-                      Countdown {countdown.name}: {changeTimeFormat(countdown.time)} seconds
-                      </p>
-                  ))}
-              </div>
-              <br></br>
-              <br></br>
-            </div>
-
-
-
-            
-        
-
-
-
-
-
-
-
-            <div id="timerSection" class="section" hidden>
-              <h1 className="sectionHeading">Update Timer: </h1>
-
-
-              <label>Please format your new time - Hours:Minutes:Seconds</label>
-              <br></br>
-              <input type="text" id="hour" required minLength="5" maxLength="15" size="3" />
-              <label>:</label>
-              <input type="text" id="minute" required minLength="5" maxLength="15" size="3" />
-              <label>:</label>
-              <input type="text" id="second" required minLength="5" maxLength="15" size="3" />
-              <br></br>
-              <button class="button-orange" onClick={newSessionTime}>Update Timer </button>
-              <br></br>
-              <p class="errorMessage" id="timerError"></p>
-              <h1 id="timerID"></h1>
-              <br></br>
-              <br></br>
-            </div> */}
 
 
             <div id="agendaSection" class="section" hidden>
@@ -2029,7 +2218,7 @@ const MiroAuthorize = () => {
                     <th scope="col" className="table__th ">Session Name</th>
                     <th scope="col" className="table__th ">Session Time</th>
                     <th scope="col" className="table__th ">Current Time Left</th>
-                    <th scope="col" className="table__th ">Add minutes</th>
+                    <th scope="col" className="table__th ">+ Minutes</th>
                     <th scope="col" className="table__th ">Action</th>
         
                   </tr>
@@ -2039,7 +2228,7 @@ const MiroAuthorize = () => {
                     <tr key={index}>
                       <td className={`table__cell `}>{session.name}</td>
                       <td  className={`table__cell `}>{session.time}</td>
-                      <td  className={`table__cell `}>{session.time}</td>
+                      <td  className={`table__cell `}>{currentTime[index]}</td>
                       <td className={`table__cell `}>
                         <input
                           type="text"
@@ -2067,14 +2256,14 @@ const MiroAuthorize = () => {
               </table>
 
               <div>
-                <button onClick={addSession}>+</button>
+                <button id="addSessionButton" class="button-orange" onClick={addSession}>+</button>
                 <br></br>
                 {showTable && (
                 <table id="addSessionTable" className="table_session " hidden>
                 <thead className="table__thead">
                   <tr>
                     <th scope="col" className="table__th ">Session Name</th>
-                    <th scope="col" className="table__th ">Session Time (hour:min:sec)</th>
+                    <th scope="col" className="table__th ">Session Time (hour:min)</th>
                     <th scope="col" className="table__th ">Action</th>
         
                   </tr>
@@ -2094,7 +2283,7 @@ const MiroAuthorize = () => {
                         <input
                           id="addSessionTime"
                           type="text"
-                          placeholder="00:00:00"
+                          placeholder="00:00"
                           value={sessionTime}
                           onChange={e => setSessionTime(e.target.value)} 
                         />
@@ -2108,14 +2297,15 @@ const MiroAuthorize = () => {
                 </table>
                 )}
                 <br></br>
-                <br></br>
-                <button class="button-orange" >Start Count Down!</button>
+                <p class="errorMessage" id="sessionError"></p>
+                <button id="countDownAgendaButton" class="button-orange" onClick={handleCountingDown} >Start Count Down!</button>
+                <button id="pauseAgendaButton" class="button-orange" onClick={handlePause} >Pause!</button>
                 <p class="errorMessage" id="agendaError"></p>
-                <br></br>
+                {/* <br></br> */}
                 
-                <button class="button-orange" onClick={handleGetAgenda}>Get Agenda</button>
-                <button class="button-orange" onClick={handleSaveAgenda}>Save Agenda</button>
-                <button class="button-orange" onClick={handleClearAgenda}>Clear Agenda</button>
+                <button class="button-orange" onClick={handleGetAgenda}>Retrieve Agenda</button>
+                <button id="saveAgendaButton" class="button-orange" onClick={handleSaveAgenda}>Save Agenda</button>
+                <button id="clearAgendaButton" class="button-orange" onClick={handleClearAgenda}>Clear Agenda</button>
 
               </div>
             </div>
@@ -2129,42 +2319,37 @@ const MiroAuthorize = () => {
 
             <div id="messageSection" class="section" hidden>
               <h1 className="sectionHeading">Message: </h1>
-              {/* <label className="sectionHeading">First step</label>
-              <br></br>
-              <label>To send messages and synchronize time with coaches, please click the button:</label>
-              <br></br>
-              <button class="button-orange" onClick={connectToServer}>Connect facilitator and coaches</button> */}
               <label class="errorMessage" id="messageError"></label>
               <br></br>
               <br></br>
-              <label className="sectionHeading">First step</label>
-              <br></br>
               <label className="sectionHeading">(Your username is {global.username})</label>
               <br></br>
-              <label>Enter recepients' usernames:</label>
+
+              <select
+                id="userDropdown"
+                value={selectedRecipients}
+                multiple
+                onChange={handleRecipientChange}
+              >
+                <option value="">Select users...</option>
+                <option value="all">Select All</option> 
+
+              </select>
+
               <br></br>
-              <label>(seperated by "," E.g. Devon,Joshua,Gary)</label>
-              <br></br>
-              <input type="text" id="recepient" onChange={(e) => createRecepients(e.target.value)}></input>
-              <br></br>
-              
-              <label className="sectionHeading">Second step</label>
-              <br></br>
-              <label>Send a Message:</label>
+              <label>Send a Message to selected recipients:</label>
               <br></br>
               <input
                 type="text"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
               />
-
-              
               <button class="button-orange" onClick={sendMessage}>Send</button>
               <br></br>
               <label class="errorMessage" id="messageSent"></label>
               {/* <button onClick={receiveMessage}>Receive</button> */}
               <br></br>
-              <label className="sectionHeading">Received Messages:</label>
+              <label className="sectionHeading">Chat History:</label>
               <br></br>
               <ul>
                 {receivedMessages.map((msg, index) => (
