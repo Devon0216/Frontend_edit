@@ -2179,6 +2179,10 @@ const MiroAuthorize = () => {
               hours = hours - Math.floor(-minutes / 60);
               minutes = (minutes % 60 + 60) % 60; // Ensure minutes are positive
             }
+            else{
+              hours += Math.floor(minutes / 60);
+              minutes %= 60;
+            }
             extraTimesConfirmed[currentTimeIndex] = undefined;
           }
     
@@ -2253,6 +2257,10 @@ const MiroAuthorize = () => {
             if (minutes < 0) {
               hours = hours - Math.floor(-minutes / 60);
               minutes = (minutes % 60 + 60) % 60; // Ensure minutes are positive
+            }
+            else{
+              hours += Math.floor(minutes / 60);
+              minutes %= 60;
             }
             extraTimesConfirmed[currentTimeIndex] = undefined;
           }
