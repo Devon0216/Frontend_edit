@@ -1854,72 +1854,72 @@ const MiroAuthorize = () => {
     }
 
 
-const handleReduceSession = (index) => {
-  if (!extraTimes[index]) {
-    const newErrors = [...extraTimeErrors];
-    newErrors[index] = 'Please enter a value';
-    setExtraTimeErrors(newErrors);
-    return; 
-  } 
-  else if (isNaN(parseInt(extraTimes[index]))) {
-    const newErrors = [...extraTimeErrors];
-    newErrors[index] = 'Please enter a valid number';
-    setExtraTimeErrors(newErrors);
-    return; 
-  } 
-  else {
-    const newErrors = [...extraTimeErrors];
-    newErrors[index] = ''; 
-    setExtraTimeErrors(newErrors);
+    const handleReduceSession = (index) => {
+      if (!extraTimes[index]) {
+        const newErrors = [...extraTimeErrors];
+        newErrors[index] = 'Please enter a value';
+        setExtraTimeErrors(newErrors);
+        return; 
+      } 
+      else if (isNaN(parseInt(extraTimes[index]))) {
+        const newErrors = [...extraTimeErrors];
+        newErrors[index] = 'Please enter a valid number';
+        setExtraTimeErrors(newErrors);
+        return; 
+      } 
+      else {
+        const newErrors = [...extraTimeErrors];
+        newErrors[index] = ''; 
+        setExtraTimeErrors(newErrors);
 
-    const reductionAmount = parseInt(extraTimes[index]);
-    const updatedSessions = sessions.map((session, i) => {
-      if (i === index) {
-        var hours = parseInt(session.time.split(':')[0]);
-        var minutes = parseInt(session.time.split(':')[1]);
-        minutes = minutes - reductionAmount;
-        if (minutes < 0) {
-          hours = hours - Math.floor(-minutes / 60);
-          minutes = (minutes % 60 + 60) % 60; 
+        const reductionAmount = parseInt(extraTimes[index]);
+        const updatedSessions = sessions.map((session, i) => {
+          if (i === index) {
+            var hours = parseInt(session.time.split(':')[0]);
+            var minutes = parseInt(session.time.split(':')[1]);
+            minutes = minutes - reductionAmount;
+            if (minutes < 0) {
+              hours = hours - Math.floor(-minutes / 60);
+              minutes = 0; 
+            }
+            var newTimeText = `${hours}`.padStart(2, '0') + ':' + `${minutes}`.padStart(2, '0') + ':00';
+            var newTime = changeTimeFormatHourMinute(newTimeText);
+            return { ...session, time: newTime };
+          } else {
+            return session;
+          }
+        });
+
+        const updatedCurrentTimes = [...currentTime];
+        if (currentSessionIndex === index && isRunning) {
+          // Extract current hours and minutes from currentTime[index]
+          let currentHours = parseInt(updatedCurrentTimes[index].split(':')[0]);
+          let currentMinutes = parseInt(updatedCurrentTimes[index].split(':')[1]);
+          let currentSeconds = parseInt(updatedCurrentTimes[index].split(':')[2]);
+          
+          currentMinutes -= reductionAmount;
+          if (currentMinutes < 0) {
+            currentHours -= Math.floor(-currentMinutes / 60);
+            currentMinutes = 0; 
+          }
+          updatedCurrentTimes[index] = `${currentHours}`.padStart(2, '0') + ':' + `${currentMinutes}`.padStart(2, '0') + ':' + `${currentSeconds}`.padStart(2, '0');
         }
-        var newTimeText = `${hours}`.padStart(2, '0') + ':' + `${minutes}`.padStart(2, '0') + ':00';
-        var newTime = changeTimeFormatHourMinute(newTimeText);
-        return { ...session, time: newTime };
-      } else {
-        return session;
+
+        setSessions(updatedSessions);
+        setCurrentTime(updatedCurrentTimes);
+
+        console.log("sessions");
+        console.log(sessions);
+
+        const newExtraTimes = [...extraTimes];
+        newExtraTimes[index] = '';
+        setExtraTimes(newExtraTimes);
+
+        const newUpdatedErrors = [...extraTimeErrors];
+        newUpdatedErrors[index] = 'Updated!';
+        setExtraTimeErrors(newUpdatedErrors);
       }
-    });
-
-    const updatedCurrentTimes = [...currentTime];
-    if (currentSessionIndex === index && isRunning) {
-      // Extract current hours and minutes from currentTime[index]
-      let currentHours = parseInt(updatedCurrentTimes[index].split(':')[0]);
-      let currentMinutes = parseInt(updatedCurrentTimes[index].split(':')[1]);
-      let currentSeconds = parseInt(updatedCurrentTimes[index].split(':')[2]);
-      
-      currentMinutes -= reductionAmount;
-      if (currentMinutes < 0) {
-        currentHours -= Math.floor(-currentMinutes / 60);
-        currentMinutes = (currentMinutes % 60 + 60) % 60; 
-      }
-      updatedCurrentTimes[index] = `${currentHours}`.padStart(2, '0') + ':' + `${currentMinutes}`.padStart(2, '0') + ':' + `${currentSeconds}`.padStart(2, '0');
-    }
-
-    setSessions(updatedSessions);
-    setCurrentTime(updatedCurrentTimes);
-
-    console.log("sessions");
-    console.log(sessions);
-
-    const newExtraTimes = [...extraTimes];
-    newExtraTimes[index] = '';
-    setExtraTimes(newExtraTimes);
-
-    const newUpdatedErrors = [...extraTimeErrors];
-    newUpdatedErrors[index] = 'Updated!';
-    setExtraTimeErrors(newUpdatedErrors);
-  }
-};
+    };
 
     
   
