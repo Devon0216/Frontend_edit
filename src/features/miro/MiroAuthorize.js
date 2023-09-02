@@ -1033,6 +1033,7 @@ const createWorkshop = async () => {
         document.getElementById("notesSection").hidden = false
         document.getElementById("agendaSection").hidden = false
         document.getElementById("messageSection").hidden = false
+        document.getElementsByClassName("collapseSection").hidden = false
         document.getElementById("wholeSummary").style.display = "none";
         document.getElementById("clusterSummary").style.display = "none";
         document.getElementById("workshopError").innerHTML = "Workshop created successfully"
@@ -1082,6 +1083,7 @@ const joinWorkshopAsFacilitator = async () => {
       document.getElementById("notesSection").hidden = false
       document.getElementById("agendaSection").hidden = false
       document.getElementById("messageSection").hidden = false
+      document.getElementsByClassName("collapseSection").hidden = false
       document.getElementById("wholeSummary").style.display = "none";
       document.getElementById("clusterSummary").style.display = "none";
     }
@@ -1116,6 +1118,7 @@ const joinWorkshopAsCoach = async () => {
       document.getElementById("notesSection").hidden = false
       document.getElementById("agendaSection").hidden = false
       document.getElementById("messageSection").hidden = false
+      document.getElementsByClassName("collapseSection").hidden = false
       document.getElementById("saveNotesButton").style.display = "none";
       document.getElementById("countDownAgendaButton").style.display = "none";
       document.getElementById("pauseAgendaButton").style.display = "none";
@@ -2160,7 +2163,6 @@ const MiroAuthorize = () => {
               hours = hours - Math.floor(-minutes / 60);
               minutes = (minutes % 60 + 60) % 60; // Ensure minutes are positive
             }
-
             extraTimesConfirmed[currentTimeIndex] = undefined;
           }
     
@@ -2337,9 +2339,11 @@ const MiroAuthorize = () => {
 
 
 
+            <div className="collapseSection" hidden>
+              <h1 className="sectionHeading">Participants' Sticky Notes: </h1>
+              <p className="collapse" onClick={toggleNotesSection}>(expand/collapse section)</p>
+            </div>
 
-            <h1 className="sectionHeading">Participants' Sticky Notes: </h1>
-            <p className="collapse" onClick={toggleNotesSection}>(expand/collapse section)</p>
             <div id="notesSection"  class="section"  hidden={notesSectionCollapsed}>
               <button class="button-orange" onClick={getNotes} >Get Participants Notes</button>
               <button class="button-orange" onClick={addNotesToWorkshop} id="saveNotesButton">Save sticky notes to workshop</button>
@@ -2384,9 +2388,10 @@ const MiroAuthorize = () => {
 
 
 
-
-            <h1 className="sectionHeading" >Workshop Agenda:</h1>
-            <p className="collapse" onClick={toggleAgendaSection}>(expand/collapse section)</p>
+            <div className="collapseSection" hidden>
+              <h1 className="sectionHeading" >Workshop Agenda:</h1>
+              <p className="collapse" onClick={toggleAgendaSection}>(expand/collapse section)</p>
+            </div>
             <div id="agendaSection" class="section"  hidden={agendaSectionCollapsed}>
               <table className="table_agenda ">
                 <thead className="table__thead">
@@ -2394,7 +2399,7 @@ const MiroAuthorize = () => {
                     <th scope="col" className="table__th ">Session Name</th>
                     <th scope="col" className="table__th ">Session Time</th>
                     <th scope="col" className="table__th ">Current Time Left</th>
-                    <th scope="col" className="table__th ">+ Extra Minutes</th>
+                    <th scope="col" className="table__th ">Chanege Time(Minutes)</th>
                     <th scope="col" className="table__th ">Action</th>
         
                   </tr>
@@ -2421,7 +2426,7 @@ const MiroAuthorize = () => {
                           }}
                           disabled={coach}
                         />
-                        <button disabled={coach} onClick={() => handleUpdateSession(index)}>Update</button>
+                        <button disabled={coach} onClick={() => handleUpdateSession(index)}>Add</button>
                         <button disabled={coach} onClick={() => handleReduceSession(index)}>Reduce</button>
                         <p >{extraTimeErrors[index]}</p>
                       </td>
@@ -2497,9 +2502,10 @@ const MiroAuthorize = () => {
 
 
 
-
-            <h1 className="sectionHeading" >Message: </h1>
-            <p className="collapse" onClick={toggleMessageSection}>(expand/collapse section)</p>
+            <div className="collapseSection" hidden>
+              <h1 className="sectionHeading" >Message: </h1>
+              <p className="collapse" onClick={toggleMessageSection}>(expand/collapse section)</p>
+            </div>
             <div id="messageSection" class="section" hidden={messageSectionCollapsed}>
               <label class="errorMessage" id="messageError"></label>
               <br></br>
