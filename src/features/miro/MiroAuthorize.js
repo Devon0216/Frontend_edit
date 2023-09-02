@@ -1033,9 +1033,19 @@ const createWorkshop = async () => {
         document.getElementById("notesSection").hidden = false
         document.getElementById("agendaSection").hidden = false
         document.getElementById("messageSection").hidden = false
+
+        document.getElementById("collapsenotesSectionHeading").hidden = false
         document.getElementById("collapseNotesSection").hidden = false
+
+        
+        document.getElementById("collapseAgendaSectionHeading").hidden = false
         document.getElementById("collapseAgendaSection").hidden = false
+
+        document.getElementById("collapseMessageSectionHeading").hidden = false
         document.getElementById("collapseMessageSection").hidden = false
+
+
+
         document.getElementById("wholeSummary").style.display = "none";
         document.getElementById("clusterSummary").style.display = "none";
         document.getElementById("workshopError").innerHTML = "Workshop created successfully"
@@ -2342,10 +2352,10 @@ const MiroAuthorize = () => {
 
 
 
-            <div id="collapseNotesSection" hidden>
-              <h1 className="sectionHeading">Participants' Sticky Notes: </h1>
-              <p className="collapse" onClick={toggleNotesSection}>(expand/collapse section)</p>
-            </div>
+
+            <h1 id="collapseNotesSectionHeading" className="sectionHeading" hidden>Participants' Sticky Notes: </h1>
+            <p id="collapseNotesSection" className="collapse" onClick={toggleNotesSection} hidden>(expand/collapse section)</p>
+
 
             <div id="notesSection"  class="section"  hidden={notesSectionCollapsed}>
               <button class="button-orange" onClick={getNotes} >Get Participants Notes</button>
@@ -2391,10 +2401,11 @@ const MiroAuthorize = () => {
 
 
 
-            <div className="collapseAgendaSection" hidden>
-              <h1 className="sectionHeading" >Workshop Agenda:</h1>
-              <p className="collapse" onClick={toggleAgendaSection}>(expand/collapse section)</p>
-            </div>
+
+
+            <h1 id="collapseAgendaSectionHeading" className="sectionHeading" hidden>Workshop Agenda:</h1>
+            <p id="collapseAgendaSection" className="collapse" onClick={toggleAgendaSection} hidden>(expand/collapse section)</p>
+
             <div id="agendaSection" class="section"  hidden={agendaSectionCollapsed}>
               <table className="table_agenda ">
                 <thead className="table__thead">
@@ -2505,10 +2516,9 @@ const MiroAuthorize = () => {
 
 
 
-            <div className="collapseMessageSection" hidden>
-              <h1 className="sectionHeading" >Message: </h1>
-              <p className="collapse" onClick={toggleMessageSection}>(expand/collapse section)</p>
-            </div>
+            <h1 id="collapseMessageSectionHeading" className="sectionHeading" hidden>Message: </h1>
+            <p id="collapseMessageSection" className="collapse" onClick={toggleMessageSection} hidden>(expand/collapse section)</p>
+
             <div id="messageSection" class="section" hidden={messageSectionCollapsed}>
               <label class="errorMessage" id="messageError"></label>
               <br></br>
