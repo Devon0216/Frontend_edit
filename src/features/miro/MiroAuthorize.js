@@ -2337,9 +2337,9 @@ const MiroAuthorize = () => {
 
 
 
-
-            <div id="notesSection"  class="section" onClick={toggleNotesSection} hidden={notesSectionCollapsed}>
-              <h1 className="sectionHeading">Participants' Sticky Notes: </h1>
+            <h1 className="sectionHeading" onClick={toggleNotesSection}>Participants' Sticky Notes: </h1>
+            <div id="notesSection"  class="section"  hidden={notesSectionCollapsed}>
+              
               <button class="button-orange" onClick={getNotes} >Get Participants Notes</button>
               <button class="button-orange" onClick={addNotesToWorkshop} id="saveNotesButton">Save sticky notes to workshop</button>
               <p class="errorMessage" id="notesButtonError"></p>
@@ -2384,9 +2384,9 @@ const MiroAuthorize = () => {
 
 
 
-
-            <div id="agendaSection" class="section" onClick={toggleAgendaSection} hidden={agendaSectionCollapsed}>
-              <h1 className="sectionHeading">Workshop Agenda:</h1>
+            <h1 className="sectionHeading" onClick={toggleAgendaSection}>Workshop Agenda:</h1>
+            <div id="agendaSection" class="section"  hidden={agendaSectionCollapsed}>
+              
               <table className="table_agenda ">
                 <thead className="table__thead">
                   <tr>
@@ -2497,9 +2497,9 @@ const MiroAuthorize = () => {
 
 
 
-
-            <div id="messageSection" class="section" onClick={toggleMessageSection} hidden={messageSectionCollapsed}>
-              <h1 className="sectionHeading">Message: </h1>
+            <h1 className="sectionHeading" onClick={toggleMessageSection}>Message: </h1>
+            <div id="messageSection" class="section" hidden={messageSectionCollapsed}>
+              
               <label class="errorMessage" id="messageError"></label>
               <br></br>
               <br></br>
