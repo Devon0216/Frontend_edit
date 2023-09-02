@@ -1852,58 +1852,74 @@ const MiroAuthorize = () => {
         // socket.emit('sendRunnigAgenda', { agenda: updatedSessions, recipients: selectedRecipients });
       }    
     }
-    const handleReduceSession = (index) => {
-      if (!extraTimes[index]) {
-        const newErrors = [...extraTimeErrors];
-        newErrors[index] = 'Please enter a value';
-        setExtraTimeErrors(newErrors);
-        return; // Stop execution if there's an error
-      } else if (isNaN(parseInt(extraTimes[index]))) {
-        const newErrors = [...extraTimeErrors];
-        newErrors[index] = 'Please enter a valid number';
-        setExtraTimeErrors(newErrors);
-        return; // Stop execution if there's an error
+
+
+const handleReduceSession = (index) => {
+  if (!extraTimes[index]) {
+    const newErrors = [...extraTimeErrors];
+    newErrors[index] = 'Please enter a value';
+    setExtraTimeErrors(newErrors);
+    return; 
+  } 
+  else if (isNaN(parseInt(extraTimes[index]))) {
+    const newErrors = [...extraTimeErrors];
+    newErrors[index] = 'Please enter a valid number';
+    setExtraTimeErrors(newErrors);
+    return; 
+  } 
+  else {
+    const newErrors = [...extraTimeErrors];
+    newErrors[index] = ''; 
+    setExtraTimeErrors(newErrors);
+
+    const reductionAmount = parseInt(extraTimes[index]);
+    const updatedSessions = sessions.map((session, i) => {
+      if (i === index) {
+        var hours = parseInt(session.time.split(':')[0]);
+        var minutes = parseInt(session.time.split(':')[1]);
+        minutes = minutes - reductionAmount;
+        if (minutes < 0) {
+          hours = hours - Math.floor(-minutes / 60);
+          minutes = (minutes % 60 + 60) % 60; 
+        }
+        var newTimeText = `${hours}`.padStart(2, '0') + ':' + `${minutes}`.padStart(2, '0') + ':00';
+        var newTime = changeTimeFormatHourMinute(newTimeText);
+        return { ...session, time: newTime };
       } else {
-        const newErrors = [...extraTimeErrors];
-        newErrors[index] = ''; // Clear the error message
-        setExtraTimeErrors(newErrors);
-    
-        const newTempExtraTimes = [...extraTimes];
-        newTempExtraTimes[index] = -parseInt(newTempExtraTimes[index]); // Negate the value to reduce time
-        setExtraTimes(newTempExtraTimes);
-    
-        const updatedSessions = sessions.map((session, i) => {
-          var hours = parseInt(session.time.split(':')[0]);
-          var minutes = parseInt(session.time.split(':')[1]);
-          minutes = minutes - parseInt(extraTimes[index]);
-          if (minutes < 0) {
-            hours = hours - Math.floor(-minutes / 60);
-            minutes = (minutes % 60 + 60) % 60; // Ensure minutes are positive
-          }
-          var newTimeText = `${hours}`.padStart(2, '0') + ':' + `${minutes}`.padStart(2, '0') + ':00';
-          var newTime = changeTimeFormatHourMinute(newTimeText);
-    
-          if (i === index) {
-            return { ...session, time: newTime };
-          } else {
-            return session;
-          }
-        });
-        setSessions(updatedSessions);
-        console.log("sessions");
-        console.log(sessions);
-    
-        const newExtraTimes = [...extraTimes];
-        newExtraTimes[index] = ''; // Clear the value
-        setExtraTimes(newExtraTimes);
-    
-        const newUpdatedErrors = [...extraTimeErrors];
-        newUpdatedErrors[index] = 'Updated!'; // Clear the error message
-        setExtraTimeErrors(newUpdatedErrors);
-    
-        // socket.emit('sendRunnigAgenda', { agenda: updatedSessions, recipients: selectedRecipients });
+        return session;
       }
-    };
+    });
+
+    const updatedCurrentTimes = [...currentTime];
+    if (currentSessionIndex === index && isRunning) {
+      // Extract current hours and minutes from currentTime[index]
+      let currentHours = parseInt(updatedCurrentTimes[index].split(':')[0]);
+      let currentMinutes = parseInt(updatedCurrentTimes[index].split(':')[1]);
+      
+      currentMinutes -= reductionAmount;
+      if (currentMinutes < 0) {
+        currentHours -= Math.floor(-currentMinutes / 60);
+        currentMinutes = (currentMinutes % 60 + 60) % 60; 
+      }
+      updatedCurrentTimes[index] = `${currentHours}`.padStart(2, '0') + ':' + `${currentMinutes}`.padStart(2, '0') + ':00';
+    }
+
+    setSessions(updatedSessions);
+    setCurrentTime(updatedCurrentTimes);
+
+    console.log("sessions");
+    console.log(sessions);
+
+    const newExtraTimes = [...extraTimes];
+    newExtraTimes[index] = '';
+    setExtraTimes(newExtraTimes);
+
+    const newUpdatedErrors = [...extraTimeErrors];
+    newUpdatedErrors[index] = 'Updated!';
+    setExtraTimeErrors(newUpdatedErrors);
+  }
+};
+
     
   
     const handleClearAgenda = () => {
