@@ -1033,7 +1033,9 @@ const createWorkshop = async () => {
         document.getElementById("notesSection").hidden = false
         document.getElementById("agendaSection").hidden = false
         document.getElementById("messageSection").hidden = false
-        document.getElementsByClassName("collapseSection").hidden = false
+        document.getElementById("collapseNotesSection").hidden = false
+        document.getElementById("collapseAgendaSection").hidden = false
+        document.getElementById("collapseMessageSection").hidden = false
         document.getElementById("wholeSummary").style.display = "none";
         document.getElementById("clusterSummary").style.display = "none";
         document.getElementById("workshopError").innerHTML = "Workshop created successfully"
@@ -1855,7 +1857,8 @@ const MiroAuthorize = () => {
         const newErrors = [...extraTimeErrors];
         newErrors[index] = ''; // Clear the error message
         setExtraTimeErrors(newErrors);
-        setExtraTimesConfirmed(-extraTimes)
+        extraTimes[index] = -extraTimes[index]
+        setExtraTimesConfirmed(extraTimes)
 
         const updatedSessions = sessions.map((session, i) => {
           var hours = parseInt(session.time.split(':')[0]);
@@ -2339,7 +2342,7 @@ const MiroAuthorize = () => {
 
 
 
-            <div className="collapseSection" hidden>
+            <div id="collapseNotesSection" hidden>
               <h1 className="sectionHeading">Participants' Sticky Notes: </h1>
               <p className="collapse" onClick={toggleNotesSection}>(expand/collapse section)</p>
             </div>
@@ -2388,7 +2391,7 @@ const MiroAuthorize = () => {
 
 
 
-            <div className="collapseSection" hidden>
+            <div className="collapseAgendaSection" hidden>
               <h1 className="sectionHeading" >Workshop Agenda:</h1>
               <p className="collapse" onClick={toggleAgendaSection}>(expand/collapse section)</p>
             </div>
@@ -2502,7 +2505,7 @@ const MiroAuthorize = () => {
 
 
 
-            <div className="collapseSection" hidden>
+            <div className="collapseMessageSection" hidden>
               <h1 className="sectionHeading" >Message: </h1>
               <p className="collapse" onClick={toggleMessageSection}>(expand/collapse section)</p>
             </div>
