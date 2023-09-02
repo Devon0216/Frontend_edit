@@ -1088,7 +1088,7 @@ const joinWorkshopAsFacilitator = async () => {
       document.getElementById("notesSection").hidden = false
       document.getElementById("agendaSection").hidden = false
       document.getElementById("messageSection").hidden = false
-      document.getElementById("collapsenotesSectionHeading").hidden = false
+      document.getElementById("collapseNotesSectionHeading").hidden = false
       document.getElementById("collapseNotesSection").hidden = false
       document.getElementById("collapseAgendaSectionHeading").hidden = false
       document.getElementById("collapseAgendaSection").hidden = false
