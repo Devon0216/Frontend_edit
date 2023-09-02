@@ -432,8 +432,13 @@ tr {
 
 
 
-
- 
+.collapse {
+  text-decoration: underline;
+}
+.collapse:hover {
+  color:coral;
+  text-decoration: underline;
+}
 
 
 

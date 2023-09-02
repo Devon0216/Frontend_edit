@@ -1852,7 +1852,7 @@ const MiroAuthorize = () => {
         const newErrors = [...extraTimeErrors];
         newErrors[index] = ''; // Clear the error message
         setExtraTimeErrors(newErrors);
-        setExtraTimesConfirmed(extraTimes)
+        setExtraTimesConfirmed(-extraTimes)
 
         const updatedSessions = sessions.map((session, i) => {
           var hours = parseInt(session.time.split(':')[0]);
@@ -2338,10 +2338,9 @@ const MiroAuthorize = () => {
 
 
 
-
+            <h1 className="sectionHeading">Participants' Sticky Notes: </h1>
+            <p className="collapse" onClick={toggleNotesSection}>(expand/collapse section)</p>
             <div id="notesSection"  class="section"  hidden={notesSectionCollapsed}>
-              <h1 className="sectionHeading">Participants' Sticky Notes: </h1>
-              <p className="sectionHeading" onClick={toggleNotesSection}>(expand/collapse section)</p>
               <button class="button-orange" onClick={getNotes} >Get Participants Notes</button>
               <button class="button-orange" onClick={addNotesToWorkshop} id="saveNotesButton">Save sticky notes to workshop</button>
               <p class="errorMessage" id="notesButtonError"></p>
@@ -2386,10 +2385,9 @@ const MiroAuthorize = () => {
 
 
 
-
+            <h1 className="sectionHeading" >Workshop Agenda:</h1>
+            <p className="collapse" onClick={toggleAgendaSection}>(expand/collapse section)</p>
             <div id="agendaSection" class="section"  hidden={agendaSectionCollapsed}>
-              <h1 className="sectionHeading" >Workshop Agenda:</h1>
-              <p className="sectionHeading" onClick={toggleAgendaSection}>(expand/collapse section)</p>
               <table className="table_agenda ">
                 <thead className="table__thead">
                   <tr>
@@ -2477,7 +2475,7 @@ const MiroAuthorize = () => {
                 </table>
                 )}
                 <br></br>
-                <p class="errorMessage" id="sessionTotalTime" >Total remaining time: </p>
+                <p class="sectionHeading" id="sessionTotalTime" >Total remaining time: </p>
                 <br></br>
                 <p class="errorMessage" id="sessionError"></p>
                 <button id="countDownAgendaButton" class="button-orange" onClick={handleCountingDown} >Start Count Down!</button>
@@ -2500,10 +2498,9 @@ const MiroAuthorize = () => {
 
 
 
-
+            <h1 className="sectionHeading" >Message: </h1>
+            <p className="collapse" onClick={toggleMessageSection}>(expand/collapse section)</p>
             <div id="messageSection" class="section" hidden={messageSectionCollapsed}>
-              <h1 className="sectionHeading" >Message: </h1>
-              <p className="sectionHeading" onClick={toggleMessageSection}>(expand/collapse section)</p>
               <label class="errorMessage" id="messageError"></label>
               <br></br>
               <br></br>
