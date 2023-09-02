@@ -1895,13 +1895,14 @@ const handleReduceSession = (index) => {
       // Extract current hours and minutes from currentTime[index]
       let currentHours = parseInt(updatedCurrentTimes[index].split(':')[0]);
       let currentMinutes = parseInt(updatedCurrentTimes[index].split(':')[1]);
+      let currentSeconds = parseInt(updatedCurrentTimes[index].split(':')[2]);
       
       currentMinutes -= reductionAmount;
       if (currentMinutes < 0) {
         currentHours -= Math.floor(-currentMinutes / 60);
         currentMinutes = (currentMinutes % 60 + 60) % 60; 
       }
-      updatedCurrentTimes[index] = `${currentHours}`.padStart(2, '0') + ':' + `${currentMinutes}`.padStart(2, '0') + ':00';
+      updatedCurrentTimes[index] = `${currentHours}`.padStart(2, '0') + ':' + `${currentMinutes}`.padStart(2, '0') + ':' + `${currentSeconds}`.padStart(2, '0');
     }
 
     setSessions(updatedSessions);
