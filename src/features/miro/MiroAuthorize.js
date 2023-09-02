@@ -1855,31 +1855,22 @@ const MiroAuthorize = () => {
         setExtraTimesConfirmed(extraTimes)
 
         const updatedSessions = sessions.map((session, i) => {
-            var hours = parseInt(session.time.split(":")[0])
-            var minutes = parseInt(session.time.split(":")[1])
-            minutes = minutes - parseInt(extraTimes[index])
-            if (minutes < 0){
-              hours = hours - Math.floor(minutes / 60)
-              if (hours < 0){
-                hours = 0;
-                minutes = 0;
-              }
-              else{
-                minutes = minutes % 60;
-              }
-              
-            }
-            var newTimeText = `${hours}` + ":" + `${minutes}` + ":00"
-            var newTime = changeTimeFormatHourMinute(newTimeText)
-
-            if (i === index){
-              return { ...session, time: newTime };
-            }
-            else{
-              return session
-            }
+          var hours = parseInt(session.time.split(':')[0]);
+          var minutes = parseInt(session.time.split(':')[1]);
+          minutes = minutes - parseInt(extraTimes[index]);
+          if (minutes < 0) {
+            hours = hours - Math.floor(-minutes / 60);
+            minutes = (minutes % 60 + 60) % 60; // Ensure minutes are positive
           }
-        );
+          var newTimeText = `${hours}`.padStart(2, '0') + ':' + `${minutes}`.padStart(2, '0') + ':00';
+          var newTime = changeTimeFormatHourMinute(newTimeText);
+
+          if (i === index) {
+            return { ...session, time: newTime };
+          } else {
+            return session;
+          }
+        });
         setSessions(updatedSessions);
         console.log("sessions")
         console.log(sessions)
@@ -2161,9 +2152,15 @@ const MiroAuthorize = () => {
 
           if (extraTimesConfirmed[currentTimeIndex]) {
             const extraMinutes = parseInt(extraTimesConfirmed[currentTimeIndex]);
-            minutes += extraMinutes;
-            hours += Math.floor(minutes / 60);
-            minutes %= 60;
+            // minutes += extraMinutes;
+            // hours += Math.floor(minutes / 60);
+            // minutes %= 60;
+            minutes = minutes + parseInt(extraTimes[index]);
+            if (minutes < 0) {
+              hours = hours - Math.floor(-minutes / 60);
+              minutes = (minutes % 60 + 60) % 60; // Ensure minutes are positive
+            }
+
             extraTimesConfirmed[currentTimeIndex] = undefined;
           }
     
@@ -2231,9 +2228,14 @@ const MiroAuthorize = () => {
 
           if (extraTimesConfirmed[currentTimeIndex]) {
             const extraMinutes = parseInt(extraTimesConfirmed[currentTimeIndex]);
-            minutes += extraMinutes;
-            hours += Math.floor(minutes / 60);
-            minutes %= 60;
+            // minutes += extraMinutes;
+            // hours += Math.floor(minutes / 60);
+            // minutes %= 60;
+            minutes = minutes + parseInt(extraTimes[index]);
+            if (minutes < 0) {
+              hours = hours - Math.floor(-minutes / 60);
+              minutes = (minutes % 60 + 60) % 60; // Ensure minutes are positive
+            }
             extraTimesConfirmed[currentTimeIndex] = undefined;
           }
     
@@ -2337,9 +2339,9 @@ const MiroAuthorize = () => {
 
 
 
-            <h1 className="sectionHeading" onClick={toggleNotesSection}>Participants' Sticky Notes: </h1>
             <div id="notesSection"  class="section"  hidden={notesSectionCollapsed}>
-              
+              <h1 className="sectionHeading">Participants' Sticky Notes: </h1>
+              <p className="sectionHeading" onClick={toggleNotesSection}>(expand/collapse section)</p>
               <button class="button-orange" onClick={getNotes} >Get Participants Notes</button>
               <button class="button-orange" onClick={addNotesToWorkshop} id="saveNotesButton">Save sticky notes to workshop</button>
               <p class="errorMessage" id="notesButtonError"></p>
@@ -2384,9 +2386,10 @@ const MiroAuthorize = () => {
 
 
 
-            <h1 className="sectionHeading" onClick={toggleAgendaSection}>Workshop Agenda:</h1>
+
             <div id="agendaSection" class="section"  hidden={agendaSectionCollapsed}>
-              
+              <h1 className="sectionHeading" >Workshop Agenda:</h1>
+              <p className="sectionHeading" onClick={toggleAgendaSection}>(expand/collapse section)</p>
               <table className="table_agenda ">
                 <thead className="table__thead">
                   <tr>
@@ -2497,9 +2500,10 @@ const MiroAuthorize = () => {
 
 
 
-            <h1 className="sectionHeading" onClick={toggleMessageSection}>Message: </h1>
+
             <div id="messageSection" class="section" hidden={messageSectionCollapsed}>
-              
+              <h1 className="sectionHeading" >Message: </h1>
+              <p className="sectionHeading" onClick={toggleMessageSection}>(expand/collapse section)</p>
               <label class="errorMessage" id="messageError"></label>
               <br></br>
               <br></br>
