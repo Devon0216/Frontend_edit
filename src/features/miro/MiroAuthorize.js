@@ -1852,29 +1852,26 @@ const MiroAuthorize = () => {
         // socket.emit('sendRunnigAgenda', { agenda: updatedSessions, recipients: selectedRecipients });
       }    
     }
-
-    const handleReduceSession = index => {
-
+    const handleReduceSession = (index) => {
       if (!extraTimes[index]) {
         const newErrors = [...extraTimeErrors];
         newErrors[index] = 'Please enter a value';
         setExtraTimeErrors(newErrors);
         return; // Stop execution if there's an error
-      } 
-      else if ( isNaN(parseInt(extraTimes[index])) ){
+      } else if (isNaN(parseInt(extraTimes[index]))) {
         const newErrors = [...extraTimeErrors];
         newErrors[index] = 'Please enter a valid number';
         setExtraTimeErrors(newErrors);
         return; // Stop execution if there's an error
-      }
-      else {
+      } else {
         const newErrors = [...extraTimeErrors];
         newErrors[index] = ''; // Clear the error message
         setExtraTimeErrors(newErrors);
-        const newTempExtraTimes = extraTimes;
-        newTempExtraTimes[index] = -newTempExtraTimes[index]
-        setExtraTimesConfirmed(newTempExtraTimes)
-
+    
+        const newTempExtraTimes = [...extraTimes];
+        newTempExtraTimes[index] = -parseInt(newTempExtraTimes[index]); // Negate the value to reduce time
+        setExtraTimes(newTempExtraTimes);
+    
         const updatedSessions = sessions.map((session, i) => {
           var hours = parseInt(session.time.split(':')[0]);
           var minutes = parseInt(session.time.split(':')[1]);
@@ -1885,7 +1882,7 @@ const MiroAuthorize = () => {
           }
           var newTimeText = `${hours}`.padStart(2, '0') + ':' + `${minutes}`.padStart(2, '0') + ':00';
           var newTime = changeTimeFormatHourMinute(newTimeText);
-
+    
           if (i === index) {
             return { ...session, time: newTime };
           } else {
@@ -1893,20 +1890,21 @@ const MiroAuthorize = () => {
           }
         });
         setSessions(updatedSessions);
-        console.log("sessions")
-        console.log(sessions)
-
+        console.log("sessions");
+        console.log(sessions);
+    
         const newExtraTimes = [...extraTimes];
         newExtraTimes[index] = ''; // Clear the value
         setExtraTimes(newExtraTimes);
-
+    
         const newUpdatedErrors = [...extraTimeErrors];
         newUpdatedErrors[index] = 'Updated!'; // Clear the error message
         setExtraTimeErrors(newUpdatedErrors);
-
+    
         // socket.emit('sendRunnigAgenda', { agenda: updatedSessions, recipients: selectedRecipients });
-      }    
-    }
+      }
+    };
+    
   
     const handleClearAgenda = () => {
       // clearAgenda();
