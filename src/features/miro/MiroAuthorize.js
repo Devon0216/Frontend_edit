@@ -1831,11 +1831,69 @@ const MiroAuthorize = () => {
         setExtraTimeErrors(newUpdatedErrors);
 
         // socket.emit('sendRunnigAgenda', { agenda: updatedSessions, recipients: selectedRecipients });
+      }    
+    }
+
+    const handleReduceSession = index => {
+
+      if (!extraTimes[index]) {
+        const newErrors = [...extraTimeErrors];
+        newErrors[index] = 'Please enter a value';
+        setExtraTimeErrors(newErrors);
+        return; // Stop execution if there's an error
+      } 
+      else if ( isNaN(parseInt(extraTimes[index])) ){
+        const newErrors = [...extraTimeErrors];
+        newErrors[index] = 'Please enter a valid number';
+        setExtraTimeErrors(newErrors);
+        return; // Stop execution if there's an error
       }
-  
-  
-      // }
-      
+      else {
+        const newErrors = [...extraTimeErrors];
+        newErrors[index] = ''; // Clear the error message
+        setExtraTimeErrors(newErrors);
+        setExtraTimesConfirmed(extraTimes)
+
+        const updatedSessions = sessions.map((session, i) => {
+            var hours = parseInt(session.time.split(":")[0])
+            var minutes = parseInt(session.time.split(":")[1])
+            minutes = minutes - parseInt(extraTimes[index])
+            if (minutes < 0){
+              hours = hours - Math.floor(minutes / 60)
+              if (hours < 0){
+                hours = 0;
+                minutes = 0;
+              }
+              else{
+                minutes = minutes % 60;
+              }
+              
+            }
+            var newTimeText = `${hours}` + ":" + `${minutes}` + ":00"
+            var newTime = changeTimeFormatHourMinute(newTimeText)
+
+            if (i === index){
+              return { ...session, time: newTime };
+            }
+            else{
+              return session
+            }
+          }
+        );
+        setSessions(updatedSessions);
+        console.log("sessions")
+        console.log(sessions)
+
+        const newExtraTimes = [...extraTimes];
+        newExtraTimes[index] = ''; // Clear the value
+        setExtraTimes(newExtraTimes);
+
+        const newUpdatedErrors = [...extraTimeErrors];
+        newUpdatedErrors[index] = 'Updated!'; // Clear the error message
+        setExtraTimeErrors(newUpdatedErrors);
+
+        // socket.emit('sendRunnigAgenda', { agenda: updatedSessions, recipients: selectedRecipients });
+      }    
     }
   
     const handleClearAgenda = () => {
@@ -2128,6 +2186,8 @@ const MiroAuthorize = () => {
           updateTimer("Time left: " + newTime);
 
 
+
+
           const filteredRecipients = selectedRecipients.filter(user => user !== global.username);
 
           const data = {
@@ -2140,6 +2200,8 @@ const MiroAuthorize = () => {
           console.log("data")
           console.log(data)
           socket.emit('sendRunnigAgenda', data);
+
+          document.getElementById("sessionTotalTime").textContent = "Total remaining time: " + changeTimeFormat(calculateTotalTime());
           
 
 
@@ -2190,25 +2252,9 @@ const MiroAuthorize = () => {
             
             return updatedCurrentTime;
           });
-          
-          // updateTimer("Time left: " + newTime);
 
-
-          // const filteredRecipients = selectedRecipients.filter(user => user !== global.username);
-
-          // const data = {
-          //   isRunning: isRunning,
-          //   sessions: sessions,
-          //   currentTime: currentTime,
-          //   currentTimeIndex: currentTimeIndex,
-          //   recipients: filteredRecipients
-          // };
-          // console.log("data")
-          // console.log(data)
-          // socket.emit('sendRunnigAgenda', data);
-          
-
-
+          document.getElementById("sessionTotalTime").textContent = "Total remaining time: " + changeTimeFormat(calculateTotalTime());
+        
         }, 1000);
       }
     
@@ -2217,12 +2263,48 @@ const MiroAuthorize = () => {
       };
     }, [isRunning, currentTimeIndex, currentTime]);
 
+    const calculateTotalTime = () => {
+      let [currentHours, currentMinutes, currentSeconds] = currentTime[currentTimeIndex].split(":").map(Number);
+      let totalTime = currentHours * 3600 + currentMinutes * 60 + currentSeconds;
+
+      // Add the session times
+      sessions.forEach((session, index) => {
+        if (currentTimeIndex !== index){
+          const [hours, minutes, seconds] = session.time.split(':').map(Number);
+          totalTime += hours * 3600 + minutes * 60 + seconds;
+        }
+      });
+
+      return totalTime;
+    };
+
+
+
+  const [notesSectionCollapsed, setNotesSectionCollapsed] = useState(true); // Initially, notesSection is collapsed
+  const [agendaSectionCollapsed, setAgendaSectionCollapsed] = useState(true); // Initially, agendaSection is collapsed
+  const [messageSectionCollapsed, setMessageSectionCollapsed] = useState(true); // Initially, messageSection is collapsed
+
+  // Function to toggle the collapsed state of the notes section
+  const toggleNotesSection = () => {
+    setNotesSectionCollapsed(!notesSectionCollapsed);
+  };
+
+  // Function to toggle the collapsed state of the agenda section
+  const toggleAgendaSection = () => {
+    setAgendaSectionCollapsed(!agendaSectionCollapsed);
+  };
+
+  // Function to toggle the collapsed state of the message section
+  const toggleMessageSection = () => {
+    setMessageSectionCollapsed(!messageSectionCollapsed);
+  };
+
     
     
 
     let content = (
         <section>
-            <div id="workshopSection" class="section" >
+            <div class="section" >
               <h1 className="sectionHeading">Please authorize again if any unexpected behaviour occurs</h1>
               <br></br>
               <h3 class="errorMessage" id="loading"></h3>
@@ -2256,7 +2338,7 @@ const MiroAuthorize = () => {
 
 
 
-            <div id="notesSection"  class="section" hidden>
+            <div id="notesSection"  class="section" onClick={toggleNotesSection} hidden={notesSectionCollapsed}>
               <h1 className="sectionHeading">Participants' Sticky Notes: </h1>
               <button class="button-orange" onClick={getNotes} >Get Participants Notes</button>
               <button class="button-orange" onClick={addNotesToWorkshop} id="saveNotesButton">Save sticky notes to workshop</button>
@@ -2303,7 +2385,7 @@ const MiroAuthorize = () => {
 
 
 
-            <div id="agendaSection" class="section" hidden>
+            <div id="agendaSection" class="section" onClick={toggleAgendaSection} hidden={agendaSectionCollapsed}>
               <h1 className="sectionHeading">Workshop Agenda:</h1>
               <table className="table_agenda ">
                 <thead className="table__thead">
@@ -2339,6 +2421,7 @@ const MiroAuthorize = () => {
                           disabled={coach}
                         />
                         <button disabled={coach} onClick={() => handleUpdateSession(index)}>Update</button>
+                        <button disabled={coach} onClick={() => handleReduceSession(index)}>Reduce</button>
                         <p >{extraTimeErrors[index]}</p>
                       </td>
                       <td className={currentSessionIndex === index && isRunning ? 'runningSession' : 'table__cell'}>
@@ -2391,6 +2474,8 @@ const MiroAuthorize = () => {
                 </table>
                 )}
                 <br></br>
+                <p class="errorMessage" id="sessionTotalTime" >Total remaining time: </p>
+                <br></br>
                 <p class="errorMessage" id="sessionError"></p>
                 <button id="countDownAgendaButton" class="button-orange" onClick={handleCountingDown} >Start Count Down!</button>
                 <button id="pauseAgendaButton" class="button-orange" onClick={handlePause} >Pause!</button>
@@ -2413,7 +2498,7 @@ const MiroAuthorize = () => {
 
 
 
-            <div id="messageSection" class="section" hidden>
+            <div id="messageSection" class="section" onClick={toggleMessageSection} hidden={messageSectionCollapsed}>
               <h1 className="sectionHeading">Message: </h1>
               <label class="errorMessage" id="messageError"></label>
               <br></br>
