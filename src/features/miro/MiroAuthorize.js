@@ -2155,7 +2155,7 @@ const MiroAuthorize = () => {
             // minutes += extraMinutes;
             // hours += Math.floor(minutes / 60);
             // minutes %= 60;
-            minutes = minutes + parseInt(extraTimes[index]);
+            minutes = minutes + extraMinutes;
             if (minutes < 0) {
               hours = hours - Math.floor(-minutes / 60);
               minutes = (minutes % 60 + 60) % 60; // Ensure minutes are positive
@@ -2231,7 +2231,7 @@ const MiroAuthorize = () => {
             // minutes += extraMinutes;
             // hours += Math.floor(minutes / 60);
             // minutes %= 60;
-            minutes = minutes + parseInt(extraTimes[index]);
+            minutes = minutes + extraMinutes;
             if (minutes < 0) {
               hours = hours - Math.floor(-minutes / 60);
               minutes = (minutes % 60 + 60) % 60; // Ensure minutes are positive
