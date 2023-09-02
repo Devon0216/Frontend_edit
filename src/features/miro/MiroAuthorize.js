@@ -1033,19 +1033,12 @@ const createWorkshop = async () => {
         document.getElementById("notesSection").hidden = false
         document.getElementById("agendaSection").hidden = false
         document.getElementById("messageSection").hidden = false
-
         document.getElementById("collapsenotesSectionHeading").hidden = false
         document.getElementById("collapseNotesSection").hidden = false
-
-        
         document.getElementById("collapseAgendaSectionHeading").hidden = false
         document.getElementById("collapseAgendaSection").hidden = false
-
         document.getElementById("collapseMessageSectionHeading").hidden = false
         document.getElementById("collapseMessageSection").hidden = false
-
-
-
         document.getElementById("wholeSummary").style.display = "none";
         document.getElementById("clusterSummary").style.display = "none";
         document.getElementById("workshopError").innerHTML = "Workshop created successfully"
@@ -1095,7 +1088,12 @@ const joinWorkshopAsFacilitator = async () => {
       document.getElementById("notesSection").hidden = false
       document.getElementById("agendaSection").hidden = false
       document.getElementById("messageSection").hidden = false
-      document.getElementsByClassName("collapseSection").hidden = false
+      document.getElementById("collapsenotesSectionHeading").hidden = false
+      document.getElementById("collapseNotesSection").hidden = false
+      document.getElementById("collapseAgendaSectionHeading").hidden = false
+      document.getElementById("collapseAgendaSection").hidden = false
+      document.getElementById("collapseMessageSectionHeading").hidden = false
+      document.getElementById("collapseMessageSection").hidden = false
       document.getElementById("wholeSummary").style.display = "none";
       document.getElementById("clusterSummary").style.display = "none";
     }
@@ -1139,6 +1137,12 @@ const joinWorkshopAsCoach = async () => {
       document.getElementById("addSessionButton").style.display = "none";
       document.getElementById("wholeSummary").style.display = "none";
       document.getElementById("clusterSummary").style.display = "none";
+      document.getElementById("collapsenotesSectionHeading").hidden = false
+      document.getElementById("collapseNotesSection").hidden = false
+      document.getElementById("collapseAgendaSectionHeading").hidden = false
+      document.getElementById("collapseAgendaSection").hidden = false
+      document.getElementById("collapseMessageSectionHeading").hidden = false
+      document.getElementById("collapseMessageSection").hidden = false
       // document.getElementById("addAgendaButton").style.display = "none";
       // document.getElementById("clearAgendaButton").style.display = "none";
       // document.getElementById("agendaCoach").hidden = true;
@@ -1867,8 +1871,9 @@ const MiroAuthorize = () => {
         const newErrors = [...extraTimeErrors];
         newErrors[index] = ''; // Clear the error message
         setExtraTimeErrors(newErrors);
-        extraTimes[index] = -extraTimes[index]
-        setExtraTimesConfirmed(extraTimes)
+        const newTempExtraTimes = extraTimes;
+        newTempExtraTimes[index] = -newTempExtraTimes[index]
+        setExtraTimesConfirmed(newTempExtraTimes)
 
         const updatedSessions = sessions.map((session, i) => {
           var hours = parseInt(session.time.split(':')[0]);
