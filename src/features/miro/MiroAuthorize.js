@@ -1042,6 +1042,10 @@ const createWorkshop = async () => {
         document.getElementById("wholeSummary").style.display = "none";
         document.getElementById("clusterSummary").style.display = "none";
         document.getElementById("workshopError").innerHTML = "Workshop created successfully"
+        toggleNotesSection();
+        toggleAgendaSection();
+        toggleMessageSection();
+
       }
       
     }
@@ -1096,6 +1100,9 @@ const joinWorkshopAsFacilitator = async () => {
       document.getElementById("collapseMessageSection").hidden = false
       document.getElementById("wholeSummary").style.display = "none";
       document.getElementById("clusterSummary").style.display = "none";
+      toggleNotesSection();
+      toggleAgendaSection();
+      toggleMessageSection();
     }
     else{
       document.getElementById("workshopError").innerHTML = "Wrong username or miroId for facilitator"
@@ -1148,6 +1155,9 @@ const joinWorkshopAsCoach = async () => {
       // document.getElementById("agendaCoach").hidden = true;
       // document.getElementById("summaryCoach").hidden = true;
       document.getElementById("workshopError").innerHTML = "Joined as coach successfully"
+      toggleNotesSection();
+      toggleAgendaSection();
+      toggleMessageSection();
     }
 
     // const result1 = await getUserByName(global.username, global.password );
@@ -2347,9 +2357,9 @@ const MiroAuthorize = () => {
 
 
 
-  const [notesSectionCollapsed, setNotesSectionCollapsed] = useState(false); // Initially, notesSection is collapsed
-  const [agendaSectionCollapsed, setAgendaSectionCollapsed] = useState(false); // Initially, agendaSection is collapsed
-  const [messageSectionCollapsed, setMessageSectionCollapsed] = useState(false); // Initially, messageSection is collapsed
+  const [notesSectionCollapsed, setNotesSectionCollapsed] = useState(true); // Initially, notesSection is collapsed
+  const [agendaSectionCollapsed, setAgendaSectionCollapsed] = useState(true); // Initially, agendaSection is collapsed
+  const [messageSectionCollapsed, setMessageSectionCollapsed] = useState(true); // Initially, messageSection is collapsed
 
   // Function to toggle the collapsed state of the notes section
   const toggleNotesSection = () => {
