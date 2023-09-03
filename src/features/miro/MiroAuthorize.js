@@ -1033,7 +1033,7 @@ const createWorkshop = async () => {
         document.getElementById("notesSection").hidden = false
         document.getElementById("agendaSection").hidden = false
         document.getElementById("messageSection").hidden = false
-        document.getElementById("collapsenotesSectionHeading").hidden = false
+        document.getElementById("collapseNotesSectionHeading").hidden = false
         document.getElementById("collapseNotesSection").hidden = false
         document.getElementById("collapseAgendaSectionHeading").hidden = false
         document.getElementById("collapseAgendaSection").hidden = false
@@ -1137,7 +1137,7 @@ const joinWorkshopAsCoach = async () => {
       document.getElementById("addSessionButton").style.display = "none";
       document.getElementById("wholeSummary").style.display = "none";
       document.getElementById("clusterSummary").style.display = "none";
-      document.getElementById("collapsenotesSectionHeading").hidden = false
+      document.getElementById("collapseNotesSectionHeading").hidden = false
       document.getElementById("collapseNotesSection").hidden = false
       document.getElementById("collapseAgendaSectionHeading").hidden = false
       document.getElementById("collapseAgendaSection").hidden = false
@@ -1298,7 +1298,7 @@ const summarise = async () => {
         const resultFrameNotes = await getFrameNotes(responseToken.data, globalBoardID, resultFrames.data.data[i].id );
         console.log("resultFrame Notes")
         console.log(resultFrameNotes)
-        summarsationText = summarsationText + "Cluster  " + resultFrames.data.data[i].data.title + " \n"
+        summarsationText = summarsationText + "Cluster  " + resultFrames.data.data[i].data.title + ": \n"
         let frameSummary = ""
         if (resultFrameNotes.data.total !== 0){
           for (let j = 0; j<resultFrameNotes.data.total;j++){
@@ -2347,9 +2347,9 @@ const MiroAuthorize = () => {
 
 
 
-  const [notesSectionCollapsed, setNotesSectionCollapsed] = useState(true); // Initially, notesSection is collapsed
-  const [agendaSectionCollapsed, setAgendaSectionCollapsed] = useState(true); // Initially, agendaSection is collapsed
-  const [messageSectionCollapsed, setMessageSectionCollapsed] = useState(true); // Initially, messageSection is collapsed
+  const [notesSectionCollapsed, setNotesSectionCollapsed] = useState(false); // Initially, notesSection is collapsed
+  const [agendaSectionCollapsed, setAgendaSectionCollapsed] = useState(false); // Initially, agendaSection is collapsed
+  const [messageSectionCollapsed, setMessageSectionCollapsed] = useState(false); // Initially, messageSection is collapsed
 
   // Function to toggle the collapsed state of the notes section
   const toggleNotesSection = () => {
