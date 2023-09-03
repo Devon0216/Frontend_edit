@@ -1880,7 +1880,7 @@ const MiroAuthorize = () => {
             minutes = minutes - reductionAmount;
             if (minutes < 0) {
               hours = hours - Math.floor(-minutes / 60);
-              minutes = 0; 
+              minutes = (minutes % 60 + 60) % 60; 
             }
             var newTimeText = `${hours}`.padStart(2, '0') + ':' + `${minutes}`.padStart(2, '0') + ':00';
             var newTime = changeTimeFormatHourMinute(newTimeText);
@@ -1897,10 +1897,15 @@ const MiroAuthorize = () => {
           let currentMinutes = parseInt(updatedCurrentTimes[index].split(':')[1]);
           let currentSeconds = parseInt(updatedCurrentTimes[index].split(':')[2]);
           
-          currentMinutes -= reductionAmount;
-          if (currentMinutes < 0) {
+          // currentMinutes -= reductionAmount;
+          if ( (currentMinutes - reductionAmount) < 0) {
             currentHours -= Math.floor(-currentMinutes / 60);
             currentMinutes = 0; 
+            currentSeconds = 0;
+          }
+          else{
+            currentHours -= Math.floor(-currentMinutes / 60);
+            currentMinutes -= reductionAmount;
           }
           updatedCurrentTimes[index] = `${currentHours}`.padStart(2, '0') + ':' + `${currentMinutes}`.padStart(2, '0') + ':' + `${currentSeconds}`.padStart(2, '0');
         }
