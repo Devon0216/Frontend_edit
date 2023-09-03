@@ -19,17 +19,21 @@ const Welcome = () => {
         }
     }
 
-    function gotoAuthorize() {
-        navigate('/dash/authorize')
-    }
+    // function gotoAuthorize() {
+    //     navigate('/dash/authorize')
+    // }
 
     function gotoPastWorkshop() {
         navigate('/dash/pastWorkshop')
     }
 
-    function gotoWelcome() {
-        navigate('/')
+    function gotoHelp() {
+        navigate('/dash/help')
     }
+
+    // function gotoWelcome() {
+    //     navigate('/')
+    // }
 
 
     const content = (
@@ -56,6 +60,7 @@ const Welcome = () => {
                     <button class="button-orange" onClick={gotoPastWorkshop }>Past Workshop</button>
                     <br/>
                     <br/>
+                    <button class="button-orange" onClick={gotoHelp}>Help</button>
                     
                 </div>
             </main>

@@ -21,6 +21,7 @@ var coach = false;
 var intervalIds = [];
 var connected = false;
 var connectedServer = false;
+var inWorkshop = false;
 
 
 
@@ -1041,6 +1042,7 @@ const createWorkshop = async () => {
         document.getElementById("collapseMessageSection").hidden = false
         document.getElementById("wholeSummary").style.display = "none";
         document.getElementById("clusterSummary").style.display = "none";
+        inWorkshop = true;
         document.getElementById("workshopError").innerHTML = "Workshop created successfully"
 
 
@@ -1086,7 +1088,7 @@ const joinWorkshopAsFacilitator = async () => {
 
     if (facilitatorUserId === loginUserId){
       
-      document.getElementById("workshopError").innerHTML = "Joined as facilitator successfully"
+
       document.getElementById("notesSection").hidden = false
       document.getElementById("agendaSection").hidden = false
       document.getElementById("messageSection").hidden = false
@@ -1098,6 +1100,8 @@ const joinWorkshopAsFacilitator = async () => {
       document.getElementById("collapseMessageSection").hidden = false
       document.getElementById("wholeSummary").style.display = "none";
       document.getElementById("clusterSummary").style.display = "none";
+      inWorkshop = true;
+      document.getElementById("workshopError").innerHTML = "Joined as facilitator successfully"
 
     }
     else{
@@ -1146,6 +1150,7 @@ const joinWorkshopAsCoach = async () => {
       document.getElementById("collapseAgendaSection").hidden = false
       document.getElementById("collapseMessageSectionHeading").hidden = false
       document.getElementById("collapseMessageSection").hidden = false
+      inWorkshop = true;
       // document.getElementById("addAgendaButton").style.display = "none";
       // document.getElementById("clearAgendaButton").style.display = "none";
       // document.getElementById("agendaCoach").hidden = true;
@@ -1290,7 +1295,7 @@ const summarise = async () => {
     }
 
 
-    let frameSensitivityScore = 2
+    let frameSensitivityScore = 3
 
 
     const resultFrames = await getFrames(responseToken.data, globalBoardID );
@@ -2396,10 +2401,10 @@ const MiroAuthorize = () => {
               <br></br>
               <input type="text" id="workshopname" required minLength="2" size="20" />
               <br></br>
-              <button class="button-orange" onClick={() => {handleCreateWorkshopAndConnect();}}>Create a  workshop</button>
+              <button class="button-orange" onClick={() => {handleCreateWorkshopAndConnect();}} disabled={inWorkshop}>Create a  workshop</button>
               <br></br>
-              <button class="button-orange" onClick={() => {handleJoinWorkshopFacilitatorAndConnect();}}>Join a workshop as facilitator</button>
-              <button class="button-orange" onClick={() => {handleJoinWorkshopCoachAndConnect();}}>Join a workshop as coach</button>
+              <button class="button-orange" onClick={() => {handleJoinWorkshopFacilitatorAndConnect();}} disabled={inWorkshop}>Join a workshop as facilitator</button>
+              <button class="button-orange" onClick={() => {handleJoinWorkshopCoachAndConnect();}} disabled={inWorkshop}>Join a workshop as coach</button>
               <br></br>
               <br></br>
             </div>

@@ -8,6 +8,7 @@ import UsersList from './features/users/UsersList'
 import MiroAuthorize from './features/miro/MiroAuthorize'
 // import Timer from './features/timer/Timer'
 import PastWorkshop from './features/pastWorkshop/PastWorkshop'
+import Help from './features/help/Help'
 // import UserTesting from './features/users/UserTesting'
 import Login from './features/auth/Login';
 import Signup from './features/auth/Signup'
@@ -25,13 +26,13 @@ function App() {
 
           <Route index element={<Welcome />} />
 
-          <Route path="notes">
+          {/* <Route path="notes">
             <Route index element={<NotesList />} />
           </Route>
 
           <Route path="users">
             <Route index element={<UsersList />} />
-          </Route>
+          </Route> */}
 
           <Route path="authorize">
             <Route index element={<MiroAuthorize />} />
@@ -44,6 +45,10 @@ function App() {
           <Route path="pastWorkshop">
             <Route index element={<PastWorkshop />} />
             <Route path=":id" element={<WorkshopNotes />} />
+          </Route>
+
+          <Route path="help">
+            <Route index element={<Help />} />
           </Route>
 
         </Route>{/* End Dash */}
