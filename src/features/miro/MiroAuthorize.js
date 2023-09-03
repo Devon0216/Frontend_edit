@@ -1877,10 +1877,22 @@ const MiroAuthorize = () => {
           if (i === index) {
             var hours = parseInt(session.time.split(':')[0]);
             var minutes = parseInt(session.time.split(':')[1]);
-            minutes = minutes - reductionAmount;
-            if (minutes < 0) {
-              hours = hours - Math.floor(-minutes / 60);
-              minutes = (minutes % 60 + 60) % 60; 
+            var seconds = parseInt(session.time.split(':')[2]);
+            // minutes = minutes - reductionAmount;
+            if ( (minutes - reductionAmount) < 0) {
+              if ( (hours + Math.floor((minutes - reductionAmount) / 60)) < 0 ){
+                hours = 0;
+                minutes = 0;
+                seconds = 0;
+              }
+              else{
+                hours = hours + Math.floor( (minutes - reductionAmount) / 60);
+                minutes = ( (minutes - reductionAmount) % 60 + 60) % 60;
+              }
+ 
+            }
+            else{
+              minutes = minutes - reductionAmount;
             }
             var newTimeText = `${hours}`.padStart(2, '0') + ':' + `${minutes}`.padStart(2, '0') + ':00';
             var newTime = changeTimeFormatHourMinute(newTimeText);
@@ -1899,9 +1911,15 @@ const MiroAuthorize = () => {
           
           // currentMinutes -= reductionAmount;
           if ( (currentMinutes - reductionAmount) < 0) {
-            currentHours -= Math.floor(-currentMinutes / 60);
-            currentMinutes = 0; 
-            currentSeconds = 0;
+            if ( (currentHours + Math.floor((currentMinutes - reductionAmount) / 60)) < 0 ){
+              currentHours = 0;
+              currentMinutes = 0;
+              currentSeconds = 0;
+            }
+            else{
+              currentHours = currentHours + Math.floor( (currentMinutes - reductionAmount) / 60);
+              currentMinutes = ( (currentMinutes - reductionAmount) % 60 + 60) % 60;
+            }
           }
           else{
             currentMinutes -= reductionAmount;
