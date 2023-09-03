@@ -1904,7 +1904,6 @@ const MiroAuthorize = () => {
             currentSeconds = 0;
           }
           else{
-            currentHours -= Math.floor(-currentMinutes / 60);
             currentMinutes -= reductionAmount;
           }
           updatedCurrentTimes[index] = `${currentHours}`.padStart(2, '0') + ':' + `${currentMinutes}`.padStart(2, '0') + ':' + `${currentSeconds}`.padStart(2, '0');
