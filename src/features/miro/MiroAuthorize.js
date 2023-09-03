@@ -1141,6 +1141,7 @@ const joinWorkshopAsCoach = async () => {
       document.getElementById("pauseAgendaButton").style.display = "none";
       document.getElementById("saveAgendaButton").style.display = "none";
       document.getElementById("clearAgendaButton").style.display = "none";
+      document.getElementById("deleteAgendaButton").style.display = "none";
       document.getElementById("addSessionButton").style.display = "none";
       document.getElementById("wholeSummary").style.display = "none";
       document.getElementById("clusterSummary").style.display = "none";
@@ -1486,8 +1487,8 @@ const MiroAuthorize = () => {
         
     }
 
-    const clearAgenda = async () => {
-        document.getElementById("agendaError").innerHTML = "Clearing agenda..."
+    const deleteAgenda = async () => {
+        document.getElementById("agendaError").innerHTML = "Deleting agenda..."
         // const result1 = await getWorkshopByNameAPI(global.workshopname );
         // global.userid = result1.data[0]._id
         // const result2 = await addAgendaAPI(global.userid, agenda );
@@ -1500,10 +1501,10 @@ const MiroAuthorize = () => {
         // agenda = ""
 
         if (result2.status === 200){
-          document.getElementById("agendaError").innerHTML = "Agenda cleared successfully"
+          document.getElementById("agendaError").innerHTML = "Agenda deleted successfully"
         }
         else{
-          document.getElementById("agendaError").innerHTML = "Agenda clear failed"
+          document.getElementById("agendaError").innerHTML = "Agenda delete failed"
         }
     }
 
@@ -1970,6 +1971,26 @@ const MiroAuthorize = () => {
       });
 
       document.getElementById("agendaError").innerHTML = "Agenda cleared successfully"
+    };
+
+    const handleDeleteAgenda = () => {
+      // clearAgenda();
+      setSessions([]);
+      setCurrentTime([]);
+      setIsRunning(false);
+
+      const filteredRecipients = selectedRecipients.filter(user => user !== global.username);
+      socket.emit('sendRunnigAgenda', {
+        isRunning: false,
+        sessions: [],
+        currentTime: [],
+        currentTimeIndex: 0,
+        recipients: filteredRecipients
+      });
+
+      deleteAgenda();
+
+      document.getElementById("agendaError").innerHTML = "Agenda deleted successfully"
     };
   
     const handleSaveAgenda = () => {
@@ -2564,6 +2585,7 @@ const MiroAuthorize = () => {
                 <button class="button-orange" onClick={handleGetAgenda}>Retrieve Agenda</button>
                 <button id="saveAgendaButton" class="button-orange" onClick={handleSaveAgenda}>Save Agenda</button>
                 <button id="clearAgendaButton" class="button-orange" onClick={handleClearAgenda}>Clear Agenda</button>
+                <button id="deleteAgendaButton" class="button-orange" onClick={handleDeleteAgenda}>Clear Agenda</button>
 
               </div>
               <br></br>
