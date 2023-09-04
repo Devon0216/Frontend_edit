@@ -1534,7 +1534,7 @@ const MiroAuthorize = () => {
         const initialCurrentTime = sessionData.map(session => session.time);
         setCurrentTime(initialCurrentTime);
 
-        document.getElementById("agendaError").innerHTML = "Get agenda successfully"
+        document.getElementById("agendaError").innerHTML = "Retrieved agenda successfully"
       }
       else{
         document.getElementById("agendaError").innerHTML = "No agenda found for the current workshop"
@@ -2157,8 +2157,9 @@ const MiroAuthorize = () => {
       };
       socket.emit('sendMessage', data);
       setReceivedMessages(prevMessages => [...prevMessages, message + " (sent to " + selectedRecipients + ")"]);
-      document.getElementById("messageSent").textContent = "Message sent successfully"
-      document.getElementById("inputMessage").value = ""
+      document.getElementById("messageSent").textContent = "Message sent successfully";
+      setMessage("");
+
     };
 
 
@@ -2585,8 +2586,8 @@ const MiroAuthorize = () => {
                 
                 <button class="button-orange" onClick={handleGetAgenda}>Retrieve Agenda</button>
                 <button id="saveAgendaButton" class="button-orange" onClick={handleSaveAgenda}>Save Agenda</button>
-                <button id="clearAgendaButton" class="button-orange" onClick={handleClearAgenda}>Clear Agenda</button>
-                <button id="deleteAgendaButton" class="button-orange" onClick={handleDeleteAgenda}>Clear Agenda</button>
+                <button id="clearAgendaButton" class="button-orange" onClick={handleClearAgenda}>Clear Current Agenda</button>
+                <button id="deleteAgendaButton" class="button-orange" onClick={handleDeleteAgenda}>Delete Agenda</button>
 
               </div>
               <br></br>
@@ -2626,6 +2627,7 @@ const MiroAuthorize = () => {
                 type="text"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
+                onfocus={() => (document.getElementById("messageSent").textContent = "")}
               />
               <button class="button-orange" onClick={sendMessage}>Send</button>
               <br></br>
