@@ -2158,6 +2158,7 @@ const MiroAuthorize = () => {
       socket.emit('sendMessage', data);
       setReceivedMessages(prevMessages => [...prevMessages, message + " (sent to " + selectedRecipients + ")"]);
       document.getElementById("messageSent").textContent = "Message sent successfully"
+      document.getElementById("inputMessage").value = ""
     };
 
 
@@ -2621,6 +2622,7 @@ const MiroAuthorize = () => {
 
               <br></br>
               <input
+                id="inputMessage"
                 type="text"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
