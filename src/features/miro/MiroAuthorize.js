@@ -3,8 +3,11 @@ import React, { useState, useEffect } from "react";
 // import { useNavigate, Link } from 'react-router-dom'
 import io from 'socket.io-client';
 
-// import {createUser} from '../users/Users';
-import { getStickyNotes, saveStickyNotes, deleteNotesByWorkshopAPI, getFrames, getFrameNotes } from "../stickynotes/StickyNotes";
+import {getAccessToken, getAccessTokenContext, getBoards, createBoardAPI} from '../auth/Authentication';
+import {createUser, getUserByMiroId} from '../users/Users';
+import {getStickyNotes, saveStickyNotes, deleteNotesByWorkshopAPI, getFrames, getFrameNotes, summariseAPI, addSummaryAPI } from "../stickynotes/StickyNotes";
+import {createTimerAPI, getTimerAPI, updateTimerAPI, addAgendaAPI, deleteAgendaAPI} from '../agenda/Agenda';
+import {createWorkshopAPI, getWorkshopByNameAPI, updateWorkshopAPI} from '../workshop/Workshop';
 
 var responseToken;
 var responseBoard;
@@ -39,75 +42,75 @@ var inWorkshop = false;
     ******************************************************
     ******************************************************
 */
-const getAccessToken = async (code) => {
-  const options = {
-      'method': 'POST',
-      'url': `https://whiteboarddj-server.onrender.com/auth`,
-      'headers': {
-        'Content-Type': 'application/json'
-      },
-      data: {
-        code: code
-      }
-  };
+// const getAccessToken = async (code) => {
+//   const options = {
+//       'method': 'POST',
+//       'url': `https://whiteboarddj-server.onrender.com/auth`,
+//       'headers': {
+//         'Content-Type': 'application/json'
+//       },
+//       data: {
+//         code: code
+//       }
+//   };
   
-  try {
-      const result = await axios(options);
-      console.log("hi")
-      console.log(result);
-      return result;
-    } catch (e) {
-        console.log(e);
-        return JSON.parse(e.request.responseText).message
-    }
-}
+//   try {
+//       const result = await axios(options);
+//       console.log("hi")
+//       console.log(result);
+//       return result;
+//     } catch (e) {
+//         console.log(e);
+//         return JSON.parse(e.request.responseText).message
+//     }
+// }
 
-const getAccessTokenContext = async (access_token) => {
+// const getAccessTokenContext = async (access_token) => {
 
-  const options = {
-    'method': 'GET',
-    'url': `https://api.miro.com/v1/oauth-token`,
-    'headers': {
-      'Authorization': `Bearer ${access_token}`,
-      'accept': 'application/json',
-      'content-type': 'application/json'
-    },
-    data: {
+//   const options = {
+//     'method': 'GET',
+//     'url': `https://api.miro.com/v1/oauth-token`,
+//     'headers': {
+//       'Authorization': `Bearer ${access_token}`,
+//       'accept': 'application/json',
+//       'content-type': 'application/json'
+//     },
+//     data: {
 
-    }
-  };
+//     }
+//   };
 
-  try {
-    const result = await axios(options);
-    return result;
-  } catch (e) {
-      return e;
-  }
-}
+//   try {
+//     const result = await axios(options);
+//     return result;
+//   } catch (e) {
+//       return e;
+//   }
+// }
 
-const getBoards = async (access_token, teamId) => {
-const options = {
-  'method': 'GET',
-  'url': `https://api.miro.com/v2/boards?team_id=${teamId}`,
-  'headers': {
-    'Authorization': `Bearer ${access_token}`,
-    'accept': 'application/json',
-    'content-type': 'application/json'
-  },
-  data: {
+// const getBoards = async (access_token, teamId) => {
+// const options = {
+//   'method': 'GET',
+//   'url': `https://api.miro.com/v2/boards?team_id=${teamId}`,
+//   'headers': {
+//     'Authorization': `Bearer ${access_token}`,
+//     'accept': 'application/json',
+//     'content-type': 'application/json'
+//   },
+//   data: {
 
-  }
-};
+//   }
+// };
 
-try {
-  const result = await axios(options);
-  return result;
-} catch (e) {
-     console.log("e.response.data");
-     console.log(e.response.data);
-     return e;
-}
-}
+// try {
+//   const result = await axios(options);
+//   return result;
+// } catch (e) {
+//      console.log("e.response.data");
+//      console.log(e.response.data);
+//      return e;
+// }
+// }
 
 // const getBoardID = async (access_token, boardId) => {
 //   const options = {
@@ -131,77 +134,77 @@ try {
 //     }
 // }
 
-const createBoardAPI = async (access_token, teamId) => {
-  const options = {
-      'method': 'POST',
-      'url': `https://api.miro.com/v2/boards`,
-      'headers': {
-        'Authorization': `Bearer ${access_token}`,
-        'accept': 'application/json',
-        'content-type': 'application/json'
-      },
-      data: {
-        "teamId": `${teamId}`,
-        "name": "WhiteboardDJ"
-      }
-  };
+// const createBoardAPI = async (access_token, teamId) => {
+//   const options = {
+//       'method': 'POST',
+//       'url': `https://api.miro.com/v2/boards`,
+//       'headers': {
+//         'Authorization': `Bearer ${access_token}`,
+//         'accept': 'application/json',
+//         'content-type': 'application/json'
+//       },
+//       data: {
+//         "teamId": `${teamId}`,
+//         "name": "WhiteboardDJ"
+//       }
+//   };
   
-  try {
-      const result = await axios(options);
-      return result;
-    } catch (e) {
-        console.log(e);
-        return JSON.parse(e.request.responseText).message
-    }
-}
+//   try {
+//       const result = await axios(options);
+//       return result;
+//     } catch (e) {
+//         console.log(e);
+//         return JSON.parse(e.request.responseText).message
+//     }
+// }
 
 
 
-const login = async () => {
-  const loginUsername = document.getElementById("username").value
-  const loginPassword = document.getElementById("password").value
+// const login = async () => {
+//   const loginUsername = document.getElementById("username").value
+//   const loginPassword = document.getElementById("password").value
 
-  const result1 = await getUserByMiroId(loginUsername, loginPassword );
+//   const result1 = await getUserByMiroId(loginUsername, loginPassword );
   
-  if (result1.data[0].username !== undefined){
-    const loginUserName = result1.data[0].username
-    console.log("loginUserName")
-    console.log(loginUserName)
+//   if (result1.data[0].username !== undefined){
+//     const loginUserName = result1.data[0].username
+//     console.log("loginUserName")
+//     console.log(loginUserName)
 
-    global.username = loginUserName
-    global.password = loginPassword
-    global.userid = result1.data[0]._id
-    document.getElementById("workshopSection").hidden = false
-    document.getElementById("loginError").textContent = "You have successfully logged in!"
-  }
-  else{
-    document.getElementById("loginError").textContent = "You have entered wrong username or password"
-  }
-}
+//     global.username = loginUserName
+//     global.password = loginPassword
+//     global.userid = result1.data[0]._id
+//     document.getElementById("workshopSection").hidden = false
+//     document.getElementById("loginError").textContent = "You have successfully logged in!"
+//   }
+//   else{
+//     document.getElementById("loginError").textContent = "You have entered wrong username or password"
+//   }
+// }
 
-const createUser = async (username, miroId) => {
-  const options = {
-      'method': 'POST',
-      'url': `https://whiteboarddj-server.onrender.com/users`,
-      'headers': {
-        'Content-Type': 'application/json'
-      },
-      data: {
-        username: `${username}`,
-        miroId: `${miroId}`
-      }
-  };
+// const createUser = async (username, miroId) => {
+//   const options = {
+//       'method': 'POST',
+//       'url': `https://whiteboarddj-server.onrender.com/users`,
+//       'headers': {
+//         'Content-Type': 'application/json'
+//       },
+//       data: {
+//         username: `${username}`,
+//         miroId: `${miroId}`
+//       }
+//   };
   
-  try {
-      const result = await axios(options);
-      console.log("create user result")
-      console.log(result);
-      return result;
-    } catch (e) {
-        console.log(e);
-        return JSON.parse(e.request.responseText).message
-    }
-}
+//   try {
+//       const result = await axios(options);
+//       console.log("create user result")
+//       console.log(result);
+//       return result;
+//     } catch (e) {
+//         console.log(e);
+//         return JSON.parse(e.request.responseText).message
+//     }
+// }
 
 const getUsername = async () => {
   const result1 = await getAccessTokenContext(responseToken.data);
@@ -225,13 +228,6 @@ const getUsername = async () => {
       document.getElementById("loading").innerHTML = resultGetUser.response.data.message
     }
   }
-
-
-
-  
-
-
-
 
   let tempboardid = "";
   const boards = await getBoards(responseToken.data, result1.data.team.id);
@@ -590,87 +586,87 @@ function changeTimeFormatHourMinute(time) {
       return result
 }
 
-const createTimerAPI = async (access_token, boardID, content) => {
-    const options = {
-        'method': 'POST',
-        'url': `https://api.miro.com/v2/boards/${boardID}/texts`,
-        'headers': {
-            'Authorization': `Bearer ${access_token}`,
-            'accept': 'application/json',
-            'content-type': 'application/json'
-        },
-        data: {
-            "data": {
-                "content": `${content}`
-            },
-            "style": {
-                "fontSize": "300"
-            }
-        }
-    };
+// const createTimerAPI = async (access_token, boardID, content) => {
+//     const options = {
+//         'method': 'POST',
+//         'url': `https://api.miro.com/v2/boards/${boardID}/texts`,
+//         'headers': {
+//             'Authorization': `Bearer ${access_token}`,
+//             'accept': 'application/json',
+//             'content-type': 'application/json'
+//         },
+//         data: {
+//             "data": {
+//                 "content": `${content}`
+//             },
+//             "style": {
+//                 "fontSize": "300"
+//             }
+//         }
+//     };
     
-    try {
-        const result = await axios(options);
-        console.log(result.data.id);
+//     try {
+//         const result = await axios(options);
+//         console.log(result.data.id);
         
-        return result;
-      } catch (e) {
-           console.log(e);
-      }
-}
+//         return result;
+//       } catch (e) {
+//            console.log(e);
+//       }
+// }
 
-const getTimerAPI = async (access_token, boardID, itemID) => {
-    const options = {
-        'method': 'GET',
-        'url': `https://api.miro.com/v2/boards/${boardID}/items/${itemID}`,
-        'headers': {
-            'Authorization': `Bearer ${access_token}`,
-            'accept': 'application/json',
-        },
-        data: {
+// const getTimerAPI = async (access_token, boardID, itemID) => {
+//     const options = {
+//         'method': 'GET',
+//         'url': `https://api.miro.com/v2/boards/${boardID}/items/${itemID}`,
+//         'headers': {
+//             'Authorization': `Bearer ${access_token}`,
+//             'accept': 'application/json',
+//         },
+//         data: {
 
-        }
-    };
+//         }
+//     };
     
-    try {
-        const result = await axios(options);
-        console.log(result.data.id);
+//     try {
+//         const result = await axios(options);
+//         console.log(result.data.id);
         
-        return result;
-      } catch (e) {
-           console.log(e);
-      }
-}
+//         return result;
+//       } catch (e) {
+//            console.log(e);
+//       }
+// }
 
-const updateTimerAPI = async (access_token, boardID, itemID, content) => {
-    const options = {
-        'method': 'PATCH',
-        'url': `https://api.miro.com/v2/boards/${boardID}/texts/${itemID}`,
-        'headers': {
-            'Authorization': `Bearer ${access_token}`,
-            'accept': 'application/json',
-            'content-type': 'application/json'
-        },
-        data: {
-            "data": {
-                "content": `${content}`
-            },
-            "style": {
-                "fontSize": "300",
-                "color": "#fa0505"
-            }
-        }
-    };
+// const updateTimerAPI = async (access_token, boardID, itemID, content) => {
+//     const options = {
+//         'method': 'PATCH',
+//         'url': `https://api.miro.com/v2/boards/${boardID}/texts/${itemID}`,
+//         'headers': {
+//             'Authorization': `Bearer ${access_token}`,
+//             'accept': 'application/json',
+//             'content-type': 'application/json'
+//         },
+//         data: {
+//             "data": {
+//                 "content": `${content}`
+//             },
+//             "style": {
+//                 "fontSize": "300",
+//                 "color": "#fa0505"
+//             }
+//         }
+//     };
     
-    try {
-        const result = await axios(options);
-        console.log(result.data.id);
+//     try {
+//         const result = await axios(options);
+//         console.log(result.data.id);
         
-        return result;
-      } catch (e) {
-           console.log(e);
-      }
-}
+//         return result;
+//       } catch (e) {
+//            console.log(e);
+//       }
+// }
 
 const setTimer = async () => {
     let time = "Time left:"
@@ -727,147 +723,147 @@ const newTime = async () => {
     ******************************************************
     ******************************************************
 */
-const createWorkshopAPI = async (userID, workshopname) => {
-    const options = {
-        'method': 'POST',
-        'url': `https://whiteboarddj-server.onrender.com/workshops`,
-        'headers': {
-            'content-type': 'application/json'
-        },
-        data: {
-            User: userID,
-            workshopname: workshopname
-        }
-    };
+// const createWorkshopAPI = async (userID, workshopname) => {
+//     const options = {
+//         'method': 'POST',
+//         'url': `https://whiteboarddj-server.onrender.com/workshops`,
+//         'headers': {
+//             'content-type': 'application/json'
+//         },
+//         data: {
+//             User: userID,
+//             workshopname: workshopname
+//         }
+//     };
     
-    try {
-        const result = await axios(options);
-        console.log(result.data);
+//     try {
+//         const result = await axios(options);
+//         console.log(result.data);
         
-        return result;
-      } catch (e) {
-           console.log(e);
-           return JSON.parse(e.request.responseText).message
-      }
-}
+//         return result;
+//       } catch (e) {
+//            console.log(e);
+//            return JSON.parse(e.request.responseText).message
+//       }
+// }
 
-const getWorkshopByNameAPI = async ( workshopname) => {
-    const options = {
-        'method': 'POST',
-        'url': `https://whiteboarddj-server.onrender.com/workshops/workshopByName`,
-        'headers': {
-            'content-type': 'application/json'
-        },
-        data: {
-            workshopname: workshopname
-        }
-    };
+// const getWorkshopByNameAPI = async ( workshopname) => {
+//     const options = {
+//         'method': 'POST',
+//         'url': `https://whiteboarddj-server.onrender.com/workshops/workshopByName`,
+//         'headers': {
+//             'content-type': 'application/json'
+//         },
+//         data: {
+//             workshopname: workshopname
+//         }
+//     };
     
-    try {
-        console.log("workshopname")
-        console.log(workshopname)
-        const result = await axios(options);
-        console.log(result.data);
+//     try {
+//         console.log("workshopname")
+//         console.log(workshopname)
+//         const result = await axios(options);
+//         console.log(result.data);
         
-        return result;
-      } catch (e) {
-           console.log(e);
-           document.getElementById("workshopError").innerHTML = JSON.parse(e.request.responseText).message
-           return JSON.parse(e.request.responseText).message
-      }
-}
+//         return result;
+//       } catch (e) {
+//            console.log(e);
+//            document.getElementById("workshopError").innerHTML = JSON.parse(e.request.responseText).message
+//            return JSON.parse(e.request.responseText).message
+//       }
+// }
 
-const updateWorkshopAPI = async (workshopID, userID, notes) => {
-    const options = {
-        'method': 'PATCH',
-        'url': `https://whiteboarddj-server.onrender.com/workshops`,
-        'headers': {
-            'content-type': 'application/json'
-        },
-        data: {
-            id: workshopID,
-            User: userID,
-            Note: notes
-        }
-    };
+// const updateWorkshopAPI = async (workshopID, userID, notes) => {
+//     const options = {
+//         'method': 'PATCH',
+//         'url': `https://whiteboarddj-server.onrender.com/workshops`,
+//         'headers': {
+//             'content-type': 'application/json'
+//         },
+//         data: {
+//             id: workshopID,
+//             User: userID,
+//             Note: notes
+//         }
+//     };
     
-    try {
-        const result = await axios(options);
-        console.log(result.data);
+//     try {
+//         const result = await axios(options);
+//         console.log(result.data);
         
-        return result;
-      } catch (e) {
-           console.log(e);
-      }
-}
+//         return result;
+//       } catch (e) {
+//            console.log(e);
+//       }
+// }
 
-const addAgendaAPI = async (workshopID, workshopAgenda) => {
-    const options = {
-        'method': 'PATCH',
-        'url': `https://whiteboarddj-server.onrender.com/workshops/userworkshop`,
-        'headers': {
-            'content-type': 'application/json'
-        },
-        data: {
-            id: workshopID,
-            workshopAgenda: workshopAgenda
-        }
-    };
+// const addAgendaAPI = async (workshopID, workshopAgenda) => {
+//     const options = {
+//         'method': 'PATCH',
+//         'url': `https://whiteboarddj-server.onrender.com/workshops/userworkshop`,
+//         'headers': {
+//             'content-type': 'application/json'
+//         },
+//         data: {
+//             id: workshopID,
+//             workshopAgenda: workshopAgenda
+//         }
+//     };
     
-    try {
-        const result = await axios(options);
-        console.log(result.data);
+//     try {
+//         const result = await axios(options);
+//         console.log(result.data);
         
-        return result;
-      } catch (e) {
-           console.log(e);
-      }
-}
+//         return result;
+//       } catch (e) {
+//            console.log(e);
+//       }
+// }
 
-const deleteAgendaAPI = async (workshopID) => {
-    const options = {
-        'method': 'DELETE',
-        'url': `https://whiteboarddj-server.onrender.com/workshops/userworkshop`,
-        'headers': {
-            'content-type': 'application/json'
-        },
-        data: {
-            id: workshopID
-        }
-    };
+// const deleteAgendaAPI = async (workshopID) => {
+//     const options = {
+//         'method': 'DELETE',
+//         'url': `https://whiteboarddj-server.onrender.com/workshops/userworkshop`,
+//         'headers': {
+//             'content-type': 'application/json'
+//         },
+//         data: {
+//             id: workshopID
+//         }
+//     };
     
-    try {
-        const result = await axios(options);
-        console.log(result.data);
+//     try {
+//         const result = await axios(options);
+//         console.log(result.data);
         
-        return result;
-      } catch (e) {
-           console.log(e);
-      }
-}
+//         return result;
+//       } catch (e) {
+//            console.log(e);
+//       }
+// }
 
-const getUserByMiroId = async (username, miroId) => {
-        const options = {
-            'method': 'POST',
-            'url': `https://whiteboarddj-server.onrender.com/users/username`,
-            'headers': {
+// const getUserByMiroId = async (username, miroId) => {
+//         const options = {
+//             'method': 'POST',
+//             'url': `https://whiteboarddj-server.onrender.com/users/username`,
+//             'headers': {
                 
-            },
-            data: {
-              "username": `${username}`,
-              "miroId": `${miroId}`
-            }
-        };
+//             },
+//             data: {
+//               "username": `${username}`,
+//               "miroId": `${miroId}`
+//             }
+//         };
         
-        try {
-            const result = await axios(options);
-            console.log(result.data);
-            return result;
-          } catch (e) {
-                console.log(e);
-                return e
-          }
-    }
+//         try {
+//             const result = await axios(options);
+//             console.log(result.data);
+//             return result;
+//           } catch (e) {
+//                 console.log(e);
+//                 return e
+//           }
+//     }
 
 const createWorkshop = async () => {
     if (document.getElementById("workshopname").value === ""){
@@ -1042,50 +1038,50 @@ const addAgenda = async () => {
 
 }
 
-const summariseAPI = async (notes, sensitivity) => {
-    const options = {
-        'method': 'POST',
-        'url': `https://whiteboarddj-server.onrender.com/summarise`,
-        'headers': {
-            'content-type': 'application/json'
-        },
-        data: {
-            notes: notes,
-            sensitivity: sensitivity
-        }
-    };
+// const summariseAPI = async (notes, sensitivity) => {
+//     const options = {
+//         'method': 'POST',
+//         'url': `https://whiteboarddj-server.onrender.com/summarise`,
+//         'headers': {
+//             'content-type': 'application/json'
+//         },
+//         data: {
+//             notes: notes,
+//             sensitivity: sensitivity
+//         }
+//     };
     
-    try {
-        const result = await axios(options);
-        console.log(result.data);
-        return result;
-      } catch (e) {
-           console.log(e);
-      }
-}
+//     try {
+//         const result = await axios(options);
+//         console.log(result.data);
+//         return result;
+//       } catch (e) {
+//            console.log(e);
+//       }
+// }
 
-const addSummaryAPI = async (workshopID, workshopSummary) => {
-  const options = {
-      'method': 'PATCH',
-      'url': `https://whiteboarddj-server.onrender.com/workshops/workshopByName`,
-      'headers': {
-          'content-type': 'application/json'
-      },
-      data: {
-          id: workshopID,
-          workshopSummary: workshopSummary
-      }
-  };
+// const addSummaryAPI = async (workshopID, workshopSummary) => {
+//   const options = {
+//       'method': 'PATCH',
+//       'url': `https://whiteboarddj-server.onrender.com/workshops/workshopByName`,
+//       'headers': {
+//           'content-type': 'application/json'
+//       },
+//       data: {
+//           id: workshopID,
+//           workshopSummary: workshopSummary
+//       }
+//   };
   
-  try {
-      const result = await axios(options);
-      console.log(result.data);
+//   try {
+//       const result = await axios(options);
+//       console.log(result.data);
       
-      return result;
-    } catch (e) {
-         console.log(e);
-    }
-}
+//       return result;
+//     } catch (e) {
+//          console.log(e);
+//     }
+// }
 
 
 const summarise = async () => {

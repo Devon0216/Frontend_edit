@@ -103,4 +103,49 @@ export const getFrameNotes = async (access_token, boardID, frameId) => {
       } catch (e) {
            console.log(e);
       }
-  }
+}
+
+export const summariseAPI = async (notes, sensitivity) => {
+    const options = {
+        'method': 'POST',
+        'url': `https://whiteboarddj-server.onrender.com/summarise`,
+        'headers': {
+            'content-type': 'application/json'
+        },
+        data: {
+            notes: notes,
+            sensitivity: sensitivity
+        }
+    };
+    
+    try {
+        const result = await axios(options);
+        console.log(result.data);
+        return result;
+      } catch (e) {
+           console.log(e);
+      }
+}
+
+export const addSummaryAPI = async (workshopID, workshopSummary) => {
+  const options = {
+      'method': 'PATCH',
+      'url': `https://whiteboarddj-server.onrender.com/workshops/workshopByName`,
+      'headers': {
+          'content-type': 'application/json'
+      },
+      data: {
+          id: workshopID,
+          workshopSummary: workshopSummary
+      }
+  };
+  
+  try {
+      const result = await axios(options);
+      console.log(result.data);
+      
+      return result;
+    } catch (e) {
+         console.log(e);
+    }
+}
