@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import io from 'socket.io-client';
 
 // import {createUser} from '../users/Users';
-import { getStickyNotes } from "../stickynotes/StickyNotes";
+import { getStickyNotes, saveStickyNotes, deleteNotesByWorkshopAPI, getFrames, getFrameNotes } from "../stickynotes/StickyNotes";
 
 var responseToken;
 var responseBoard;
@@ -311,95 +311,95 @@ const NoteItem = ({ noteContent }) => {
 
 
 
-const saveStickyNotes = async (workshop, content) => {
-    const options = {
-        'method': 'POST',
-        'url': `https://whiteboarddj-server.onrender.com/notes`,
-        'headers': {
-          'Content-Type': 'application/json'
-        },
-        data: {
-          workshop: workshop,
-          content: content
-        }
-    };
+// const saveStickyNotes = async (workshop, content) => {
+//     const options = {
+//         'method': 'POST',
+//         'url': `https://whiteboarddj-server.onrender.com/notes`,
+//         'headers': {
+//           'Content-Type': 'application/json'
+//         },
+//         data: {
+//           workshop: workshop,
+//           content: content
+//         }
+//     };
     
-    try {
-        const result = await axios(options);
-        return result;
-      } catch (e) {
-           console.log(e);
-      }
-}
+//     try {
+//         const result = await axios(options);
+//         return result;
+//       } catch (e) {
+//            console.log(e);
+//       }
+// }
 
-const deleteNotesByWorkshopAPI = async (workshop) => {
-    const options = {
-        'method': 'DELETE',
-        'url': `https://whiteboarddj-server.onrender.com/notes/workshopNotes`,
-        'headers': {
-          'Content-Type': 'application/json'
-        },
-        data: {
-          workshop: workshop,
-        }
-    };
+// const deleteNotesByWorkshopAPI = async (workshop) => {
+//     const options = {
+//         'method': 'DELETE',
+//         'url': `https://whiteboarddj-server.onrender.com/notes/workshopNotes`,
+//         'headers': {
+//           'Content-Type': 'application/json'
+//         },
+//         data: {
+//           workshop: workshop,
+//         }
+//     };
     
-    try {
-        const result = await axios(options);
-        return result;
-      } catch (e) {
-           console.log(e);
-      }
-}
+//     try {
+//         const result = await axios(options);
+//         return result;
+//       } catch (e) {
+//            console.log(e);
+//       }
+// }
 
 
-const getFrames = async (access_token, boardID) => {
-  const options = {
-      'method': 'GET',
-      'url': `https://api.miro.com/v2/boards/${boardID}/items?limit=50&type=frame`,
-      'headers': {
-        'Authorization': `Bearer ${access_token}`,
-        'accept': 'application/json',
-        'content-type': 'application/json'
-      },
-      data: {
-      }
-  };
+// const getFrames = async (access_token, boardID) => {
+//   const options = {
+//       'method': 'GET',
+//       'url': `https://api.miro.com/v2/boards/${boardID}/items?limit=50&type=frame`,
+//       'headers': {
+//         'Authorization': `Bearer ${access_token}`,
+//         'accept': 'application/json',
+//         'content-type': 'application/json'
+//       },
+//       data: {
+//       }
+//   };
   
-  try {
-      const result = await axios(options);
-      console.log(result);
+//   try {
+//       const result = await axios(options);
+//       console.log(result);
       
-      return result;
-    } catch (e) {
-         console.log(e);
-    }
-}
+//       return result;
+//     } catch (e) {
+//          console.log(e);
+//     }
+// }
 
 
-const getFrameNotes = async (access_token, boardID, frameId) => {
-  const options = {
-      'method': 'GET',
-      'url': `https://api.miro.com/v2/boards/${boardID}/items?parent_item_id=${frameId}`,
-      'headers': {
-        'Authorization': `Bearer ${access_token}`,
-        'accept': 'application/json',
-        'content-type': 'application/json'
-      },
-      data: {
+// const getFrameNotes = async (access_token, boardID, frameId) => {
+//   const options = {
+//       'method': 'GET',
+//       'url': `https://api.miro.com/v2/boards/${boardID}/items?parent_item_id=${frameId}`,
+//       'headers': {
+//         'Authorization': `Bearer ${access_token}`,
+//         'accept': 'application/json',
+//         'content-type': 'application/json'
+//       },
+//       data: {
         
-      }
-  };
+//       }
+//   };
   
-  try {
-      const result = await axios(options);
-      console.log(result);
+//   try {
+//       const result = await axios(options);
+//       console.log(result);
       
-      return result;
-    } catch (e) {
-         console.log(e);
-    }
-}
+//       return result;
+//     } catch (e) {
+//          console.log(e);
+//     }
+// }
 
 /*
     ******************************************************
