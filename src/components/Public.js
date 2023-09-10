@@ -7,10 +7,6 @@ const Public = () => {
         navigate('/dash')
     }
 
-    function gotoSignup() {
-        navigate('/signup')
-    }
-
     const content = (
 
         <section className="public">
@@ -34,11 +30,6 @@ const Public = () => {
                     University of Cape Town<br />   
                 </p>
                 <br />
-
-                {/* <button onClick={gotoLogin} >Log in</button> */}
-
-
-                {/* <button class="button-orange" onClick={gotoSignup }>Sign up</button> */}
             </main> 
 
             <footer>

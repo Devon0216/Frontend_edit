@@ -8,10 +8,6 @@ const DashHeader = () => {
                 <Link to="/dash">
                     <h1 className="dash-header__title">Whiteboard DJ</h1>
                 </Link>
-                {/* <nav className="dash-header__nav">
-                    {/* add nav buttons later }
-                    <p>Username: {global.username}</p>
-                </nav> */}
             </div>
         </header>
     )

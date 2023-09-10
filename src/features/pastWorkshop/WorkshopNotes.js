@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 
 
 var textfileContent = "";
 
 
 const NoteItem = ({ noteContent }) => {
-    // console.log("noteContent")
-    // console.log(noteContent)
-    
     return(
-    // global.workshopID = workshopID;
     <tr className="table__row user">
         <td className={`table__cell ` }>{noteContent}</td>
     </tr>
@@ -35,8 +31,6 @@ const WorkshopNotes = () => {
         
         try {
             const result = await axios(options);
-            // console.log("getNotesByWorkshop");
-            // console.log(result);
             console.log("global.workshopID");
             console.log(global.workshopID);
             console.log("result.data");
@@ -115,7 +109,6 @@ const WorkshopNotes = () => {
   
     return (
       <section>
-        {/* <button onClick={getUserWorkshops}>get workshops for you</button> */}
         <h1 id="test" className="sectionHeading" >Participants Sticky Notes: </h1>
 
   
@@ -151,8 +144,6 @@ const WorkshopNotes = () => {
       </section>
     );
 
-    // return (
-    //     <h1>{global.workshopID}</h1>
-    // )
+
 }
 export default WorkshopNotes

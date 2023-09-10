@@ -6,15 +6,12 @@ import { useNavigate } from 'react-router-dom'
 
 
 const WorkshopItem = ({ workshopName, workshopID }) => {
-    
-    // global.workshopID = workshopID;
     const navigate = useNavigate()
     const handleEdit = () => {
         global.workshopID = workshopID;
         navigate(`/dash/pastWorkshop/${workshopID}`)
     }
     return(
-    // global.workshopID = workshopID;
   <tr className="table__row user">
     <td onClick={handleEdit} className={`table__cell ` }>{workshopName}</td>
   </tr>
@@ -58,7 +55,6 @@ const PastWorkshop = () => {
 
     return (
       <section>
-        {/* <button onClick={getUserWorkshops}>get workshops for you</button> */}
         <h1 id="Title" className="sectionHeading">Workshops: </h1>
 
         <table className="table_workshop table--users">

@@ -3,13 +3,9 @@ import Layout from './components/Layout'
 import Public from './components/Public'
 import DashLayout from './components/DashLayout'
 import Welcome from './features/auth/Welcome'
-import NotesList from './features/notes/NotesList'
-import UsersList from './features/users/UsersList'
 import MiroAuthorize from './features/miro/MiroAuthorize'
-// import Timer from './features/timer/Timer'
 import PastWorkshop from './features/pastWorkshop/PastWorkshop'
 import Help from './features/help/Help'
-// import UserTesting from './features/users/UserTesting'
 import Login from './features/auth/Login';
 import Signup from './features/auth/Signup'
 import WorkshopNotes from './features/pastWorkshop/WorkshopNotes'
@@ -26,21 +22,9 @@ function App() {
 
           <Route index element={<Welcome />} />
 
-          {/* <Route path="notes">
-            <Route index element={<NotesList />} />
-          </Route>
-
-          <Route path="users">
-            <Route index element={<UsersList />} />
-          </Route> */}
-
           <Route path="authorize">
             <Route index element={<MiroAuthorize />} />
           </Route>
-
-          {/* <Route path="authorized">
-            <Route index element={<MiroAuthorize />} />
-          </Route> */}
 
           <Route path="pastWorkshop">
             <Route index element={<PastWorkshop />} />
