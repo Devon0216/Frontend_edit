@@ -3,6 +3,9 @@ import React, { useState, useEffect } from "react";
 // import { useNavigate, Link } from 'react-router-dom'
 import io from 'socket.io-client';
 
+import {createUser} from '../users/Users';
+import { getStickyNotes } from "../stickynotes/StickyNotes";
+
 var responseToken;
 var responseBoard;
 var globalBoardID;
@@ -277,27 +280,27 @@ const connectMiroBoard = async () => {
     ******************************************************
     ******************************************************
 */
-const getStickyNotes = async (access_token, boardID) => {
-    const options = {
-        'method': 'GET',
-        'url': `https://api.miro.com/v2/boards/${boardID}/items?limit=50&type=sticky_note`,
-        'headers': {
-            'Authorization': `Bearer ${access_token}`
-        },
-        data: {
+// const getStickyNotes = async (access_token, boardID) => {
+//     const options = {
+//         'method': 'GET',
+//         'url': `https://api.miro.com/v2/boards/${boardID}/items?limit=50&type=sticky_note`,
+//         'headers': {
+//             'Authorization': `Bearer ${access_token}`
+//         },
+//         data: {
           
-        }
-    };
+//         }
+//     };
     
-    try {
-        const result = await axios(options);
-        console.log(result);
+//     try {
+//         const result = await axios(options);
+//         console.log(result);
         
-        return result;
-      } catch (e) {
-           console.log(e);
-      }
-}
+//         return result;
+//       } catch (e) {
+//            console.log(e);
+//       }
+// }
        
 const NoteItem = ({ noteContent }) => {
     return(
