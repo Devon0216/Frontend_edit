@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-
+// import { useNavigate, Link } from 'react-router-dom'
 import io from 'socket.io-client';
 
 var responseToken;
-
+var responseBoard;
 var globalBoardID;
 var timerID;
 var finalTime;
@@ -13,12 +13,12 @@ var notes;
 var currentNotes;
 var currentNotesLength;
 var agenda = "";
-
+// var sessionNumber = -1;
 var socket
 var userId
 var coach = false;
 
-
+// var intervalIds = [];
 var connected = false;
 var connectedServer = false;
 var inWorkshop = false;
@@ -60,6 +60,7 @@ const getAccessToken = async (code) => {
 }
 
 const getAccessTokenContext = async (access_token) => {
+
   const options = {
     'method': 'GET',
     'url': `https://api.miro.com/v1/oauth-token`,
