@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const getStickyNotes = async (access_token, boardID) => {
     const options = {
         'method': 'GET',

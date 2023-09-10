@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const createUser = async (username, miroId) => {
     const options = {
         'method': 'POST',
