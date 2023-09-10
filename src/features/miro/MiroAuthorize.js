@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 // import { useNavigate, Link } from 'react-router-dom'
 import io from 'socket.io-client';
 
-import {createUser} from '../users/Users';
+// import {createUser} from '../users/Users';
 import { getStickyNotes } from "../stickynotes/StickyNotes";
 
 var responseToken;
