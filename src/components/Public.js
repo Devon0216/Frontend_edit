@@ -10,13 +10,12 @@ const Public = () => {
     const content = (
 
         <section className="public">
-             <header>
-
-                <h1>
+             <header className="dash-header">
+                <div>
                     <Link to="/dash">
-                    <h1 class="sectionHeading">Whiteboard DJ</h1>
+                        <h1 class="dash-header__title">Whiteboard DJ</h1>
                     </Link >
-                </h1>
+                </div>
             </header>
             <main className="public__main">
                 <h1 class="sectionHeading">Welcome Page!</h1>
@@ -33,8 +32,8 @@ const Public = () => {
             </main> 
 
             <footer>
-                    <button class="button-orange" onClick={gotoHome} >Home Page</button>
-                </footer>
+                <button class="button-orange" onClick={gotoHome} >Home Page</button>
+            </footer>
 
             
 

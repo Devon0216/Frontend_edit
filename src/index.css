@@ -83,11 +83,11 @@ select {
   flex-flow: column nowrap;
 }
 
-/* a {
+a {
   text-decoration: none;
 }
 
-a,
+/* a,
 a:visited {
   color: var(--LINK-COLOR);
 }
@@ -115,7 +115,7 @@ a:focus-visible {
 }
 
 .public {
-  padding: 1em;
+  padding: 0em;
   flex-grow: 1;
 }
 
