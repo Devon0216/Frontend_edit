@@ -31,15 +31,15 @@ const WorkshopNotes = () => {
         
         try {
             const result = await axios(options);
-            console.log("global.workshopID");
-            console.log(global.workshopID);
-            console.log("result.data");
-            console.log(result.data);
+            // console.log("global.workshopID");
+            // console.log(global.workshopID);
+            // console.log("result.data");
+            // console.log(result.data);
             setNotes(result.data);
 
 
-            console.log("notes")
-            console.log(notes)
+            // console.log("notes")
+            // console.log(notes)
             return result;
         } catch (e) {
             console.log(e);
@@ -85,14 +85,14 @@ const WorkshopNotes = () => {
 
     const downloadTxt = () => {
       var textfileContent = "Notes:\n"
-      console.log("notes.length")
-      console.log(notes.length)
+      // console.log("notes.length")
+      // console.log(notes.length)
       for (let i = 0;i < notes.length;i++){
         textfileContent += notes[i].content + "\n"
       }
       textfileContent = textfileContent + "\nSummary: \n" + document.getElementById("summary").innerHTML + "\nAgenda: \n" + fetchedAgendaSession;
-      console.log("textfileContent")
-      console.log(textfileContent)
+      // console.log("textfileContent")
+      // console.log(textfileContent)
       const blob = new Blob([textfileContent], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       

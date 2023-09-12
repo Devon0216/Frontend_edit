@@ -120,7 +120,7 @@ export const summariseAPI = async (notes, sensitivity) => {
     
     try {
         const result = await axios(options);
-        console.log(result.data);
+        // console.log(result.data);
         return result;
       } catch (e) {
            console.log(e);
@@ -142,7 +142,7 @@ export const addSummaryAPI = async (workshopID, workshopSummary) => {
   
   try {
       const result = await axios(options);
-      console.log(result.data);
+      // console.log(result.data);
       
       return result;
     } catch (e) {

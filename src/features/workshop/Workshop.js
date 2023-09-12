@@ -15,7 +15,7 @@ export const createWorkshopAPI = async (userID, workshopname) => {
     
     try {
         const result = await axios(options);
-        console.log(result.data);
+        // console.log(result.data);
         
         return result;
       } catch (e) {
@@ -66,7 +66,7 @@ export const updateWorkshopAPI = async (workshopID, userID, notes) => {
     
     try {
         const result = await axios(options);
-        console.log(result.data);
+        // console.log(result.data);
         
         return result;
       } catch (e) {

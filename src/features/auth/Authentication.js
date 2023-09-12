@@ -64,7 +64,7 @@ export const getBoards = async (access_token, teamId) => {
       const result = await axios(options);
       return result;
     } catch (e) {
-         console.log("e.response.data");
+        //  console.log("e.response.data");
          console.log(e.response.data);
          return e;
     }

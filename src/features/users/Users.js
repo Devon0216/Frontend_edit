@@ -39,7 +39,7 @@ export const getUserByMiroId = async (username, miroId) => {
     
     try {
         const result = await axios(options);
-        console.log(result.data);
+        // console.log(result.data);
         return result;
       } catch (e) {
             console.log(e);

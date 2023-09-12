@@ -98,7 +98,7 @@ export const addAgendaAPI = async (workshopID, workshopAgenda) => {
     
     try {
         const result = await axios(options);
-        console.log(result.data);
+        // console.log(result.data);
         
         return result;
       } catch (e) {
@@ -120,7 +120,7 @@ export const deleteAgendaAPI = async (workshopID) => {
     
     try {
         const result = await axios(options);
-        console.log(result.data);
+        // console.log(result.data);
         
         return result;
       } catch (e) {

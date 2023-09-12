@@ -8,11 +8,11 @@ import {createTimerAPI, getTimerAPI, updateTimerAPI, addAgendaAPI, deleteAgendaA
 import {createWorkshopAPI, getWorkshopByNameAPI, updateWorkshopAPI} from '../workshop/Workshop';
 
 var responseToken;
-var responseBoard;
+// var responseBoard;
 var globalBoardID;
 var timerID;
-var finalTime;
-let intervalID;
+// var finalTime;
+// let intervalID;
 var notes;
 var currentNotes;
 var currentNotesLength;
@@ -88,12 +88,10 @@ const connectMiroBoard = async () => {
       if (coach === false){
         await setTimer();
       }
-
       document.getElementById("loading").innerHTML = "You have successfully connected to the Miro board!"
     }
 
 }
-
 
 /*
     ******************************************************
@@ -109,7 +107,6 @@ const NoteItem = ({ noteContent }) => {
   </tr>
 )};
 
-
 /*
     ******************************************************
     ******************************************************
@@ -117,71 +114,6 @@ const NoteItem = ({ noteContent }) => {
     ******************************************************
     ******************************************************
 */
-function startCountdown(durationInSeconds) {
-    let remainingTime = durationInSeconds;
-    clearInterval(intervalID);
-  
-    intervalID = setInterval(() => {
-      if (remainingTime <= 0) {
-        clearInterval(intervalID); // Clear the interval when countdown is done
-        document.getElementById("timer").innerHTML = "Timer expired"
-      } else {
-        if (remainingTime > 3600){
-          let hours = Math.floor(remainingTime / (60*60));
-          let minutes = Math.floor((remainingTime - 3600 * hours)/60) ;
-          let seconds = remainingTime % 60;
-          if (hours < 10){
-            hours = "0" + hours;
-          }
-          if (minutes < 10){
-            minutes = "0" + minutes;
-          }
-          if (seconds < 10){
-            seconds = "0" + seconds;
-          }
-          document.getElementById("timer").innerHTML =  "Time left: " + hours + ":" + minutes + ":" + seconds ;
-        }
-        else if (remainingTime > 60){
-          let hours = 0 ;
-          let minutes = Math.floor(remainingTime /60);
-          let seconds = remainingTime % 60;
-          if (minutes === 60){
-            minutes = 59
-            seconds = remainingTime / 60;
-          }
-          if (hours < 10){
-            hours = "0" + hours;
-          }
-          if (minutes < 10){
-            minutes = "0" + minutes;
-          }
-          if (seconds < 10){
-            seconds = "0" + seconds;
-          }
-          document.getElementById("timer").innerHTML =  "Time left: " + hours + ":" + minutes + ":" + seconds ;
-        }
-        else{
-          let hours = 0;
-          let minutes = 0;
-          let seconds = remainingTime % 60;
-          if (hours < 10){
-            hours = "0" + hours;
-          }
-          if (minutes < 10){
-            minutes = "0" + minutes;
-          }
-          if (seconds < 10){
-            seconds = "0" + seconds;
-          }
-          document.getElementById("timer").innerHTML =  "Time left: " + hours + ":" + minutes + ":" + seconds ;
-        }
-
-        updateTimer();
-        remainingTime--;
-      }
-    }, 1000); // Run the interval every 1000ms (1 second)
-  }
-
 function changeTimeFormat(durationInSeconds) {
     let remainingTime = durationInSeconds;
     let result = ""
@@ -302,15 +234,12 @@ function changeTimeFormatHourMinute(time) {
 
 const setTimer = async () => {
     let time = "Time left:"
-
-    // const timerText = await createTimerAPI(responseToken.data, responseBoard.data.id, time );
     const timerText = await createTimerAPI(responseToken.data, globalBoardID, time );
     
     timerID = JSON.stringify(timerText.data.id);
     if (timerID.indexOf('"') !== -1){
         timerID = timerID.slice(1,timerID.length-1);
     }
-
 
     if (timerText.status === 201){
       document.getElementById("agendaError").textContent = "Timer on Miro board created successfully";
@@ -321,32 +250,15 @@ const setTimer = async () => {
 
 }
 
-const getTimer = async () => {
-    const timerText = await getTimerAPI(responseToken.data, responseBoard.data.id, timerID);
-    document.getElementById("timerID").textContent = JSON.stringify(timerText.data.data.content); 
-}
+// const getTimer = async () => {
+//     const timerText = await getTimerAPI(responseToken.data, responseBoard.data.id, timerID);
+//     document.getElementById("timerID").textContent = JSON.stringify(timerText.data.data.content); 
+// }
 
 const updateTimer = async (timeText) => {
     const timerText = await updateTimerAPI(responseToken.data, globalBoardID, timerID, timeText);
 
 }
-
-// const updateAgendaTimer = async (time) => {
-//     let timerText = "Time left: " + changeTimeFormat(time)
-//     const result = await updateTimerAPI(responseToken.data, globalBoardID, timerID, timerText);
-// }
-
-
-
-// const newTime = async () => {
-//     let hour = parseInt( document.getElementById("hour").value )
-//     let minute = parseInt( document.getElementById("minute").value )
-//     let second = parseInt( document.getElementById("second").value )
-//     finalTime = hour*3600 + minute*60 + second;
-
-//     startCountdown(finalTime);
-// }
-
 
 /*
     ******************************************************
@@ -355,7 +267,6 @@ const updateTimer = async (timeText) => {
     ******************************************************
     ******************************************************
 */
-
 const createWorkshop = async () => {
     if (document.getElementById("workshopname").value === ""){
       document.getElementById("workshopError").innerHTML = "Please enter a workshop name"
@@ -371,7 +282,6 @@ const createWorkshop = async () => {
       }
 
       const result2 = await createWorkshopAPI(global.userid, global.workshopname );
-      console.log(result2)
       
       if (result2 === "Duplicate workshopname"){
         document.getElementById("workshopError").innerHTML = "Workshop name already exists"
@@ -390,10 +300,7 @@ const createWorkshop = async () => {
         document.getElementById("clusterSummary").style.display = "none";
         inWorkshop = true;
         document.getElementById("workshopError").innerHTML = "Workshop created successfully"
-
-
-      }
-      
+      }      
     }
 
 }
@@ -436,7 +343,6 @@ const joinWorkshopAsFacilitator = async () => {
       document.getElementById("clusterSummary").style.display = "none";
       inWorkshop = true;
       document.getElementById("workshopError").innerHTML = "Joined as facilitator successfully"
-
     }
     else{
       document.getElementById("workshopError").innerHTML = "Wrong username or miroId for facilitator"
@@ -482,9 +388,7 @@ const joinWorkshopAsCoach = async () => {
       document.getElementById("collapseMessageSection").hidden = false
       inWorkshop = true;
       document.getElementById("workshopError").innerHTML = "Joined as coach successfully"
-
-    }
-    
+    } 
   }
 
 }
@@ -492,7 +396,6 @@ const joinWorkshopAsCoach = async () => {
 const addNotesToWorkshop = async () => {
     global.workshopname = document.getElementById("workshopname").value
     document.getElementById("notesButtonError").innerHTML = "Saving notes..."
-    
     
     const result1 = await getWorkshopByNameAPI(global.workshopname );
     const workshopid = result1.data[0]._id
@@ -503,7 +406,6 @@ const addNotesToWorkshop = async () => {
         const result = await saveStickyNotes(workshopid, currentNotes[i].data.content );
         notesId.push(result.data._id);
     }
-
 
     const result2 = await updateWorkshopAPI(workshopid, global.userid, notesId );
 
@@ -527,15 +429,11 @@ const addAgenda = async () => {
     else{
       document.getElementById("agendaError").innerHTML = "Agenda save failed"
     }
-
 }
-
-
 
 
 const summarise = async () => {
     document.getElementById("notesSummaryError").innerHTML = "Summarising notes..."
-
     var notesText = ""
 
     for (let i = 0;i < currentNotesLength;i++){
@@ -556,17 +454,15 @@ const summarise = async () => {
       sensitivityScore = Math.floor(currentNotesLength/2);
     }
 
-
     let frameSensitivityScore = 3
-
 
     const resultFrames = await getFrames(responseToken.data, globalBoardID );
     let summarsationText = ""
     if (resultFrames.data.total !== 0){
       for (let i = 0; i<resultFrames.data.total;i++){
         const resultFrameNotes = await getFrameNotes(responseToken.data, globalBoardID, resultFrames.data.data[i].id );
-        console.log("resultFrame Notes")
-        console.log(resultFrameNotes)
+        // console.log("resultFrame Notes")
+        // console.log(resultFrameNotes)
         summarsationText = summarsationText + "Cluster  " + resultFrames.data.data[i].data.title + ": \n"
         let frameSummary = ""
         if (resultFrameNotes.data.total !== 0){
@@ -588,15 +484,12 @@ const summarise = async () => {
 
     
     const result1 = await summariseAPI(notesText, sensitivityScore );
-    // console.log("result1.data")
-    // console.log(result1.data)
     document.getElementById("summarisation").textContent =  result1.data.summary;
 
     let finalSummary = "Summary of the whole workshop: \n" + result1.data.summary + "\n\nSummary of clusters: \n" + summarsationText
 
     const result2 = await getWorkshopByNameAPI(global.workshopname );
     const result3 = await addSummaryAPI(result2.data[0]._id, finalSummary );
-    // console.log(result3)
 
     if (result3.status === 200){
       document.getElementById("notesSummaryError").innerHTML = "Summary saved successfully"
@@ -650,13 +543,13 @@ const MiroAuthorize = () => {
     }
 
 
-      /*
-      ******************************************************
-      ******************************************************
-      Agenda section
-      ******************************************************
-      ******************************************************
-      */
+    /*
+    ******************************************************
+    ******************************************************
+    Agenda section
+    ******************************************************
+    ******************************************************
+    */
 
     const [sessions, setSessions] = useState([]);
     const [sessionName, setSessionName] = useState('');
@@ -670,20 +563,18 @@ const MiroAuthorize = () => {
     const [currentSessionIndex, setCurrentSessionIndex] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
 
-        const deleteAgenda = async () => {
-        document.getElementById("agendaError").innerHTML = "Deleting agenda..."
-        const result1 = await getWorkshopByNameAPI(global.workshopname );
-        const result2 = await deleteAgendaAPI(result1.data[0]._id );
-        console.log(result2)
+    const deleteAgenda = async () => {
+      document.getElementById("agendaError").innerHTML = "Deleting agenda..."
+      const result1 = await getWorkshopByNameAPI(global.workshopname );
+      const result2 = await deleteAgendaAPI(result1.data[0]._id );
 
-        if (result2.status === 200){
-          document.getElementById("agendaError").innerHTML = "Agenda deleted successfully"
-        }
-        else{
-          document.getElementById("agendaError").innerHTML = "Agenda delete failed"
-        }
+      if (result2.status === 200){
+        document.getElementById("agendaError").innerHTML = "Agenda deleted successfully"
+      }
+      else{
+        document.getElementById("agendaError").innerHTML = "Agenda delete failed"
+      }
     }
-
 
 
     const getAgenda = async () => {
@@ -705,7 +596,6 @@ const MiroAuthorize = () => {
       else{
         document.getElementById("agendaError").innerHTML = "No agenda found for the current workshop"
       }
-
     }
 
     function isValidTimeFormat(time) {
@@ -745,12 +635,12 @@ const MiroAuthorize = () => {
 
     };
   
-    const handleTimeChange = (index, newTime) => {
-      const updatedSessions = sessions.map((session, i) =>
-        i === index ? { ...session, time: newTime } : session
-      );
-      setSessions(updatedSessions);
-    };
+    // const handleTimeChange = (index, newTime) => {
+    //   const updatedSessions = sessions.map((session, i) =>
+    //     i === index ? { ...session, time: newTime } : session
+    //   );
+    //   setSessions(updatedSessions);
+    // };
   
     const handleDeleteSession = index => {
       const updatedSessions = sessions.filter((session, i) => i !== index);
@@ -942,7 +832,6 @@ const MiroAuthorize = () => {
       });
 
       deleteAgenda();
-
       document.getElementById("agendaError").innerHTML = "Agenda deleted successfully"
     };
   
@@ -951,7 +840,6 @@ const MiroAuthorize = () => {
         agenda = agenda + session.name + " " + session.time + '\n'
       });
       addAgenda();
-      console.log('Agenda saved:', sessions);
     };
   
     const addSession = () => {
@@ -961,7 +849,6 @@ const MiroAuthorize = () => {
     const handleGetAgenda = () => {
       getAgenda();
     }
-
 
     const handlePause = () => {
       setIsRunning(false);
@@ -986,8 +873,6 @@ const MiroAuthorize = () => {
       }
     };
     
-
-
     /*
     ******************************************************
     ******************************************************
@@ -1000,15 +885,12 @@ const MiroAuthorize = () => {
     const [selectedRecipients, setSelectedRecipients] = useState([]);
     const [usersInRoom, setUsersInRoom] = useState([]);
 
-
     const connectToServer = () => {
       userId = global.username;
       socket = io.connect('https://whiteboarddj-server.onrender.com', {
         query:  {userId},
         transports: ['websocket'] 
       }); // Adjust the URL to your server's URL
-      console.log("socket")
-      console.log(socket)
 
       if (socket){
         document.getElementById("messageError").textContent = "You are connected to the server successfully"
@@ -1017,13 +899,11 @@ const MiroAuthorize = () => {
         document.getElementById("messageError").textContent = "You failed connecting to the server"
       }
       socket.on('receiveMessage', (message) => {
-        console.log("Received a new message: " + message)
         setReceivedMessages(prevMessages => [...prevMessages, message]);
       });
 
 
       socket.on('receiveRunningAgenda', (data) => {
-        console.log("Received a new agenda: " + data)
         setIsRunning(data.isRunning);
         setSessions(data.sessions);
         setCurrentTime(data.currentTime);
@@ -1069,16 +949,7 @@ const MiroAuthorize = () => {
     }
   
     const sendMessage = () => {
-      console.log( "global.username")
-      console.log(global.username)
-      console.log("userId")
-      console.log(userId)
-  
-      console.log("selectedRecipients")
-      console.log(selectedRecipients)
-      console.log("selectedRecipients.length")
-      console.log(selectedRecipients.length)
-      let sentRecipients = ""
+      // let sentRecipients = ""
   
       const data = {
         message: message + " (from " + global.username + ")",
@@ -1088,7 +959,6 @@ const MiroAuthorize = () => {
       setReceivedMessages(prevMessages => [...prevMessages, message + " (sent to " + selectedRecipients + ")"]);
       document.getElementById("messageSent").textContent = "Message sent successfully";
       setMessage("");
-
     };
 
 
@@ -1207,14 +1077,9 @@ const MiroAuthorize = () => {
             currentTimeIndex: currentTimeIndex,
             recipients: filteredRecipients
           };
-          // console.log("data")
-          // console.log(data)
           socket.emit('sendRunnigAgenda', data);
 
           document.getElementById("sessionTotalTime").textContent = "Total remaining time: " + changeTimeFormat(calculateTotalTime());
-          
-
-
         }, 1000);
       }
       else if (isRunning && currentTimeIndex < currentTime.length && coach === true) {
@@ -1270,7 +1135,6 @@ const MiroAuthorize = () => {
           });
 
           document.getElementById("sessionTotalTime").textContent = "Total remaining time: " + changeTimeFormat(calculateTotalTime());
-        
         }, 1000);
       }
     
