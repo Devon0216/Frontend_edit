@@ -14,8 +14,8 @@ const DashFooter = () => {
 
     const content = (
         <footer className="dash-footer">
-            <button class="button-orange" onClick={gotoWelcome }>Welcome Page</button>
-            <button class="button-orange" onClick={gotoHome} >Home Page</button>
+            <button class="button-orange dash-footer__button" onClick={gotoWelcome }>Welcome Page</button>
+            <button class="button-orange dash-footer__button" onClick={gotoHome} >Home Page</button>
         </footer>
     )
     return content

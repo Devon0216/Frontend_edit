@@ -1,6 +1,4 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
-// import { useNavigate, Link } from 'react-router-dom'
 import io from 'socket.io-client';
 
 import {getAccessToken, getAccessTokenContext, getBoards, createBoardAPI} from '../auth/Authentication';
@@ -19,20 +17,12 @@ var notes;
 var currentNotes;
 var currentNotesLength;
 var agenda = "";
-// var sessionNumber = -1;
 var socket
 var userId
 var coach = false;
-
-// var intervalIds = [];
 var connected = false;
 var connectedServer = false;
 var inWorkshop = false;
-
-
-
-
-
 
 
 /*
@@ -42,30 +32,6 @@ var inWorkshop = false;
     ******************************************************
     ******************************************************
 */
-// const login = async () => {
-//   const loginUsername = document.getElementById("username").value
-//   const loginPassword = document.getElementById("password").value
-
-//   const result1 = await getUserByMiroId(loginUsername, loginPassword );
-  
-//   if (result1.data[0].username !== undefined){
-//     const loginUserName = result1.data[0].username
-//     console.log("loginUserName")
-//     console.log(loginUserName)
-
-//     global.username = loginUserName
-//     global.password = loginPassword
-//     global.userid = result1.data[0]._id
-//     document.getElementById("workshopSection").hidden = false
-//     document.getElementById("loginError").textContent = "You have successfully logged in!"
-//   }
-//   else{
-//     document.getElementById("loginError").textContent = "You have entered wrong username or password"
-//   }
-// }
-
-
-
 const getUsername = async () => {
   const result1 = await getAccessTokenContext(responseToken.data);
   global.username = result1.data.createdBy.name;
@@ -682,59 +648,28 @@ const MiroAuthorize = () => {
         document.getElementById("notesButtonError").innerHTML = "Notes loaded sucessfully"
     }
 
-    /*
-    ******************************************************
-    ******************************************************
-    Agenda section
-    ******************************************************
-    ******************************************************
-    */
-    // const [agendaSession, setAgendaSession] = useState('');
-    // const [fetchedAgendaSession, setFetcgedAgendaSession] = useState('');
 
-    //   const addSessions=  () => {
-    //     if (document.getElementById("newSession").value === ""){
-    //       document.getElementById("sessionError").innerHTML = "Please enter a session name"
-    //     }
-    //     else{
-    //       var hours = 0;
-    //       var minutes = 0;
-    //       var seconds = 0;
-    //       if (document.getElementById("newSessionHour").value !== ""){
-    //         hours = parseInt( document.getElementById("newSessionHour").value )
-    //       }
-    //       if (document.getElementById("newSessionMinute").value !== ""){
-    //         minutes = parseInt( document.getElementById("newSessionMinute").value )
-    //       }
-    //       if (document.getElementById("newSessionSecond").value !== ""){
-    //         seconds = parseInt( document.getElementById("newSessionSecond").value )
-    //       }
+      /*
+      ******************************************************
+      ******************************************************
+      Agenda section
+      ******************************************************
+      ******************************************************
+      */
 
-    //       if (hours < 10){
-    //           hours = "0" + hours;
-    //         }
-    //         if (minutes < 10){
-    //           minutes = "0" + minutes;
-    //         }
-    //         if (seconds < 10){
-    //           seconds = "0" + seconds;
-    //         }
+    const [sessions, setSessions] = useState([]);
+    const [sessionName, setSessionName] = useState('');
+    const [sessionTime, setSessionTime] = useState('');
+    const [currentTime, setCurrentTime] = useState([]);
+    const [currentTimeIndex, setCurrentTimeIndex] = useState(0);
+    const [extraTimes, setExtraTimes] = useState([]);
+    const [extraTimesConfirmed, setExtraTimesConfirmed] = useState([]);
+    const [extraTimeErrors, setExtraTimeErrors] = useState([]);
+    const [showTable, setShowTable] = useState(false);
+    const [currentSessionIndex, setCurrentSessionIndex] = useState(0);
+    const [isRunning, setIsRunning] = useState(false);
 
-    //       agenda = agenda + document.getElementById("newSession").value + " " 
-    //       + hours + ":" 
-    //       + minutes + ":" 
-    //       + seconds + '\n'
-    //       setAgendaSession(agenda);
-          
-    //       document.getElementById("newSession").value = "";
-    //       document.getElementById("newSessionHour").value = "";
-    //       document.getElementById("newSessionMinute").value = "";
-    //       document.getElementById("newSessionSecond").value = "";
-    //     }
-        
-    // }
-
-    const deleteAgenda = async () => {
+        const deleteAgenda = async () => {
         document.getElementById("agendaError").innerHTML = "Deleting agenda..."
         const result1 = await getWorkshopByNameAPI(global.workshopname );
         const result2 = await deleteAgendaAPI(result1.data[0]._id );
@@ -771,179 +706,6 @@ const MiroAuthorize = () => {
       }
 
     }
-
-    // const addItems = async () => {
-    //   setCountdowns([]);
-    //     var sessions = fetchedAgendaSession.split('\n')
-    //     console.log(sessions)
-
-    //     for (let i = 0;i<sessions.length-1;i++){
-    //         let itemName = sessions[i].slice(0, sessions[i].indexOf(' ') + 1)
-      
-    //         let sessionTime = sessions[i].slice(sessions[i].indexOf(' ') + 1,sessions[i].length)
-    //         let hour = parseInt( sessionTime.slice(0,sessionTime.indexOf(':')) )
-    //         let minute = parseInt( sessionTime.slice(sessionTime.indexOf(':') + 1,sessionTime.lastIndexOf(':')) )
-    //         let second = parseInt( sessionTime.slice(sessionTime.lastIndexOf(':') + 1,sessionTime.length) )
-    //         let finalTime = hour*3600 + minute*60 + second;
-      
-    //         const newItem = { name: itemName, time: finalTime, id: i };
-    //         setCountdowns((prevItems) => [...prevItems, newItem]);
-    //     }
-    // }
-
-
-    /*
-    ******************************************************
-    ******************************************************
-    Time section
-    ******************************************************
-    ******************************************************
-    */
-
-    // const [countdowns, setCountdowns] = useState([]);
-    // const [currentCountdownIndex, setCurrentCountdownIndex] = useState(0);
-    const [isRunning, setIsRunning] = useState(false);
-  
-    // const startCountdown = () => {
-    //   addItems()
-    //   if (!isRunning) {
-    //     setIsRunning(true);
-    //     setCurrentCountdownIndex(0);
-    //   }
-    //   if (coach === false){
-    //     document.getElementById("timerSection").hidden = false
-    //   }
-    // };
-
-    // const startNewAgendaCountdown = () => {
-    //   if (!isRunning) {
-    //     setIsRunning(true);
-    //     setCurrentCountdownIndex(0);
-    //   }
-    // };
-
-    // const updateAgendaWithTimer = async (updatedAgenda) => {
-    //   const result1 = await getWorkshopByNameAPI(global.workshopname );
-    //   const result2 = await addAgendaAPI(result1.data[0]._id, updatedAgenda );
-    // }
-
-    // const newSessionTime = async () => {
-    //     var hours = 0;
-    //     var minutes = 0;
-    //     var seconds = 0;
-    //     if (document.getElementById("hour").value !== ""){
-    //       hours = parseInt( document.getElementById("hour").value )
-    //     }
-    //     if (document.getElementById("minute").value !== ""){
-    //       minutes = parseInt( document.getElementById("minute").value )
-    //     }
-    //     if (document.getElementById("second").value !== ""){
-    //       seconds = parseInt( document.getElementById("second").value )
-    //     }
-    //     finalTime = hours*3600 + minutes*60 + seconds;
-
-    //     setCountdowns((prevCountdowns) => {
-    //         const updatedCountdowns = [...prevCountdowns];
-    //         const currentCountdown = updatedCountdowns[currentCountdownIndex];
-    //         if (currentCountdown.time > 0) {
-    //           updatedCountdowns[currentCountdownIndex] = {
-    //             ...currentCountdown,
-    //             time: finalTime,
-    //           };
-
-    //         let updatedAgenda = ""
-            
-    //         for (let i = 0;i<updatedCountdowns.length;i++){
-    //           let sessionName = updatedCountdowns[i].name
-    //           let sessionTime = changeTimeFormat(updatedCountdowns[i].time)
-    //           updatedAgenda = updatedAgenda + sessionName + " " + sessionTime + '\n'
-    //         }
-            
-    //         updateAgendaWithTimer(updatedAgenda);
-            
-
-    //         const data = {
-    //           agenda: updatedCountdowns ,
-    //           recipients: selectedRecipients
-    //         };
-    //         socket.emit('sendAgenda', data);
-
-    //         }
-    //         document.getElementById("timerError").textContent = "time updated succesfully";
-    //         return updatedCountdowns;
-    //     });
-    // }
-  
-
-
-    // useEffect(() => {
-    //   let timerId;
-  
-    //   if (isRunning && currentTimeIndex < countdowns.length && coach === true) {
-    //     timerId = setInterval(() => {
-    //       setCountdowns((prevCountdowns) => {
-    //         const updatedCountdowns = [...prevCountdowns];
-    //         const currentCountdown = updatedCountdowns[currentCountdownIndex];
-    //         if (currentCountdown.time > 0) {
-    //           updatedCountdowns[currentCountdownIndex] = {
-    //             ...currentCountdown,
-    //             time: currentCountdown.time - 1,
-    //           };
-                
-
-    //         } else {
-    //           clearInterval(timerId);
-    //           setCurrentCountdownIndex(currentCountdownIndex + 1);
-    //         }
-    //         return updatedCountdowns;
-    //       });
-    //     }, 1000);
-    //   }
-    //   else if (isRunning && currentCountdownIndex < countdowns.length && coach === false) {
-    //     timerId = setInterval(() => {
-    //       setCountdowns((prevCountdowns) => {
-    //         const updatedCountdowns = [...prevCountdowns];
-    //         const currentCountdown = updatedCountdowns[currentCountdownIndex];
-    //         if (currentCountdown.time > 0) {
-    //           updatedCountdowns[currentCountdownIndex] = {
-    //             ...currentCountdown,
-    //             time: currentCountdown.time - 1,
-    //           };
-    //           updateAgendaTimer(currentCountdown.time-1)
-                
-
-    //         } else {
-    //           clearInterval(timerId);
-    //           setCurrentCountdownIndex(currentCountdownIndex + 1);
-    //         }
-    //         return updatedCountdowns;
-    //       });
-    //     }, 1000);
-    //   }
-  
-    //   return () => {
-    //     clearInterval(timerId);
-    //   };
-    // }, [isRunning, currentCountdownIndex, countdowns]);
-
-      /*
-      ******************************************************
-      ******************************************************
-      New agenda section
-      ******************************************************
-      ******************************************************
-      */
-
-    const [sessions, setSessions] = useState([]);
-    const [sessionName, setSessionName] = useState('');
-    const [sessionTime, setSessionTime] = useState('');
-    const [currentTime, setCurrentTime] = useState([]);
-    const [currentTimeIndex, setCurrentTimeIndex] = useState(0);
-    const [extraTimes, setExtraTimes] = useState([]);
-    const [extraTimesConfirmed, setExtraTimesConfirmed] = useState([]);
-    const [extraTimeErrors, setExtraTimeErrors] = useState([]);
-    const [showTable, setShowTable] = useState(false);
-    const [currentSessionIndex, setCurrentSessionIndex] = useState(0);
 
     function isValidTimeFormat(time) {
       const parts = time.split(':'); // Split the input by colon
@@ -987,8 +749,6 @@ const MiroAuthorize = () => {
         i === index ? { ...session, time: newTime } : session
       );
       setSessions(updatedSessions);
-      // console.log("sessions")
-      // console.log(sessions)
     };
   
     const handleDeleteSession = index => {
@@ -1051,8 +811,6 @@ const MiroAuthorize = () => {
           }
         );
         setSessions(updatedSessions);
-        // console.log("sessions")
-        // console.log(sessions)
 
         const newExtraTimes = [...extraTimes];
         newExtraTimes[index] = ''; // Clear the value
@@ -1138,9 +896,6 @@ const MiroAuthorize = () => {
 
         setSessions(updatedSessions);
         setCurrentTime(updatedCurrentTimes);
-
-        // console.log("sessions");
-        // console.log(sessions);
 
         const newExtraTimes = [...extraTimes];
         newExtraTimes[index] = '';
@@ -1247,8 +1002,6 @@ const MiroAuthorize = () => {
 
     const connectToServer = () => {
       userId = global.username;
-      // console.log("connectToServer userId")
-      // console.log(userId)
       socket = io.connect('https://whiteboarddj-server.onrender.com', {
         query:  {userId},
         transports: ['websocket'] 
@@ -1278,10 +1031,6 @@ const MiroAuthorize = () => {
 
       let selectedUsers = [];
       socket.on('userList', (userList) => {
-
-        // console.log("userList")
-        // console.log(userList)
-
         // Update dropdown menu with the new user list
         const dropdown = document.getElementById('userDropdown');
         dropdown.innerHTML = ''; // Clear existing options
@@ -1579,10 +1328,6 @@ const MiroAuthorize = () => {
             </div>
 
 
-
-
-
-
             <div id="workshopSection" class="section" >
               <h1 className="sectionHeading">Create or join a workshop:</h1>
               <p class="errorMessage" id="workshopError"></p>
@@ -1652,7 +1397,6 @@ const MiroAuthorize = () => {
 
             <h1 id="collapseAgendaSectionHeading" className="sectionHeading" hidden>Workshop Agenda:</h1>
             <p id="collapseAgendaSection" className="collapse" onClick={toggleAgendaSection} hidden>(expand/collapse section)</p>
-
             <div id="agendaSection" class="section"  hidden={agendaSectionCollapsed}>
               <table className="table_agenda ">
                 <thead className="table__thead">
@@ -1759,11 +1503,8 @@ const MiroAuthorize = () => {
 
 
 
-
-
             <h1 id="collapseMessageSectionHeading" className="sectionHeading" hidden>Message: </h1>
             <p id="collapseMessageSection" className="collapse" onClick={toggleMessageSection} hidden>(expand/collapse section)</p>
-
             <div id="messageSection" class="section" hidden={messageSectionCollapsed}>
               <label class="errorMessage" id="messageError"></label>
               <br></br>
@@ -1803,12 +1544,8 @@ const MiroAuthorize = () => {
               </ul>
             </div>
 
-            
-
         </section>
-
     )
-
     return content
 }
 
