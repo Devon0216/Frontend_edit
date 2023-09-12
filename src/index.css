@@ -468,6 +468,11 @@ tr {
   .icon-button {
     font-size: 1.5rem;
   }
+
+  .dash-footer {
+    padding: 0 1em;
+    gap: 0;
+  }
 }
 
 @media screen and (min-width: 768px) {
@@ -482,6 +487,11 @@ tr {
 
   .dash-container {
     padding: 1em;
+  }
+
+  .dash-footer {
+    padding: 0 1em;
+    gap: 0;
   }
 
   .table {

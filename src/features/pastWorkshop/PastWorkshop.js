@@ -19,8 +19,8 @@ const WorkshopItem = ({ workshopName, workshopID }) => {
 
 const PastWorkshop = () => {
 
-    console.log("global.userid")
-    console.log(global.userid)
+    // console.log("global.userid")
+    // console.log(global.userid)
     
 
     const [workshops, setWorkshops] = useState([]);

@@ -414,14 +414,15 @@ const joinWorkshopAsFacilitator = async () => {
         document.getElementById("loading").innerHTML = "You have successfully connected to the Miro board!"
       }
     }
+    else{
+      document.getElementById("loading").innerHTML = "Please authorize again after refresh!"
+    }
 
     const facilitatorUserId = result1.data[0].User
     const result2 = await getUserByMiroId(global.username, global.miroId );
     const loginUserId = result2.data[0]._id
 
     if (facilitatorUserId === loginUserId){
-      
-
       document.getElementById("notesSection").hidden = false
       document.getElementById("agendaSection").hidden = false
       document.getElementById("messageSection").hidden = false
@@ -587,15 +588,15 @@ const summarise = async () => {
 
     
     const result1 = await summariseAPI(notesText, sensitivityScore );
-    console.log("result1.data")
-    console.log(result1.data)
+    // console.log("result1.data")
+    // console.log(result1.data)
     document.getElementById("summarisation").textContent =  result1.data.summary;
 
     let finalSummary = "Summary of the whole workshop: \n" + result1.data.summary + "\n\nSummary of clusters: \n" + summarsationText
 
     const result2 = await getWorkshopByNameAPI(global.workshopname );
     const result3 = await addSummaryAPI(result2.data[0]._id, finalSummary );
-    console.log(result3)
+    // console.log(result3)
 
     if (result3.status === 200){
       document.getElementById("notesSummaryError").innerHTML = "Summary saved successfully"
@@ -1321,10 +1322,7 @@ const MiroAuthorize = () => {
         <section>
             <div class="section" >
               <h1 className="sectionHeading">Please authorize again if any unexpected behaviour occurs</h1>
-              <br></br>
               <h3 class="errorMessage" id="loading"></h3>
-              <br></br>
-              <br></br>
             </div>
 
 
