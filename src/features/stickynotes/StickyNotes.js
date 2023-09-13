@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// Sticky notes function to get all the sticky notes from a Miro board with given Miro access token and Miro board ID, by calling the Miro API
 export const getStickyNotes = async (access_token, boardID) => {
     const options = {
         'method': 'GET',
@@ -13,13 +14,13 @@ export const getStickyNotes = async (access_token, boardID) => {
     
     try {
         const result = await axios(options);
-        // console.log(result);
         return result;
-      } catch (e) {
-           console.log(e);
-      }
+    } catch (e) {
+        return e;
+    }
 }
 
+// Sticky notes function to save all the sticky notes with given workshop name and the sticky notes content, by calling the Server API
 export const saveStickyNotes = async (workshop, content) => {
     const options = {
         'method': 'POST',
@@ -36,11 +37,12 @@ export const saveStickyNotes = async (workshop, content) => {
     try {
         const result = await axios(options);
         return result;
-      } catch (e) {
-           console.log(e);
-      }
+    } catch (e) {
+        return e;
+    }
 }
 
+// Sticky notes function to delete all the sticky notes for the given workshop name, by calling the Server API
 export const deleteNotesByWorkshopAPI = async (workshop) => {
     const options = {
         'method': 'DELETE',
@@ -56,11 +58,12 @@ export const deleteNotesByWorkshopAPI = async (workshop) => {
     try {
         const result = await axios(options);
         return result;
-      } catch (e) {
-           console.log(e);
-      }
+    } catch (e) {
+        return e;
+    }
 }
 
+// Sticky notes function to get all the frames from the Miro board with given Miro access token and the Miro board ID, by calling the Miro API
 export const getFrames = async (access_token, boardID) => {
     const options = {
         'method': 'GET',
@@ -76,13 +79,13 @@ export const getFrames = async (access_token, boardID) => {
     
     try {
         const result = await axios(options);
-        // console.log(result);
         return result;
-      } catch (e) {
-           console.log(e);
-      }
-  }
+    } catch (e) {
+        return e;
+    }
+}
 
+// Sticky notes function to get all the sticky notes for a frame with given Miro access token, Miro board ID and the frame ID, by calling the Miro API
 export const getFrameNotes = async (access_token, boardID, frameId) => {
     const options = {
         'method': 'GET',
@@ -98,13 +101,13 @@ export const getFrameNotes = async (access_token, boardID, frameId) => {
     
     try {
         const result = await axios(options);
-        // console.log(result);
         return result;
-      } catch (e) {
-           console.log(e);
-      }
+    } catch (e) {
+        return e;
+    }
 }
 
+// Sticky notes function to summarise the sticky notes with given sticky notes and the sensitivity score, by calling the Server API
 export const summariseAPI = async (notes, sensitivity) => {
     const options = {
         'method': 'POST',
@@ -120,13 +123,13 @@ export const summariseAPI = async (notes, sensitivity) => {
     
     try {
         const result = await axios(options);
-        // console.log(result.data);
         return result;
-      } catch (e) {
-           console.log(e);
-      }
+    } catch (e) {
+        return e;
+    }
 }
 
+// Sticky notes function to add the summary content to the workshop with given workshop ID and the summary, by calling the Server API
 export const addSummaryAPI = async (workshopID, workshopSummary) => {
   const options = {
       'method': 'PATCH',
@@ -142,10 +145,8 @@ export const addSummaryAPI = async (workshopID, workshopSummary) => {
   
   try {
       const result = await axios(options);
-      // console.log(result.data);
-      
       return result;
-    } catch (e) {
-         console.log(e);
-    }
+  } catch (e) {
+      return e;
+  }
 }

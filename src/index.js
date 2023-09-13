@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { store } from './app/store'
 import { Provider } from 'react-redux'
 
+// It uses the provider to make the store available to any nested components, and it uses the app routes to render the app.
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

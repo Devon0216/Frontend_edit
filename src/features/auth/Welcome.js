@@ -1,5 +1,6 @@
 import { useNavigate, Link } from 'react-router-dom'
 
+// Open Miro authorization page, by calling the server
 const openURL = async () =>  {
     window.open(`https://whiteboarddj-server.onrender.com/miro`, "_self")
 }
@@ -7,15 +8,15 @@ const openURL = async () =>  {
 const Welcome = () => {
     const navigate = useNavigate();
 
-
+    // Navigate to Past workshop page
     function gotoPastWorkshop() {
         navigate('/dash/pastWorkshop')
     }
 
+    // Navigate to Help page
     function gotoHelp() {
         navigate('/dash/help')
     }
-
 
     const content = (
         <section className="welcome">
@@ -33,15 +34,10 @@ const Welcome = () => {
                     <br/>
                     <br/>
                     <button class="button-orange" onClick={gotoHelp}>Help</button>
-                    
                 </div>
             </main>
-
         </section>
-
-        
     )
-
     return content
 }
 export default Welcome

@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// User function to create a new user with given username and Miro ID, by calling the server API
 export const createUser = async (username, miroId) => {
     const options = {
         'method': 'POST',
@@ -15,15 +16,13 @@ export const createUser = async (username, miroId) => {
     
     try {
         const result = await axios(options);
-        // console.log("create user result")
-        // console.log(result);
         return result;
-      } catch (e) {
-          console.log(e);
-          return JSON.parse(e.request.responseText).message
-      }
+    } catch (e) {
+        return JSON.parse(e.request.responseText).message
+    }
 }
 
+// User function to get a user with given username and Miro ID, by calling the server API
 export const getUserByMiroId = async (username, miroId) => {
     const options = {
         'method': 'POST',
@@ -39,10 +38,8 @@ export const getUserByMiroId = async (username, miroId) => {
     
     try {
         const result = await axios(options);
-        // console.log(result.data);
         return result;
-      } catch (e) {
-            console.log(e);
-            return e
-      }
+    } catch (e) {
+        return e
+    }
 }

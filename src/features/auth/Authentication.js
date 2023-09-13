@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// Authorization function to get a access token for using Miro REST apis with given code, by calling the server API
 export const getAccessToken = async (code) => {
     const options = {
         'method': 'POST',
@@ -14,17 +15,14 @@ export const getAccessToken = async (code) => {
     
     try {
         const result = await axios(options);
-        // console.log("hi")
-        // console.log(result);
         return result;
-      } catch (e) {
-          console.log(e);
-          return JSON.parse(e.request.responseText).message
-      }
+    } catch (e) {
+        return JSON.parse(e.request.responseText).message
+    }
   }
 
+// Authorization function to get a Miro's access token context with given access token, by calling the Miro API
 export const getAccessTokenContext = async (access_token) => {
-
     const options = {
         'method': 'GET',
         'url': `https://api.miro.com/v1/oauth-token`,
@@ -34,7 +32,6 @@ export const getAccessTokenContext = async (access_token) => {
         'content-type': 'application/json'
         },
         data: {
-
         }
     };
 
@@ -46,6 +43,7 @@ export const getAccessTokenContext = async (access_token) => {
     }
 }
 
+// Authorization function to get a Miro team's boards with given Miro access token and Miro team ID, by calling the Miro API
 export const getBoards = async (access_token, teamId) => {
     const options = {
       'method': 'GET',
@@ -56,7 +54,6 @@ export const getBoards = async (access_token, teamId) => {
         'content-type': 'application/json'
       },
       data: {
-    
       }
     };
     
@@ -64,12 +61,11 @@ export const getBoards = async (access_token, teamId) => {
       const result = await axios(options);
       return result;
     } catch (e) {
-        //  console.log("e.response.data");
-         console.log(e.response.data);
          return e;
     }
 }
 
+// Authorization function to create a Miro board with given Miro access token and Miro team ID, by calling the Miro API
 export const createBoardAPI = async (access_token, teamId) => {
     const options = {
         'method': 'POST',
@@ -89,7 +85,6 @@ export const createBoardAPI = async (access_token, teamId) => {
         const result = await axios(options);
         return result;
       } catch (e) {
-          console.log(e);
           return JSON.parse(e.request.responseText).message
       }
   }

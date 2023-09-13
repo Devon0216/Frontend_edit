@@ -1,13 +1,15 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 
+// This foorter component is used to navigate between pages
 const DashFooter = () => {
-
     const navigate = useNavigate()
 
+    // Navigate to Welcome page
     function gotoWelcome() {
         navigate('/')
     }
 
+    // Navigate to Home page
     function gotoHome() {
         navigate('/dash')
     }

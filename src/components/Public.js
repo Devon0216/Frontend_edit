@@ -1,14 +1,15 @@
 import { useNavigate, Link } from 'react-router-dom'
 
+// This Public component is used to render the Welcome page
 const Public = () => {
-
     const navigate = useNavigate();
+
+    // Navigate to Home page
     function gotoHome() {
         navigate('/dash')
     }
 
     const content = (
-
         <section className="public">
              <header className="dash-header">
                 <div>
@@ -34,13 +35,7 @@ const Public = () => {
             <footer>
                 <button class="button-orange" onClick={gotoHome} >Home Page</button>
             </footer>
-
-            
-
         </section>
-
-
-
     )
     return content
 }

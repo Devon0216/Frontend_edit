@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-// import { useNavigate } from 'react-router-dom'
 
-
-var textfileContent = "";
-
-
+// Function to create a table row for the given sticky note content
 const NoteItem = ({ noteContent }) => {
     return(
     <tr className="table__row user">
@@ -17,6 +13,7 @@ const WorkshopNotes = () => {
     const [notes, setNotes] = useState([]);
     const [fetchedAgendaSession, setFetcgedAgendaSession] = useState('');
 
+    // Sticky notes function to get all the sticky notes from a workshop with given workshop ID, by calling the server API
     const getNotesByWorkshop = async () => {
         const options = {
             'method': 'POST',
@@ -31,15 +28,7 @@ const WorkshopNotes = () => {
         
         try {
             const result = await axios(options);
-            // console.log("global.workshopID");
-            // console.log(global.workshopID);
-            // console.log("result.data");
-            // console.log(result.data);
             setNotes(result.data);
-
-
-            // console.log("notes")
-            // console.log(notes)
             return result;
         } catch (e) {
             console.log(e);
@@ -47,6 +36,7 @@ const WorkshopNotes = () => {
         }
     };
 
+    // Sticky notes function to get the agenda and summary from a workshop with given workshop ID, by calling the server API
     const getyWorkshopById = async () => {
       const options = {
           'method': 'POST',
@@ -71,7 +61,6 @@ const WorkshopNotes = () => {
             document.getElementById("summaryError").innerHTML = "No summary for this workshop"
           }
 
-
           return result;
       } catch (e) {
           console.log(e);
@@ -83,16 +72,13 @@ const WorkshopNotes = () => {
         getyWorkshopById();
     }, []);
 
+    // Function to download the workshop content as a txt file
     const downloadTxt = () => {
       var textfileContent = "Notes:\n"
-      // console.log("notes.length")
-      // console.log(notes.length)
       for (let i = 0;i < notes.length;i++){
         textfileContent += notes[i].content + "\n"
       }
       textfileContent = textfileContent + "\nSummary: \n" + document.getElementById("summary").innerHTML + "\nAgenda: \n" + fetchedAgendaSession;
-      // console.log("textfileContent")
-      // console.log(textfileContent)
       const blob = new Blob([textfileContent], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       
@@ -111,7 +97,7 @@ const WorkshopNotes = () => {
       <section>
         <h1 id="test" className="sectionHeading" >Participants Sticky Notes: </h1>
 
-  
+        {/* Table to display the sticky notes */}
         <table className="table_workshop table--users">
           <thead className="table__thead">
             <tr>
@@ -128,6 +114,7 @@ const WorkshopNotes = () => {
         </table>
         <p id="notesError"></p>
 
+        {/* Display the summary and agenda information */}
         <h1 id="Summarisation" className="sectionHeading">Summary:</h1>
         <p id="summary" style={{ whiteSpace: 'pre-line' }}></p>
         <p id="summaryError"></p>
@@ -137,6 +124,7 @@ const WorkshopNotes = () => {
               <p key={index}>{line}</p>
         ))}
 
+        {/* Button to download the workshop content as a txt file */}
         <p id="textfileContent"></p>
         <br></br>
         <br></br>

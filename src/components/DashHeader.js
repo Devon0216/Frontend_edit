@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-
+// This Header component is used to navigate to the Home page
 const DashHeader = () => {  
     const content = (
         <header className="dash-header">
@@ -11,7 +11,6 @@ const DashHeader = () => {
             </div>
         </header>
     )
-
     return content
 }
 export default DashHeader

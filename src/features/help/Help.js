@@ -2,6 +2,7 @@ const Help = () => {
 
     let content = (
         <section>
+            {/* Explanation of the project's background */}
             <h1 className="sectionHeading">Help documentation:</h1>
             <p> 
                 You are acting as a facilitator or a coach of a Design Thinking workshop. 
@@ -10,6 +11,7 @@ const Help = () => {
             </p>
             <br></br>
 
+            {/* Explanation of the sticky notes feature */}
             <h1 className="sectionHeading">Sticky Notes feature:</h1>
             <p> 
                 Get Participants Notes: You can view the sticky notes contents(added by workshop participants) on the Miro board.
@@ -21,7 +23,7 @@ const Help = () => {
             </p>
             <br></br>
 
-            
+            {/* Explanation of the agenda feature */}
             <h1 className="sectionHeading">Agenda feature:</h1>
             <p> 
                 Agenda table: You have a table of agenda items, you can add, edit, delete agenda items.
@@ -39,7 +41,7 @@ const Help = () => {
             </p>
             <br></br>
 
-            
+            {/* Explanation of the messaging feature */}            
             <h1 className="sectionHeading">Message feature:</h1>
             <p> 
                 Send a Message to selected recipients: You can select the users who you want to send message to.
@@ -49,6 +51,7 @@ const Help = () => {
             </p>
             <br></br>
 
+            {/* Explanation of the past workshop feature */}
             <h1 className="sectionHeading">Past workshop feature:</h1>
             <p> 
                 Select a workshop: You can select a workshop to view its details.
@@ -57,14 +60,8 @@ const Help = () => {
                 <br></br>
             </p>
             <br></br>
-
-
-
-
         </section>
-
     )
-
     return content
 }
 

@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom'
 
-
-
-
+// Function to create a table row with workshopname shown, for the given workshop name and workshop ID
 const WorkshopItem = ({ workshopName, workshopID }) => {
     const navigate = useNavigate()
     const handleEdit = () => {
@@ -12,19 +10,16 @@ const WorkshopItem = ({ workshopName, workshopID }) => {
         navigate(`/dash/pastWorkshop/${workshopID}`)
     }
     return(
-  <tr className="table__row user">
-    <td onClick={handleEdit} className={`table__cell ` }>{workshopName}</td>
-  </tr>
-)};
+      <tr className="table__row user">
+        <td onClick={handleEdit} className={`table__cell ` }>{workshopName}</td>
+      </tr>
+    )
+};
 
 const PastWorkshop = () => {
-
-    // console.log("global.userid")
-    // console.log(global.userid)
-    
-
     const [workshops, setWorkshops] = useState([]);
 
+    // Function to get all the workshops created by the user in the past, for the given user ID
     const getUserWorkshops = async () => {
       const options = {
           'method': 'POST',
@@ -37,7 +32,7 @@ const PastWorkshop = () => {
           }
       };
       try {
-          const result = await axios(options);
+        const result = await axios(options);
         setWorkshops(result.data);
       } catch (e) {
         console.log(e);
@@ -57,6 +52,7 @@ const PastWorkshop = () => {
       <section>
         <h1 id="Title" className="sectionHeading">Workshops: </h1>
 
+        {/* Create a table for the workshops created by the user in past, with rows indicating workshop names*/}
         <table className="table_workshop table--users">
           <thead className="table__thead">
             <tr>

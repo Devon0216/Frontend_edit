@@ -7,12 +7,10 @@ import {getStickyNotes, saveStickyNotes, deleteNotesByWorkshopAPI, getFrames, ge
 import {createTimerAPI, getTimerAPI, updateTimerAPI, addAgendaAPI, deleteAgendaAPI} from '../agenda/Agenda';
 import {createWorkshopAPI, getWorkshopByNameAPI, updateWorkshopAPI} from '../workshop/Workshop';
 
+// Necessary variables
 var responseToken;
-// var responseBoard;
 var globalBoardID;
 var timerID;
-// var finalTime;
-// let intervalID;
 var notes;
 var currentNotes;
 var currentNotesLength;
@@ -32,6 +30,7 @@ var inWorkshop = false;
     ******************************************************
     ******************************************************
 */
+// Admin function to set the username and get the Miro board(create a Miro board if it's not found)
 const getUsername = async () => {
   const result1 = await getAccessTokenContext(responseToken.data);
   global.username = result1.data.createdBy.name;
@@ -73,6 +72,7 @@ const getUsername = async () => {
 
 }
 
+// Admin function to connect to the Miro board
 const connectMiroBoard = async () => {
     const str = window.location.href;
     const jsonCode = str.slice(str.indexOf('=') + 1,str.indexOf('&'));
@@ -100,6 +100,7 @@ const connectMiroBoard = async () => {
     ******************************************************
     ******************************************************
 */
+// Sticky notes function to create a table row with given note content
 const NoteItem = ({ noteContent }) => {
     return(
   <tr className="table__row user">
@@ -114,6 +115,7 @@ const NoteItem = ({ noteContent }) => {
     ******************************************************
     ******************************************************
 */
+// Timer function to change the time format from seconds to hours:minutes:seconds
 function changeTimeFormat(durationInSeconds) {
     let remainingTime = durationInSeconds;
     let result = ""
@@ -170,51 +172,18 @@ function changeTimeFormat(durationInSeconds) {
         return result
 }
 
+// Timer function to change the time format to hours:minutes
 function changeTimeFormatHourMinute(time) {
-  var transformedTime = time.split(":")
-  var hours = parseInt(transformedTime[0])
-  var minutes = parseInt(transformedTime[1])
-  var finalTime = hours*3600 + minutes*60;
-  let remainingTime = finalTime;
-  let result = ""
+    var transformedTime = time.split(":")
+    var hours = parseInt(transformedTime[0])
+    var minutes = parseInt(transformedTime[1])
+    var finalTime = hours*3600 + minutes*60;
+    let remainingTime = finalTime;
+    let result = ""
 
-      if (remainingTime > 3600){
-          let hours = Math.floor(remainingTime / (60*60));
-          let minutes = Math.floor((remainingTime - 3600 * hours)/60) ;
-          let seconds = remainingTime % 60;
-          if (hours < 10){
-          hours = "0" + hours;
-          }
-          if (minutes < 10){
-          minutes = "0" + minutes;
-          }
-          if (seconds < 10){
-          seconds = "0" + seconds;
-          }
-          result =   hours + ":" + minutes + ":" + seconds ;
-      }
-      else if (remainingTime > 60){
-          let hours = 0 ;
-          let minutes = Math.floor(remainingTime /60);
-          let seconds = remainingTime % 60;
-          if (minutes === 60){
-          minutes = 59
-          seconds = remainingTime / 60;
-          }
-          if (hours < 10){
-          hours = "0" + hours;
-          }
-          if (minutes < 10){
-          minutes = "0" + minutes;
-          }
-          if (seconds < 10){
-          seconds = "0" + seconds;
-          }
-          result =   hours + ":" + minutes + ":" + seconds ;
-      }
-      else{
-        let hours = 0;
-        let minutes = Math.floor(remainingTime /60);
+    if (remainingTime > 3600){
+        let hours = Math.floor(remainingTime / (60*60));
+        let minutes = Math.floor((remainingTime - 3600 * hours)/60) ;
         let seconds = remainingTime % 60;
         if (hours < 10){
         hours = "0" + hours;
@@ -226,12 +195,45 @@ function changeTimeFormatHourMinute(time) {
         seconds = "0" + seconds;
         }
         result =   hours + ":" + minutes + ":" + seconds ;
+    }
+    else if (remainingTime > 60){
+        let hours = 0 ;
+        let minutes = Math.floor(remainingTime /60);
+        let seconds = remainingTime % 60;
+        if (minutes === 60){
+        minutes = 59
+        seconds = remainingTime / 60;
+        }
+        if (hours < 10){
+        hours = "0" + hours;
+        }
+        if (minutes < 10){
+        minutes = "0" + minutes;
+        }
+        if (seconds < 10){
+        seconds = "0" + seconds;
+        }
+        result =   hours + ":" + minutes + ":" + seconds ;
+    }
+    else{
+      let hours = 0;
+      let minutes = Math.floor(remainingTime /60);
+      let seconds = remainingTime % 60;
+      if (hours < 10){
+      hours = "0" + hours;
       }
-
-      return result
+      if (minutes < 10){
+      minutes = "0" + minutes;
+      }
+      if (seconds < 10){
+      seconds = "0" + seconds;
+      }
+      result =   hours + ":" + minutes + ":" + seconds ;
+    }
+    return result
 }
 
-
+// Timer function to create a timer on Miro board
 const setTimer = async () => {
     let time = "Time left:"
     const timerText = await createTimerAPI(responseToken.data, globalBoardID, time );
@@ -247,7 +249,6 @@ const setTimer = async () => {
     else{
       document.getElementById("agendaError").textContent = "Timer on Miro board create failed";
     }
-
 }
 
 // const getTimer = async () => {
@@ -255,9 +256,9 @@ const setTimer = async () => {
 //     document.getElementById("timerID").textContent = JSON.stringify(timerText.data.data.content); 
 // }
 
+// Timer function to update the timer on Miro board
 const updateTimer = async (timeText) => {
     const timerText = await updateTimerAPI(responseToken.data, globalBoardID, timerID, timeText);
-
 }
 
 /*
@@ -267,6 +268,7 @@ const updateTimer = async (timeText) => {
     ******************************************************
     ******************************************************
 */
+// Workshop function to create a new workshop and display the corresponding sections
 const createWorkshop = async () => {
     if (document.getElementById("workshopname").value === ""){
       document.getElementById("workshopError").innerHTML = "Please enter a workshop name"
@@ -305,94 +307,96 @@ const createWorkshop = async () => {
 
 }
 
+// Workshop function to join a workshop as a facilitator and display the corresponding sections
 const joinWorkshopAsFacilitator = async () => {
-  if (document.getElementById("workshopname").value === ""){
-    document.getElementById("workshopError").innerHTML = "Please enter a workshop name"
-  }
-  else{
-    document.getElementById("loading").textContent = "Joining workshop..."
-    global.workshopname = document.getElementById("workshopname").value
-    const result1 = await getWorkshopByNameAPI(global.workshopname );
-    if (!responseToken){
-      if (connected === false){
-        await connectMiroBoard();
+    if (document.getElementById("workshopname").value === ""){
+      document.getElementById("workshopError").innerHTML = "Please enter a workshop name"
+    }
+    else{
+      document.getElementById("loading").textContent = "Joining workshop..."
+      global.workshopname = document.getElementById("workshopname").value
+      const result1 = await getWorkshopByNameAPI(global.workshopname );
+      if (!responseToken){
+        if (connected === false){
+          await connectMiroBoard();
+        }
+        else{
+          document.getElementById("loading").innerHTML = "You have successfully connected to the Miro board!"
+        }
       }
       else{
-        document.getElementById("loading").innerHTML = "You have successfully connected to the Miro board!"
+        document.getElementById("loading").innerHTML = "Please authorize again after refresh!"
+      }
+
+      const facilitatorUserId = result1.data[0].User
+      const result2 = await getUserByMiroId(global.username, global.miroId );
+      const loginUserId = result2.data[0]._id
+
+      if (facilitatorUserId === loginUserId){
+        document.getElementById("notesSection").hidden = false
+        document.getElementById("agendaSection").hidden = false
+        document.getElementById("messageSection").hidden = false
+        document.getElementById("collapseNotesSectionHeading").hidden = false
+        document.getElementById("collapseNotesSection").hidden = false
+        document.getElementById("collapseAgendaSectionHeading").hidden = false
+        document.getElementById("collapseAgendaSection").hidden = false
+        document.getElementById("collapseMessageSectionHeading").hidden = false
+        document.getElementById("collapseMessageSection").hidden = false
+        document.getElementById("wholeSummary").style.display = "none";
+        document.getElementById("clusterSummary").style.display = "none";
+        inWorkshop = true;
+        document.getElementById("workshopError").innerHTML = "Joined as facilitator successfully"
+      }
+      else{
+        document.getElementById("workshopError").innerHTML = "Wrong username or miroId for facilitator"
       }
     }
-    else{
-      document.getElementById("loading").innerHTML = "Please authorize again after refresh!"
-    }
-
-    const facilitatorUserId = result1.data[0].User
-    const result2 = await getUserByMiroId(global.username, global.miroId );
-    const loginUserId = result2.data[0]._id
-
-    if (facilitatorUserId === loginUserId){
-      document.getElementById("notesSection").hidden = false
-      document.getElementById("agendaSection").hidden = false
-      document.getElementById("messageSection").hidden = false
-      document.getElementById("collapseNotesSectionHeading").hidden = false
-      document.getElementById("collapseNotesSection").hidden = false
-      document.getElementById("collapseAgendaSectionHeading").hidden = false
-      document.getElementById("collapseAgendaSection").hidden = false
-      document.getElementById("collapseMessageSectionHeading").hidden = false
-      document.getElementById("collapseMessageSection").hidden = false
-      document.getElementById("wholeSummary").style.display = "none";
-      document.getElementById("clusterSummary").style.display = "none";
-      inWorkshop = true;
-      document.getElementById("workshopError").innerHTML = "Joined as facilitator successfully"
-    }
-    else{
-      document.getElementById("workshopError").innerHTML = "Wrong username or miroId for facilitator"
-    }
-  }
 }
 
+// Workshop function to join a workshop as a coach and display the corresponding sections
 const joinWorkshopAsCoach = async () => {
-  if (document.getElementById("workshopname").value === ""){
-    document.getElementById("workshopError").innerHTML = "Please enter a workshop name"
-  }
-  else{
-    document.getElementById("loading").textContent = "Joining workshop..."
-    global.workshopname = document.getElementById("workshopname").value
-    const result1 = await getWorkshopByNameAPI(global.workshopname );
+    if (document.getElementById("workshopname").value === ""){
+      document.getElementById("workshopError").innerHTML = "Please enter a workshop name"
+    }
+    else{
+      document.getElementById("loading").textContent = "Joining workshop..."
+      global.workshopname = document.getElementById("workshopname").value
+      const result1 = await getWorkshopByNameAPI(global.workshopname );
 
-    if (result1 !== "No workshops found"){
-      if (connected === false){
-        await connectMiroBoard();
-      }
-      else{
-        document.getElementById("loading").innerHTML = "You have successfully connected to the Miro board!"
-      }
-      coach = true;
-      document.getElementById("notesSection").hidden = false
-      document.getElementById("agendaSection").hidden = false
-      document.getElementById("messageSection").hidden = false
-      document.getElementsByClassName("collapseSection").hidden = false
-      document.getElementById("saveNotesButton").style.display = "none";
-      document.getElementById("countDownAgendaButton").style.display = "none";
-      document.getElementById("pauseAgendaButton").style.display = "none";
-      document.getElementById("saveAgendaButton").style.display = "none";
-      document.getElementById("clearAgendaButton").style.display = "none";
-      document.getElementById("deleteAgendaButton").style.display = "none";
-      document.getElementById("addSessionButton").style.display = "none";
-      document.getElementById("wholeSummary").style.display = "none";
-      document.getElementById("clusterSummary").style.display = "none";
-      document.getElementById("collapseNotesSectionHeading").hidden = false
-      document.getElementById("collapseNotesSection").hidden = false
-      document.getElementById("collapseAgendaSectionHeading").hidden = false
-      document.getElementById("collapseAgendaSection").hidden = false
-      document.getElementById("collapseMessageSectionHeading").hidden = false
-      document.getElementById("collapseMessageSection").hidden = false
-      inWorkshop = true;
-      document.getElementById("workshopError").innerHTML = "Joined as coach successfully"
-    } 
-  }
-
+      if (result1 !== "No workshops found"){
+        if (connected === false){
+          await connectMiroBoard();
+        }
+        else{
+          document.getElementById("loading").innerHTML = "You have successfully connected to the Miro board!"
+        }
+        coach = true;
+        document.getElementById("notesSection").hidden = false
+        document.getElementById("agendaSection").hidden = false
+        document.getElementById("messageSection").hidden = false
+        document.getElementsByClassName("collapseSection").hidden = false
+        document.getElementById("saveNotesButton").style.display = "none";
+        document.getElementById("countDownAgendaButton").style.display = "none";
+        document.getElementById("pauseAgendaButton").style.display = "none";
+        document.getElementById("saveAgendaButton").style.display = "none";
+        document.getElementById("clearAgendaButton").style.display = "none";
+        document.getElementById("deleteAgendaButton").style.display = "none";
+        document.getElementById("addSessionButton").style.display = "none";
+        document.getElementById("wholeSummary").style.display = "none";
+        document.getElementById("clusterSummary").style.display = "none";
+        document.getElementById("collapseNotesSectionHeading").hidden = false
+        document.getElementById("collapseNotesSection").hidden = false
+        document.getElementById("collapseAgendaSectionHeading").hidden = false
+        document.getElementById("collapseAgendaSection").hidden = false
+        document.getElementById("collapseMessageSectionHeading").hidden = false
+        document.getElementById("collapseMessageSection").hidden = false
+        inWorkshop = true;
+        document.getElementById("workshopError").innerHTML = "Joined as coach successfully"
+      } 
+    }
 }
 
+// Workshop function to add notes to the current workshop
 const addNotesToWorkshop = async () => {
     global.workshopname = document.getElementById("workshopname").value
     document.getElementById("notesButtonError").innerHTML = "Saving notes..."
@@ -408,7 +412,6 @@ const addNotesToWorkshop = async () => {
     }
 
     const result2 = await updateWorkshopAPI(workshopid, global.userid, notesId );
-
     if (result2.status === 200){
       document.getElementById("notesButtonError").innerHTML = "Notes saved successfully"
     }
@@ -417,7 +420,7 @@ const addNotesToWorkshop = async () => {
     }
 }
 
-
+// Workshop function to add current agenda to the current workshop
 const addAgenda = async () => {
     document.getElementById("agendaError").innerHTML = "Saving agenda..."
     const result1 = await getWorkshopByNameAPI(global.workshopname );
@@ -431,7 +434,7 @@ const addAgenda = async () => {
     }
 }
 
-
+// Workshop function to summarise the notes and save the summary to the current workshop
 const summarise = async () => {
     document.getElementById("notesSummaryError").innerHTML = "Summarising notes..."
     var notesText = ""
@@ -455,14 +458,11 @@ const summarise = async () => {
     }
 
     let frameSensitivityScore = 3
-
     const resultFrames = await getFrames(responseToken.data, globalBoardID );
     let summarsationText = ""
     if (resultFrames.data.total !== 0){
       for (let i = 0; i<resultFrames.data.total;i++){
         const resultFrameNotes = await getFrameNotes(responseToken.data, globalBoardID, resultFrames.data.data[i].id );
-        // console.log("resultFrame Notes")
-        // console.log(resultFrameNotes)
         summarsationText = summarsationText + "Cluster  " + resultFrames.data.data[i].data.title + ": \n"
         let frameSummary = ""
         if (resultFrameNotes.data.total !== 0){
@@ -482,12 +482,9 @@ const summarise = async () => {
     document.getElementById("clusterSummary").style.display = "block";
     document.getElementById("summarisation2").textContent =  summarsationText;
 
-    
     const result1 = await summariseAPI(notesText, sensitivityScore );
     document.getElementById("summarisation").textContent =  result1.data.summary;
-
     let finalSummary = "Summary of the whole workshop: \n" + result1.data.summary + "\n\nSummary of clusters: \n" + summarsationText
-
     const result2 = await getWorkshopByNameAPI(global.workshopname );
     const result3 = await addSummaryAPI(result2.data[0]._id, finalSummary );
 
@@ -501,16 +498,6 @@ const summarise = async () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
 const MiroAuthorize = () => {
     /*
     ******************************************************
@@ -521,6 +508,7 @@ const MiroAuthorize = () => {
     */
     const [tableContent, setTableContent] = useState([]);
 
+    // Notes function to get the sticky notes from Miro board and display on the application page
     const getNotes = async () => {
         document.getElementById("notesButtonError").innerHTML = "Loading notes..."
         
@@ -550,7 +538,6 @@ const MiroAuthorize = () => {
     ******************************************************
     ******************************************************
     */
-
     const [sessions, setSessions] = useState([]);
     const [sessionName, setSessionName] = useState('');
     const [sessionTime, setSessionTime] = useState('');
@@ -563,6 +550,7 @@ const MiroAuthorize = () => {
     const [currentSessionIndex, setCurrentSessionIndex] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
 
+    // Agenda function to delete the agenda
     const deleteAgenda = async () => {
       document.getElementById("agendaError").innerHTML = "Deleting agenda..."
       const result1 = await getWorkshopByNameAPI(global.workshopname );
@@ -576,7 +564,7 @@ const MiroAuthorize = () => {
       }
     }
 
-
+    // Agenda function to get the agenda from the current workshop and display on the application page
     const getAgenda = async () => {
       const result1 = await getWorkshopByNameAPI(global.workshopname );
       if (result1.data[0].workshopAgenda !== ""){
@@ -590,7 +578,6 @@ const MiroAuthorize = () => {
         setSessions(sessionData);
         const initialCurrentTime = sessionData.map(session => session.time);
         setCurrentTime(initialCurrentTime);
-
         document.getElementById("agendaError").innerHTML = "Retrieved agenda successfully"
       }
       else{
@@ -598,15 +585,15 @@ const MiroAuthorize = () => {
       }
     }
 
+    // Agenda function to check if the given time format is valid
     function isValidTimeFormat(time) {
-      const parts = time.split(':'); // Split the input by colon
-      // Ensure there are exactly two parts
+      const parts = time.split(':');
       if (parts.length !== 2) {
         return false;
       }
     
-      const hours = parseInt(parts[0]); // Parse the hours part as an integer
-      const minutes = parseInt(parts[1]); // Parse the minutes part as an integer
+      const hours = parseInt(parts[0]); 
+      const minutes = parseInt(parts[1]);
     
       // Check if hours and minutes are valid numbers
       if (isNaN(hours) || isNaN(minutes)) {
@@ -615,6 +602,7 @@ const MiroAuthorize = () => {
       return true;
     }
   
+    // Agenda function to add a session to the agenda
     const handleAddSession = () => {
       if (isValidTimeFormat(sessionTime)){
         if (sessionName && sessionTime) {
@@ -635,13 +623,7 @@ const MiroAuthorize = () => {
 
     };
   
-    // const handleTimeChange = (index, newTime) => {
-    //   const updatedSessions = sessions.map((session, i) =>
-    //     i === index ? { ...session, time: newTime } : session
-    //   );
-    //   setSessions(updatedSessions);
-    // };
-  
+    // Agenda function to delete the selected session
     const handleDeleteSession = index => {
       const updatedSessions = sessions.filter((session, i) => i !== index);
       setSessions(updatedSessions);
@@ -661,20 +643,20 @@ const MiroAuthorize = () => {
         recipients: filteredRecipients
       });
     };
-  
-    const handleUpdateSession = index => {
 
+    // Agenda function to add the selected session time
+    const handleUpdateSession = index => {
       if (!extraTimes[index]) {
         const newErrors = [...extraTimeErrors];
         newErrors[index] = 'Please enter a value';
         setExtraTimeErrors(newErrors);
-        return; // Stop execution if there's an error
+        return; 
       } 
       else if ( isNaN(parseInt(extraTimes[index])) ){
         const newErrors = [...extraTimeErrors];
         newErrors[index] = 'Please enter a valid number';
         setExtraTimeErrors(newErrors);
-        return; // Stop execution if there's an error
+        return; 
       }
       else {
         const newErrors = [...extraTimeErrors];
@@ -682,6 +664,7 @@ const MiroAuthorize = () => {
         setExtraTimeErrors(newErrors);
         setExtraTimesConfirmed(extraTimes)
 
+        // Update the session time correctly
         const updatedSessions = sessions.map((session, i) => {
             var hours = parseInt(session.time.split(":")[0])
             var minutes = parseInt(session.time.split(":")[1])
@@ -704,16 +687,16 @@ const MiroAuthorize = () => {
         setSessions(updatedSessions);
 
         const newExtraTimes = [...extraTimes];
-        newExtraTimes[index] = ''; // Clear the value
+        newExtraTimes[index] = ''; 
         setExtraTimes(newExtraTimes);
 
         const newUpdatedErrors = [...extraTimeErrors];
-        newUpdatedErrors[index] = 'Updated!'; // Clear the error message
+        newUpdatedErrors[index] = 'Updated!';
         setExtraTimeErrors(newUpdatedErrors);
       }    
     }
 
-
+    // Agenda function to reduce the current session time correctly
     const handleReduceSession = (index) => {
       if (!extraTimes[index]) {
         const newErrors = [...extraTimeErrors];
@@ -732,6 +715,7 @@ const MiroAuthorize = () => {
         newErrors[index] = ''; 
         setExtraTimeErrors(newErrors);
 
+        // Reduce the session time to correct format
         const reductionAmount = parseInt(extraTimes[index]);
         const updatedSessions = sessions.map((session, i) => {
           if (i === index) {
@@ -763,7 +747,6 @@ const MiroAuthorize = () => {
 
         const updatedCurrentTimes = [...currentTime];
         if (currentSessionIndex === index && isRunning) {
-          // Extract current hours and minutes from currentTime[index]
           let currentHours = parseInt(updatedCurrentTimes[index].split(':')[0]);
           let currentMinutes = parseInt(updatedCurrentTimes[index].split(':')[1]);
           let currentSeconds = parseInt(updatedCurrentTimes[index].split(':')[2]);
@@ -799,7 +782,7 @@ const MiroAuthorize = () => {
     };
 
     
-  
+    // Agenda function to clear the current agenda
     const handleClearAgenda = () => {
       setSessions([]);
       setCurrentTime([]);
@@ -813,10 +796,10 @@ const MiroAuthorize = () => {
         currentTimeIndex: 0,
         recipients: filteredRecipients
       });
-
       document.getElementById("agendaError").innerHTML = "Agenda cleared successfully"
     };
 
+    // Agenda function to delete the agenda for the current workshop
     const handleDeleteAgenda = () => {
       setSessions([]);
       setCurrentTime([]);
@@ -835,21 +818,25 @@ const MiroAuthorize = () => {
       document.getElementById("agendaError").innerHTML = "Agenda deleted successfully"
     };
   
+    // Agenda function to save the current agenda to the current workshop
     const handleSaveAgenda = () => {
       const updatedSessions = sessions.map((session) => {
         agenda = agenda + session.name + " " + session.time + '\n'
       });
       addAgenda();
     };
-  
+    
+    // Agenda function to add a session
     const addSession = () => {
       setShowTable(true);
     }
 
+    // Agenda function to get the agenda from the current workshop and display on the application page
     const handleGetAgenda = () => {
       getAgenda();
     }
 
+    // Agenda function to pause the count down
     const handlePause = () => {
       setIsRunning(false);
       document.getElementById("sessionError").textContent = "Count down has paused"
@@ -865,6 +852,7 @@ const MiroAuthorize = () => {
 
     };
 
+    // Agenda function to start the counting down for the agenda
     const handleCountingDown = () => {
       if (!isRunning) {
         setIsRunning(true);
@@ -885,12 +873,13 @@ const MiroAuthorize = () => {
     const [selectedRecipients, setSelectedRecipients] = useState([]);
     const [usersInRoom, setUsersInRoom] = useState([]);
 
+    // Message function to connect to the messaging server
     const connectToServer = () => {
       userId = global.username;
       socket = io.connect('https://whiteboarddj-server.onrender.com', {
         query:  {userId},
         transports: ['websocket'] 
-      }); // Adjust the URL to your server's URL
+      });
 
       if (socket){
         document.getElementById("messageError").textContent = "You are connected to the server successfully"
@@ -902,7 +891,6 @@ const MiroAuthorize = () => {
         setReceivedMessages(prevMessages => [...prevMessages, message]);
       });
 
-
       socket.on('receiveRunningAgenda', (data) => {
         setIsRunning(data.isRunning);
         setSessions(data.sessions);
@@ -912,9 +900,8 @@ const MiroAuthorize = () => {
 
       let selectedUsers = [];
       socket.on('userList', (userList) => {
-        // Update dropdown menu with the new user list
         const dropdown = document.getElementById('userDropdown');
-        dropdown.innerHTML = ''; // Clear existing options
+        dropdown.innerHTML = '';
 
         const defaultOption = document.createElement('option');
         defaultOption.value = '';
@@ -934,7 +921,7 @@ const MiroAuthorize = () => {
           option.value = user;
           option.textContent = user;
           if (previouslySelected.includes(user)) {
-            option.selected = true; // Preserve selected options
+            option.selected = true;
             selectedUsers.push(user);
           }
           dropdown.appendChild(option);
@@ -943,14 +930,11 @@ const MiroAuthorize = () => {
 
       socket.on('disconnect', () => {
         document.getElementById("messageError").textContent = "Disconnected from the server";
-        // Handle any additional UI or logic upon disconnection
       });
-      
     }
-  
+
+    // Message function to send the message to the selected recipients
     const sendMessage = () => {
-      // let sentRecipients = ""
-  
       const data = {
         message: message + " (from " + global.username + ")",
         recipients: selectedRecipients
@@ -961,7 +945,7 @@ const MiroAuthorize = () => {
       setMessage("");
     };
 
-
+    // Function to create a workshop and connect to messaging server
     const handleCreateWorkshopAndConnect = async () => {
       await createWorkshop();
       if (connectedServer === false){
@@ -970,6 +954,7 @@ const MiroAuthorize = () => {
       }
     };
     
+    // Function to join a workshop as a facilitator and connect to messaging server
     const handleJoinWorkshopFacilitatorAndConnect = async () => {
       await joinWorkshopAsFacilitator();
       if (connectedServer === false){
@@ -978,6 +963,7 @@ const MiroAuthorize = () => {
       }
     };
     
+    // Function to join a workshop as a coach and connect to messaging server
     const handleJoinWorkshopCoachAndConnect = async () => {
       await joinWorkshopAsCoach();
       if (connectedServer === false){
@@ -986,7 +972,7 @@ const MiroAuthorize = () => {
       }
     };
 
-  
+    // Function to change the selected recipients
     const handleRecipientChange = (event) => {
       const selectedOptions = Array.from(event.target.selectedOptions).map(
         (option) => option.value
@@ -1000,26 +986,30 @@ const MiroAuthorize = () => {
       }
     };
 
+    // Function to set all the recipients, and change due to the users in messaging server
     useEffect(() => {
       setSelectedRecipients(usersInRoom);
     }, [usersInRoom]);
 
+    // Function to set the current time index if the count down has started
     useEffect(() => {
       if (isRunning) {
         setCurrentSessionIndex(currentTimeIndex);
       }
     }, [isRunning, currentTimeIndex]);
 
-
+    // Function to run the count down correctly
     useEffect(() => {
       let timerId;
     
+      // Count down for facilitator
       if (isRunning && currentTimeIndex < currentTime.length && coach === false) {
         let [hours, minutes, seconds] = currentTime[currentTimeIndex].split(":");
         hours = parseInt(hours);
         minutes = parseInt(minutes);
         seconds = parseInt(seconds);
     
+        // Change time format correctly
         timerId = setInterval(() => {
           if (seconds > 0) {
             seconds--;
@@ -1041,7 +1031,7 @@ const MiroAuthorize = () => {
             minutes = minutes + extraMinutes;
             if (minutes < 0) {
               hours = hours - Math.floor(-minutes / 60);
-              minutes = (minutes % 60 + 60) % 60; // Ensure minutes are positive
+              minutes = (minutes % 60 + 60) % 60; 
             }
             else{
               hours += Math.floor(minutes / 60);
@@ -1052,6 +1042,7 @@ const MiroAuthorize = () => {
     
           const newTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
     
+          // Set the current count down session time
           setCurrentTime(prevCurrentTime => {
             const updatedCurrentTime = [...prevCurrentTime];
             updatedCurrentTime[currentTimeIndex] = newTime;
@@ -1062,14 +1053,12 @@ const MiroAuthorize = () => {
                 setCurrentTimeIndex(currentTimeIndex + 1);
               }
             }
-            
             return updatedCurrentTime;
           });
-          
           updateTimer("Time left: " + newTime);
 
+          // Send count down time to the coaches
           const filteredRecipients = selectedRecipients.filter(user => user !== global.username);
-
           const data = {
             isRunning: isRunning,
             sessions: sessions,
@@ -1078,16 +1067,17 @@ const MiroAuthorize = () => {
             recipients: filteredRecipients
           };
           socket.emit('sendRunnigAgenda', data);
-
           document.getElementById("sessionTotalTime").textContent = "Total remaining time: " + changeTimeFormat(calculateTotalTime());
         }, 1000);
       }
+      // Count down for coach
       else if (isRunning && currentTimeIndex < currentTime.length && coach === true) {
         let [hours, minutes, seconds] = currentTime[currentTimeIndex].split(":");
         hours = parseInt(hours);
         minutes = parseInt(minutes);
         seconds = parseInt(seconds);
     
+        // Change time format correctly
         timerId = setInterval(() => {
           if (seconds > 0) {
             seconds--;
@@ -1117,9 +1107,9 @@ const MiroAuthorize = () => {
             }
             extraTimesConfirmed[currentTimeIndex] = undefined;
           }
-    
           const newTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-    
+          
+          // Set the current count down session time
           setCurrentTime(prevCurrentTime => {
             const updatedCurrentTime = [...prevCurrentTime];
             updatedCurrentTime[currentTimeIndex] = newTime;
@@ -1130,10 +1120,8 @@ const MiroAuthorize = () => {
                 setCurrentTimeIndex(currentTimeIndex + 1);
               }
             }
-            
             return updatedCurrentTime;
           });
-
           document.getElementById("sessionTotalTime").textContent = "Total remaining time: " + changeTimeFormat(calculateTotalTime());
         }, 1000);
       }
@@ -1143,6 +1131,7 @@ const MiroAuthorize = () => {
       };
     }, [isRunning, currentTimeIndex, currentTime]);
 
+    // Function to calculate the total time of the agenda
     const calculateTotalTime = () => {
       let [currentHours, currentMinutes, currentSeconds] = currentTime[currentTimeIndex].split(":").map(Number);
       let totalTime = currentHours * 3600 + currentMinutes * 60 + currentSeconds;
@@ -1154,42 +1143,38 @@ const MiroAuthorize = () => {
           totalTime += hours * 3600 + minutes * 60 + seconds;
         }
       });
-
       return totalTime;
     };
 
+    const [notesSectionCollapsed, setNotesSectionCollapsed] = useState(true); 
+    const [agendaSectionCollapsed, setAgendaSectionCollapsed] = useState(true); 
+    const [messageSectionCollapsed, setMessageSectionCollapsed] = useState(true);
 
+    // Function to toggle the collapsed state of the notes section
+    const toggleNotesSection = () => {
+      setNotesSectionCollapsed(!notesSectionCollapsed);
+    };
 
-  const [notesSectionCollapsed, setNotesSectionCollapsed] = useState(true); // Initially, notesSection is collapsed
-  const [agendaSectionCollapsed, setAgendaSectionCollapsed] = useState(true); // Initially, agendaSection is collapsed
-  const [messageSectionCollapsed, setMessageSectionCollapsed] = useState(true); // Initially, messageSection is collapsed
+    // Function to toggle the collapsed state of the agenda section
+    const toggleAgendaSection = () => {
+      setAgendaSectionCollapsed(!agendaSectionCollapsed);
+    };
 
-  // Function to toggle the collapsed state of the notes section
-  const toggleNotesSection = () => {
-    setNotesSectionCollapsed(!notesSectionCollapsed);
-  };
-
-  // Function to toggle the collapsed state of the agenda section
-  const toggleAgendaSection = () => {
-    setAgendaSectionCollapsed(!agendaSectionCollapsed);
-  };
-
-  // Function to toggle the collapsed state of the message section
-  const toggleMessageSection = () => {
-    setMessageSectionCollapsed(!messageSectionCollapsed);
-  };
+    // Function to toggle the collapsed state of the message section
+    const toggleMessageSection = () => {
+      setMessageSectionCollapsed(!messageSectionCollapsed);
+    };
 
     
-    
-
     let content = (
         <section>
+            {/* Header section */}
             <div class="section" >
               <h1 className="sectionHeading">Please authorize again if any unexpected behaviour occurs</h1>
               <h3 class="errorMessage" id="loading"></h3>
             </div>
 
-
+            {/* Workshop section */}
             <div id="workshopSection" class="section" >
               <h1 className="sectionHeading">Create or join a workshop:</h1>
               <p class="errorMessage" id="workshopError"></p>
@@ -1206,9 +1191,7 @@ const MiroAuthorize = () => {
               <br></br>
             </div>
 
-
-
-
+            {/* Sticky notes section */}
             <h1 id="collapseNotesSectionHeading" className="sectionHeading" hidden>Participants' Sticky Notes: </h1>
             <p id="collapseNotesSection" className="collapse" onClick={toggleNotesSection} hidden>(expand/collapse section)</p>
             <div id="notesSection"  class="section"  hidden={notesSectionCollapsed}>
@@ -1253,10 +1236,7 @@ const MiroAuthorize = () => {
               <br></br>
             </div>
 
-
-
-
-
+            {/* Agenda section */}
             <h1 id="collapseAgendaSectionHeading" className="sectionHeading" hidden>Workshop Agenda:</h1>
             <p id="collapseAgendaSection" className="collapse" onClick={toggleAgendaSection} hidden>(expand/collapse section)</p>
             <div id="agendaSection" class="section"  hidden={agendaSectionCollapsed}>
@@ -1362,9 +1342,7 @@ const MiroAuthorize = () => {
               <br></br>
             </div>
 
-
-
-
+            {/* Message section */}
             <h1 id="collapseMessageSectionHeading" className="sectionHeading" hidden>Message: </h1>
             <p id="collapseMessageSection" className="collapse" onClick={toggleMessageSection} hidden>(expand/collapse section)</p>
             <div id="messageSection" class="section" hidden={messageSectionCollapsed}>
