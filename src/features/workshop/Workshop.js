@@ -40,6 +40,8 @@ export const getWorkshopByNameAPI = async ( workshopname) => {
         return result;
     } catch (e) {
         console.log(e)
+        console.log("e.request.responseText.message")
+        console.log(e.request.responseText.message)
         return JSON.parse(e.request.responseText).message
     }
 }

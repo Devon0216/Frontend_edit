@@ -362,6 +362,8 @@ const joinWorkshopAsCoach = async () => {
       document.getElementById("loading").textContent = "Joining workshop..."
       global.workshopname = document.getElementById("workshopname").value
       const result1 = await getWorkshopByNameAPI(global.workshopname );
+      console.log("result1")
+      console.log(result1)
 
       if (result1 !== "No workshops found"){
         if (connected === false){
