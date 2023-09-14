@@ -792,6 +792,7 @@ const MiroAuthorize = () => {
       setSessions([]);
       setCurrentTime([]);
       setIsRunning(false);
+      agenda = "";
 
       const filteredRecipients = selectedRecipients.filter(user => user !== global.username);
       socket.emit('sendRunnigAgenda', {
@@ -809,6 +810,7 @@ const MiroAuthorize = () => {
       setSessions([]);
       setCurrentTime([]);
       setIsRunning(false);
+      agenda = "";
 
       const filteredRecipients = selectedRecipients.filter(user => user !== global.username);
       socket.emit('sendRunnigAgenda', {
