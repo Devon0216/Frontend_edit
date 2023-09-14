@@ -39,6 +39,7 @@ export const getWorkshopByNameAPI = async ( workshopname) => {
         const result = await axios(options);
         return result;
     } catch (e) {
+        console.log(e)
         return JSON.parse(e.request.responseText).message
     }
 }
