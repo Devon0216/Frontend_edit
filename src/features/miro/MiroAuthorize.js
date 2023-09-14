@@ -316,40 +316,47 @@ const joinWorkshopAsFacilitator = async () => {
       document.getElementById("loading").textContent = "Joining workshop..."
       global.workshopname = document.getElementById("workshopname").value
       const result1 = await getWorkshopByNameAPI(global.workshopname );
-      if (!responseToken){
-        if (connected === false){
-          await connectMiroBoard();
+
+      if (result1 !== "No workshops found"){
+        if (!responseToken){
+          if (connected === false){
+            await connectMiroBoard();
+          }
+          else{
+            document.getElementById("loading").innerHTML = "You have successfully connected to the Miro board!"
+          }
         }
         else{
-          document.getElementById("loading").innerHTML = "You have successfully connected to the Miro board!"
+          document.getElementById("loading").innerHTML = "Please authorize again after refresh!"
+        }
+  
+        const facilitatorUserId = result1.data[0].User
+        const result2 = await getUserByMiroId(global.username, global.miroId );
+        const loginUserId = result2.data[0]._id
+  
+        if (facilitatorUserId === loginUserId){
+          document.getElementById("notesSection").hidden = false
+          document.getElementById("agendaSection").hidden = false
+          document.getElementById("messageSection").hidden = false
+          document.getElementById("collapseNotesSectionHeading").hidden = false
+          document.getElementById("collapseNotesSection").hidden = false
+          document.getElementById("collapseAgendaSectionHeading").hidden = false
+          document.getElementById("collapseAgendaSection").hidden = false
+          document.getElementById("collapseMessageSectionHeading").hidden = false
+          document.getElementById("collapseMessageSection").hidden = false
+          document.getElementById("wholeSummary").style.display = "none";
+          document.getElementById("clusterSummary").style.display = "none";
+          inWorkshop = true;
+          document.getElementById("workshopError").innerHTML = "Joined as facilitator successfully"
+        }
+        else{
+          document.getElementById("workshopError").innerHTML = "Wrong username or miroId for facilitator"
         }
       }
       else{
-        document.getElementById("loading").innerHTML = "Please authorize again after refresh!"
+        document.getElementById("workshopError").innerHTML = "No workshops found"
       }
-
-      const facilitatorUserId = result1.data[0].User
-      const result2 = await getUserByMiroId(global.username, global.miroId );
-      const loginUserId = result2.data[0]._id
-
-      if (facilitatorUserId === loginUserId){
-        document.getElementById("notesSection").hidden = false
-        document.getElementById("agendaSection").hidden = false
-        document.getElementById("messageSection").hidden = false
-        document.getElementById("collapseNotesSectionHeading").hidden = false
-        document.getElementById("collapseNotesSection").hidden = false
-        document.getElementById("collapseAgendaSectionHeading").hidden = false
-        document.getElementById("collapseAgendaSection").hidden = false
-        document.getElementById("collapseMessageSectionHeading").hidden = false
-        document.getElementById("collapseMessageSection").hidden = false
-        document.getElementById("wholeSummary").style.display = "none";
-        document.getElementById("clusterSummary").style.display = "none";
-        inWorkshop = true;
-        document.getElementById("workshopError").innerHTML = "Joined as facilitator successfully"
-      }
-      else{
-        document.getElementById("workshopError").innerHTML = "Wrong username or miroId for facilitator"
-      }
+      
     }
 }
 
@@ -362,8 +369,6 @@ const joinWorkshopAsCoach = async () => {
       document.getElementById("loading").textContent = "Joining workshop..."
       global.workshopname = document.getElementById("workshopname").value
       const result1 = await getWorkshopByNameAPI(global.workshopname );
-      console.log("result1")
-      console.log(result1)
 
       if (result1 !== "No workshops found"){
         if (connected === false){
@@ -394,6 +399,9 @@ const joinWorkshopAsCoach = async () => {
         document.getElementById("collapseMessageSection").hidden = false
         inWorkshop = true;
         document.getElementById("workshopError").innerHTML = "Joined as coach successfully"
+      }
+      else{
+        document.getElementById("workshopError").innerHTML = "No workshops found"
       } 
     }
 }
