@@ -1,6 +1,6 @@
 # Design Thinking Digital Toolkit Frontend Server
 
-## This is the Frontend Server for Design Thinking Digital Toolkit(DTDT), Computer Science Honours project. It was developed by Devon Yeung.
+## This is the Backend Server for Design Thinking Digital Toolkit(DTDT). It is the University of Cape Town(UCT) Computer Science Honours project developed by Devon Yeung.
 
 ---
 
@@ -19,3 +19,7 @@ This tool is to help you to better manage the workshop, with usage of a Miro sha
 3. Start counting down with the timer and the time should be pushed to coaches automatically.
 4. Messaging feature between facilitators and coaches.
 5. Retrieve past workshop data.
+
+---
+
+Special thanks to Dave Gray for his Youtube MERN stack tutorial video

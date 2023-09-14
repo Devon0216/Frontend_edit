@@ -88,7 +88,6 @@ const WorkshopNotes = () => {
       document.body.appendChild(link);
       link.click();
       
-      // Clean up after download
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     }

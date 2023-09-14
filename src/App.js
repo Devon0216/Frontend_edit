@@ -31,8 +31,7 @@ function App() {
             <Route index element={<Help />} />
           </Route>
 
-        </Route>{/* End Dash */}
-
+        </Route>
       </Route>
     </Routes>
   );

@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import {getAccessToken, getAccessTokenContext, getBoards, createBoardAPI} from '../auth/Authentication';
 import {createUser, getUserByMiroId} from '../users/Users';
 import {getStickyNotes, saveStickyNotes, deleteNotesByWorkshopAPI, getFrames, getFrameNotes, summariseAPI, addSummaryAPI } from "../stickynotes/StickyNotes";
-import {createTimerAPI, getTimerAPI, updateTimerAPI, addAgendaAPI, deleteAgendaAPI} from '../agenda/Agenda';
+import {createTimerAPI, updateTimerAPI, addAgendaAPI, deleteAgendaAPI} from '../agenda/Agenda';
 import {createWorkshopAPI, getWorkshopByNameAPI, updateWorkshopAPI} from '../workshop/Workshop';
 
 // Necessary variables
@@ -250,11 +250,6 @@ const setTimer = async () => {
       document.getElementById("agendaError").textContent = "Timer on Miro board create failed";
     }
 }
-
-// const getTimer = async () => {
-//     const timerText = await getTimerAPI(responseToken.data, responseBoard.data.id, timerID);
-//     document.getElementById("timerID").textContent = JSON.stringify(timerText.data.data.content); 
-// }
 
 // Timer function to update the timer on Miro board
 const updateTimer = async (timeText) => {
@@ -670,7 +665,7 @@ const MiroAuthorize = () => {
       }
       else {
         const newErrors = [...extraTimeErrors];
-        newErrors[index] = ''; // Clear the error message
+        newErrors[index] = '';
         setExtraTimeErrors(newErrors);
         setExtraTimesConfirmed(extraTimes)
 
@@ -1109,7 +1104,7 @@ const MiroAuthorize = () => {
             minutes = minutes + extraMinutes;
             if (minutes < 0) {
               hours = hours - Math.floor(-minutes / 60);
-              minutes = (minutes % 60 + 60) % 60; // Ensure minutes are positive
+              minutes = (minutes % 60 + 60) % 60;
             }
             else{
               hours += Math.floor(minutes / 60);
