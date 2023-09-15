@@ -16,10 +16,10 @@ const WorkshopItem = ({ workshopName, workshopID }) => {
     )
 };
 
+// Function to get all the workshops created by the user in the past, for the given user ID
 const PastWorkshop = () => {
     const [workshops, setWorkshops] = useState([]);
 
-    // Function to get all the workshops created by the user in the past, for the given user ID
     const getUserWorkshops = async () => {
       const options = {
           'method': 'POST',
